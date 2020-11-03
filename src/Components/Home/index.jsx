@@ -1,11 +1,38 @@
 import React, { Component } from 'react'
-
+import image from '../../images/Image 2.png'
+import image2 from '../../images/Group 37.png'
+import './Home.css'
 export default class indes extends Component {
     render() {
         return (
-            <div style={{background:"#D20249" ,width:"100%",height:"100vh"}}>
+          <div className="" style={{paddingBottom:"100px"}}>
+                <div className="home"   style={{ width:"100%",height:"98vh" ,zIndex:"0"}}>
+                <div className="main-list"> 
+                <ul className="list mt-2">
+                    <li className="ml-0 logo-li"><a href="#"> <img  className="home-logo img-fluid w-75" src={image} alt=""/></a></li>
+                   <li className="ml-0 nest-ul">   
+                       <ul className="inner-ul mt-5 "
+                     >
+                       <li className="" ><a href="#"> Fonctionnement </a></li>
+                    <li className=""><a href="#"> Fonctionnalités </a></li>
+                    <li className=""><a href="#"> Télécharger </a></li>
+                       </ul>
+                   </li>
+                  </ul>
+                </div>
+                <h1 className="home-heading text-white text-center mt-1" style={{fontFamily:"Arial",fontWeight:"bold"}}> Livraison de repas au travail, en Martinique !</h1>
+                <div className="d-flex justify-content-center">
+                <p className=" home-text text-white text-center mt-2   w-50" style={{fontFamily:"Arial",fontSize:"24px "}}>Grâce à TILT, soyez livré directement sur votre lieu de travail, et à partir des restaurants que vous aimez !
+</p>
+                </div>
                 
+             
+                 
+            <div  className="home-image d-flex justify-content-center" style={{ zIndex:"100"}}>
+                    <img className="mt-5" style={{width:"30%",height:"30%"}} src={image2} alt=""/>
+                </div>
             </div>
+          </div>
         )
     }
 }

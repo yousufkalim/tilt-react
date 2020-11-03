@@ -1,0 +1,44 @@
+@media only Screen and (max-width: 768px) {
+  .app-main {
+    height: 60vh !important;
+  }
+  .app-heading {
+    font-size: 26px;
+  }
+  .row {
+    margin-top: 10px !important;
+  }
+}
+@media only Screen and (max-width: 425px) {
+  .app-main {
+    height: 40vh !important;
+  }
+  .app-heading {
+    font-size: 24px;
+  }
+  .row {
+    margin-top: 0px !important;
+  }
+}
+@media only Screen and (max-width: 375px) {
+  .app-main {
+    height: 40vh !important;
+  }
+  .app-heading {
+    font-size: 22px;
+  }
+  .row {
+    margin-top: 0px !important;
+  }
+}
+@media only Screen and (max-width: 375px) {
+  .app-main {
+    height: 30vh !important;
+  }
+  .app-heading {
+    font-size: 19px;
+  }
+  .row {
+    margin-top: 0px !important;
+  }
+}

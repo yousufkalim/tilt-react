@@ -1,0 +1,64 @@
+.back {
+  background-image: url("../../images/Shape 1.jpg");
+  background-size: cover;
+}
+
+@media only Screen and (max-width: 768px) {
+  .back {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .footer-heading {
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  .footer-link {
+    font-size: 14px;
+    margin-bottom: 0px !important;
+  }
+  .footer-para {
+    font-size: 14px;
+    margin-top: -10px !important;
+  }
+}
+@media only Screen and (max-width: 425px) {
+  .back {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .footer-heading {
+    font-size: 10px;
+    margin-top: 33px;
+  }
+  .footer-link {
+    font-size: 9px;
+    margin-bottom: 0px !important;
+    margin-top: -11px !important;
+  }
+  .footer-para {
+    font-size: 10px;
+    margin-top: -16px !important;
+  }
+}
+@media only Screen and (max-width: 320px) {
+  .back {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .footer-heading {
+    font-size: 10px;
+    margin-top: 33px;
+  }
+  .footer-link {
+    font-size: 8px;
+    margin-bottom: 0px !important;
+    margin-top: -17px !important;
+  }
+  .footer-para {
+    font-size: 9px;
+    margin-top: -14px !important;
+  }
+}
