@@ -24,13 +24,13 @@
 }
 .linkList li a {
   color: #fff;
+
 }
 .linkList li a:hover {
   text-decoration: none;
+  cursor: pointer;
 }
-.linkList li:nth-of-type(1) {
-  font-weight: bold;
-}
+
 @media only Screen and (max-width: 768px) {
   .main {
     height: 150vh !important;
