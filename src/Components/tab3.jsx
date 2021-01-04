@@ -1,6 +1,6 @@
 import React from 'react'
 import './Features/Feature.css'
-import image from '../images/Image 2.png'
+import image from '../images/Group95.png'
 export default function Tab1(){
     return(
         <div className="row-main" style={{height:"70vh"}}>

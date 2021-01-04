@@ -1,5 +1,6 @@
 .main {
   background: #d20249;
+
   /* background-image: url("../../images/Shape\ 2new.jpg"); */
   /* background-size: cover; */
   /* background-repeat: no-repeat; */
@@ -24,7 +25,6 @@
 }
 .linkList li a {
   color: #fff;
-
 }
 .linkList li a:hover {
   text-decoration: none;

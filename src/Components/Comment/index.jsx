@@ -1,5 +1,8 @@
 import React from 'react'
 import './Commnet.css'
+import video from '../../images/TILTvideo.mp4'
+
+
 const index = () => {
     return (
         <div className="text-center" style={{width:"100%",height:"100vh"}}>
@@ -26,8 +29,13 @@ fait pour vous !
                 </div>
                 <div className="col-sm-12 col-md-6 col-lg-7 ml-sm-0 mb-sm-4">
                     
-                   <div className=" video-box " style={{background:"#D20249",height:"50vh",width:"100%",marginLeft:"100px" }}> 
-
+                   <div className=" video-box " style={{background:"#fff",height:"50vh",width:"100%",marginLeft:"100px" }}> 
+                   
+  
+  <video  style={{height:'49vh',width:'100%'}}  controls>
+  <source src={video} type="video/mp4"/>
+  
+</video>
                    </div>
 
                 </div>
