@@ -32,9 +32,9 @@ fait pour vous !
                    <div className=" video-box " style={{background:"#fff",height:"50vh",width:"100%",marginLeft:"100px" }}> 
                    
   
-  <video  style={{height:'49vh',width:'100%'}}  controls>
-  <source src={video} type="video/mp4"/>
-  
+  <video  style={{height:'49vh',width:'100%'}} autoPlay controls>
+  <source src={video} type="video/mp4" autoPlay/>
+
 </video>
                    </div>
 

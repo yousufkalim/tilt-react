@@ -39,7 +39,7 @@ export default function Index() {
              <ul className=" linkList text-white">
                  <li><a onClick={ActiveTab1} className={tab1===true ? 'font-weight-bold' : null}>Pour les restaurants</a></li>
                  <li><a onClick={ActiveTab2} className={tab2===true ? 'font-weight-bold' : null}>Pour les livreurs</a> </li>
-                 <li><a onClick={ActiveTab3} className={tab1===true ? 'font-weight-bold' : null}>Pour les utilisateurs</a></li>
+                 <li><a onClick={ActiveTab3} className={tab3===true ? 'font-weight-bold' : null}>Pour les utilisateurs</a></li>
 
              </ul>
              </div>
