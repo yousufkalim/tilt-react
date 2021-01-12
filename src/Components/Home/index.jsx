@@ -6,16 +6,16 @@ export default class indes extends Component {
     render() {
         return (
           <div className="" style={{paddingBottom:"100px"}}>
-                <div className="home"   style={{ width:"100%",height:"98vh" ,zIndex:"0"}}>
+                <div className="home text-center"   style={{ width:"100%",height:"98vh" ,zIndex:"0"}}>
                 <div className="main-list"> 
-                <ul className="list mt-2">
-                    <li className="ml-0 logo-li"><a href="#"> <img  className="home-logo img-fluid w-75" src={image} alt=""/></a></li>
+                <ul className="list mt-2 text-center">
+                    <li className="ml-0 logo-li text-left"><a href="http://tilt-entreprise.com/"> <img  className="home-logo img-fluid w-75" src={image} alt=""/></a></li>
                    <li className="ml-0 nest-ul">   
-                       <ul className="inner-ul mt-5 "
+                       <ul className="inner-ul mt-5 text-center "
                      >
-                       <li className="" ><a href="#"> Fonctionnement </a></li>
-                    <li className=""><a href="#"> Fonctionnalités </a></li>
-                    <li className=""><a href="#"> Télécharger </a></li>
+                       <li className="" ><a href="#operation"> Fonctionnement </a></li>
+                    <li className=""><a href="#features"> Fonctionnalités </a></li>
+                    <li className=""><a href="#download"> Télécharger </a></li>
                        </ul>
                    </li>
                   </ul>

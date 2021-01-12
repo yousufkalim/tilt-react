@@ -8,7 +8,7 @@ export default function Tab1(){
             <div className="col-12 col-sm-12 col-md-6 col-lg-6 ">
              <img className="tab-image" style={{width:"50%" ,marginLeft:"20px"}} src={image} alt=""/>
             </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6  d-flex flex-column justify-content-center">
+            <div className="col-12 tab2 col-sm-12 col-md-6 col-lg-6  d-flex flex-column justify-content-center">
               <h3 className=" feature-tab-heading text-white font-weight-bold text-left">Atteignez une nouvelle clientèle</h3>
            <p className="feature-tab-para    text-white  text-left w-75" style={{fontSize:'22px'}}>Notre service de livraison de plats en 
 entreprise vous permet de profiter 

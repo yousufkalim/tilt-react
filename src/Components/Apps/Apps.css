@@ -11,7 +11,7 @@
 }
 @media only Screen and (max-width: 425px) {
   .app-main {
-    height: 40vh !important;
+    height: 30vh !important;
   }
   .app-heading {
     font-size: 24px;
@@ -20,25 +20,25 @@
     margin-top: 0px !important;
   }
 }
+
 @media only Screen and (max-width: 375px) {
   .app-main {
-    height: 40vh !important;
-  }
-  .app-heading {
-    font-size: 22px;
-  }
-  .row {
-    margin-top: 0px !important;
-  }
-}
-@media only Screen and (max-width: 375px) {
-  .app-main {
-    height: 30vh !important;
+    height: 20vh !important;
   }
   .app-heading {
     font-size: 19px;
   }
   .row {
     margin-top: 0px !important;
+  }
+}
+@media only Screen and (max-width: 320px) {
+  .app-main {
+    height: 20vh !important;
+  }
+}
+@media only Screen and (max-width: 320px) and (max-height: 568px) {
+  .app-main {
+    height: 25vh !important;
   }
 }
