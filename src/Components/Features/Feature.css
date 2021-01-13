@@ -47,6 +47,7 @@
   .main {
     height: 150vh !important;
   }
+
   .feature-heading {
     font-size: 30px !important;
   }
@@ -122,7 +123,7 @@
     margin-top: 6vh !important;
   }
   .svgIcon {
-    bottom: -11px !important;
+    bottom: 0px !important;
   }
 }
 
@@ -207,7 +208,7 @@
     font-size: 18px !important;
   }
   .svgIcon {
-    bottom: -7px !important;
+    bottom: -4px !important;
   }
 }
 @media only Screen and (max-width: 320px) {
@@ -289,11 +290,11 @@
 
 @media only Screen and (max-width: 360px) {
   .svgIcon {
-    bottom: -4px !important;
+    bottom: -5px !important;
   }
 }
-@media only Screen and (max-width: 411px) {
+@media only Screen and (max-width: 414px) {
   .svgIcon {
-    bottom: 0px;
+    bottom: -4px !important;
   }
 }

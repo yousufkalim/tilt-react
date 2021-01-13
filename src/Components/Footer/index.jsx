@@ -25,7 +25,11 @@ const index = () => {
                 <div className="tempFooter">
                 <p className="tilt-footer-heading">Adresse de l’entreprise, Martinique</p>
                 <div style={{margin:"0 auto"}} className= "tilt-footer-link d-flex justify-content-between w-50  mb-3 mt-2">
-                    <p>Accueil</p>
+                   <p  >
+                   <a className="text-white" href="http://tilt-entreprise.com/">
+                   Accueil
+                       </a>
+                       </p>
                     <p>CGU </p>
                     <p>CGV</p>
                 </div>

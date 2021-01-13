@@ -1,6 +1,6 @@
 @media only Screen and (max-width: 768px) {
   .app-main {
-    height: 60vh !important;
+    height: 40vh !important;
   }
   .app-heading {
     font-size: 26px;
