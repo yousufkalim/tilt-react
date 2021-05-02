@@ -1,19 +1,10 @@
-import './App.css';
-import React from 'react';
-import Home from './Components/Home'
-import Comment from "./Components/Comment/index"
-import Feature from './Components/Features/index'
-import Apps from './Components/Apps/index'
-import Footer from './Components/Footer/index'
+import "./App.css";
+import React from "react";
+import HomePage from "./screens/HomePage/HomePage";
 function App() {
   return (
     <React.Fragment>
-      <Home />
-      <Comment />
-      <Feature />
-      <Apps/>
-      <Footer/>
-
+      <HomePage />
     </React.Fragment>
   );
 }
