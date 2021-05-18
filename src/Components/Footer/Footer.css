@@ -30,6 +30,10 @@
   background: transparent !important;
   padding-top: 1rem !important;
 }
+.footerLink:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 @media only Screen and (max-width: 768px) {
   .tilt-footer {
     background-position: center;
