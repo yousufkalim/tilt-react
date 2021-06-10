@@ -36,15 +36,20 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     width: "100%",
   },
+
+  activeIcon: {
+    backgroundColor: "#C72E54 !important",
+    color: " #fff",
+  },
   Link: {
     "&:hover, :visited": {
       color: "#C72E54 !important",
     },
   },
   appBar: {
-    marginLeft: theme.spacing(8) + 3,
+    marginLeft: `calc(${theme.spacing(9)}px)`,
     paddingLeft: "10px",
-    width: "100%",
+    width: `calc(100% - ${theme.spacing(9)}px)`,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -52,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   appBarShift: {
-    marginLeft: `calc(${drawerWidth}px )`,
+    marginLeft: `calc(${drawerWidth}px)`,
     paddingLeft: "10px",
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
@@ -92,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    // justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
   },
@@ -166,8 +171,12 @@ function App() {
                     activeClassName={open ? classes.active : classes.activeOpen}
                     className={classes.Link}
                   >
-                    <ListItemIcon>
-                      <HomeIcon fill="#6f7070" strock="#fff" />
+                    <ListItemIcon
+                      to="/menu"
+                      component={NavLink}
+                      activeClassName={classes.activeIcon}
+                    >
+                      <HomeIcon stroke="#6f7070" />
                     </ListItemIcon>
                     <ListItemText
                       activeClassName={classes.active}
@@ -182,7 +191,7 @@ function App() {
                     className={classes.Link}
                   >
                     <ListItemIcon>
-                      <HistoricIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
+                      <HistoricIcon stroke="#6f7070" />
                     </ListItemIcon>
                     <ListItemText primary="Historique" />
                   </ListItem>
