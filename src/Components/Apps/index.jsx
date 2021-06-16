@@ -10,11 +10,14 @@ const index = () => {
                <div className="container">
                <div className="row mt-5"  >
                     <div className="col-6 col-lg-6">
-                      <img style={{width:"80%"}}  src={appStore} alt="appStore"/>
+                        <a target="_blank" href="https://apps.apple.com/us/app/tilt/id1548875909" >
+                            <img style={{ width: "80%" }} src={appStore} alt="appStore" />
+                            </a>
                     </div>
                     <div className="col-6 col-lg-6">
+                        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.falconit.tiltapp">
                     <img style={{width:"80%"}} src={googleApp} alt="googleAppStore"/>
-
+                        </a>
                     </div>
                 </div>
                </div>

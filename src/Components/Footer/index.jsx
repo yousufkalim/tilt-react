@@ -1,6 +1,4 @@
 import React from "react";
-import CGU from "../../assets/CGU.pdf";
-import CGV from "../../assets/CGV.pdf";
 import "./Footer.css";
 const index = () => {
   return (
@@ -34,27 +32,12 @@ const index = () => {
                 Accueil
               </a>
             </p>
-            <p>
-              <div
-                className="text-white footerLink"
-                target="_blank"
-                onClick={() => window.open(CGU)}
-              >
-                CGU
-              </div>
-            </p>
-            <p>
-              <div
-                className="text-white footerLink"
-                target="_blank"
-                onClick={() => window.open(CGV)}
-              >
-                CGV
-              </div>
-            </p>
+            <p>CGU </p>
+            <p>CGV</p>
           </div>
           {/* <img className="" src={background} alt="backk"/> */}
           <p className="tilt-footer-para">
+            {" "}
             &copy; {new Date().getFullYear()}{" "}
             <a target="blank" href="https://falconconsulting.fr/">
               <span style={{ color: "#fff", textDecoration: "underline" }}>
