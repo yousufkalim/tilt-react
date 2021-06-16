@@ -4,6 +4,7 @@ import Comment from "../../Components/Comment/index";
 import Feature from "../../Components/Features/index";
 import Apps from "../../Components/Apps/index";
 import Footer from "../../Components/Footer/index";
+import ContactForm from "../../Components/Contact/contactForm";
 
 const HomePage = () => {
   return (
@@ -12,6 +13,7 @@ const HomePage = () => {
       <Comment />
       <Feature />
       <Apps />
+      <ContactForm />
       <Footer />
     </React.Fragment>
   );

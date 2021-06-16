@@ -6,7 +6,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-
+import { ToastContainer } from "react-toastify";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -21,7 +21,7 @@ import logo from "./images/Logo-white.png";
 import Menu from "./screens/Menu/Menu";
 import Orders from "./screens/orders/Orders";
 import { Box } from "@material-ui/core";
-// import HomePage from "./screens/HomePage/HomePage";
+import HomePage from "./screens/HomePage/HomePage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +45,13 @@ const useStyles = makeStyles((theme) => ({
     "&:hover, :visited": {
       color: "#C72E54 !important",
     },
+  },
+  appBarHome: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   appBar: {
     marginLeft: `calc(${theme.spacing(9)}px)`,
@@ -117,102 +124,119 @@ function App() {
   return (
     <React.Fragment>
       <Router>
-        <div
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Box flexGrow={1}>
-            <Switch>
-              <Route path="/menu">
-                <Menu />
-              </Route>
-              <Route path="/order">
-                <Orders />
-              </Route>
-            </Switch>
-          </Box>
-          <Box>
-            <Drawer
-              variant="permanent"
-              className={clsx(classes.drawer, {
-                [classes.drawerOpen]: open,
-                [classes.drawerClose]: !open,
-              })}
-              classes={{
-                paper: clsx({
-                  [classes.drawerOpen]: open,
-                  [classes.drawerClose]: !open,
-                }),
-              }}
-            >
-              <div className={classes.toolbar}>
-                <div
-                  style={{
-                    marginTop: "20px",
-                    textAlign: "center",
-                    width: "100%",
-                  }}
-                  onClick={handleDrawerClose}
-                >
-                  <img src={logo} alt="Home Icon" />
-                </div>
-              </div>
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-around"
-                style={{ height: "100%" }}
-              >
-                <List>
-                  <ListItem
-                    to="/menu"
-                    component={NavLink}
-                    activeClassName={open ? classes.active : classes.activeOpen}
-                    className={classes.Link}
+        <>
+          <ToastContainer />
+          <div
+            className={clsx(
+              window.location.pathname === "/"
+                ? classes.appBarHome
+                : classes.appBar,
+              {
+                [classes.appBarShift]: open,
+              }
+            )}
+          >
+            <Box flexGrow={1}>
+              <Switch>
+                <Route path="/menu">
+                  <Menu />
+                </Route>
+                <Route path="/order">
+                  <Orders />
+                </Route>
+                <Route path="/">
+                  <HomePage />
+                </Route>
+              </Switch>
+            </Box>
+            {window.location.pathname !== "/" && (
+              <>
+                <Box>
+                  <Drawer
+                    variant="permanent"
+                    className={clsx(classes.drawer, {
+                      [classes.drawerOpen]: open,
+                      [classes.drawerClose]: !open,
+                    })}
+                    classes={{
+                      paper: clsx({
+                        [classes.drawerOpen]: open,
+                        [classes.drawerClose]: !open,
+                      }),
+                    }}
                   >
-                    <ListItemIcon
-                      to="/menu"
-                      component={NavLink}
-                      activeClassName={classes.activeIcon}
+                    <div className={classes.toolbar}>
+                      <div
+                        style={{
+                          marginTop: "20px",
+                          textAlign: "center",
+                          width: "100%",
+                        }}
+                        onClick={handleDrawerClose}
+                      >
+                        <img src={logo} alt="Home Icon" />
+                      </div>
+                    </div>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="space-around"
+                      style={{ height: "100%" }}
                     >
-                      <HomeIcon stroke="#6f7070" />
-                    </ListItemIcon>
-                    <ListItemText
-                      activeClassName={classes.active}
-                      primary="Accueil"
-                    />
-                  </ListItem>
-                  <ListItem
-                    button
-                    to="/order"
-                    component={NavLink}
-                    activeClassName={classes.active}
-                    className={classes.Link}
-                  >
-                    <ListItemIcon>
-                      <HistoricIcon stroke="#6f7070" />
-                    </ListItemIcon>
-                    <ListItemText primary="Historique" />
-                  </ListItem>
-                  <ListItem
-                    button
-                    to="/"
-                    component={NavLink}
-                    className={classes.Link}
-                    exact
-                    activeClassName={classes.active}
-                  >
-                    <ListItemIcon>
-                      <UserIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
-                    </ListItemIcon>
-                    <ListItemText primary="Mon compte" />
-                  </ListItem>
-                </List>
-              </Box>
-            </Drawer>
-          </Box>
-        </div>
+                      <List>
+                        <ListItem
+                          to="/menu"
+                          component={NavLink}
+                          activeClassName={
+                            open ? classes.active : classes.activeOpen
+                          }
+                          className={classes.Link}
+                        >
+                          <ListItemIcon
+                            to="/menu"
+                            component={NavLink}
+                            activeClassName={classes.activeIcon}
+                          >
+                            <HomeIcon stroke="#6f7070" />
+                          </ListItemIcon>
+                          <ListItemText
+                            activeClassName={classes.active}
+                            primary="Accueil"
+                          />
+                        </ListItem>
+                        <ListItem
+                          button
+                          to="/order"
+                          component={NavLink}
+                          activeClassName={classes.active}
+                          className={classes.Link}
+                        >
+                          <ListItemIcon>
+                            <HistoricIcon stroke="#6f7070" />
+                          </ListItemIcon>
+                          <ListItemText primary="Historique" />
+                        </ListItem>
+                        <ListItem
+                          button
+                          to="/"
+                          component={NavLink}
+                          className={classes.Link}
+                          exact
+                          activeClassName={classes.active}
+                        >
+                          <ListItemIcon>
+                            <UserIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
+                          </ListItemIcon>
+                          <ListItemText primary="Mon compte" />
+                        </ListItem>
+                      </List>
+                    </Box>
+                  </Drawer>
+                </Box>
+              </>
+            )}
+          </div>
+        </>
       </Router>
     </React.Fragment>
   );
