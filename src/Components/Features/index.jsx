@@ -38,7 +38,7 @@ export default function Index() {
              <div className="d-flex justify-content-center">
              <ul className=" linkList text-white">
                  <li><a onClick={ActiveTab1} className={tab1===true ? 'font-weight-bold' : null}>Pour les restaurants</a></li>
-                 <li><a onClick={ActiveTab2} className={tab2===true ? 'font-weight-bold' : null}>Pour les livreurs</a> </li>
+                 <li><a onClick={ActiveTab2} className={tab2===true ? 'font-weight-bold' : null}>Pour les entreprises</a> </li>
                  <li><a onClick={ActiveTab3} className={tab3===true ? 'font-weight-bold' : null}>Pour les utilisateurs</a></li>
 
              </ul>

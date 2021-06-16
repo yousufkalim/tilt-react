@@ -23,7 +23,7 @@ const index = () => {
 
             <div className="container mt-1">
                 <div className="tempFooter">
-                <p className="tilt-footer-heading">Adresse de l’entreprise, Martinique</p>
+                <p className="tilt-footer-heading">41 lotissement les Frangipaniers 97228 Saint Luce</p>
                 <div style={{margin:"0 auto"}} className= "tilt-footer-link d-flex justify-content-between w-50  mb-3 mt-2">
                    <p  >
                    <a className="text-white" href="http://tilt-entreprise.com/">
