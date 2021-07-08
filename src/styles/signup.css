@@ -1,0 +1,64 @@
+.background {
+  background: #d10248;
+}
+
+.signInBtn {
+  width: 200px;
+  color: white;
+  text-decoration: none;
+  background-color: transparent;
+  border: 2px solid white;
+  padding: 15px;
+  cursor: pointer;
+  border-radius: 30px;
+  flex-wrap: nowrap;
+  transition-property: color, background-color;
+  transition-duration: 0.5s;
+}
+
+.signInBtn:hover {
+  background-color: white;
+  color: #d10248;
+}
+.signInBtn:focus {
+  outline: none;
+}
+
+.signupForm {
+  height: 100vh;
+  color: #2662b1;
+  /* color: #1967d2;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.formDiv {
+  width: 70%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.signUpBtn {
+  width: 200px;
+  color: white;
+  cursor: pointer;
+  background-color: #d10248;
+  border: 2px solid #d10248;
+  padding: 15px;
+  border-radius: 30px;
+  transition-property: color, background-color;
+  transition-duration: 0.5s;
+  margin-top: 10px;
+}
+
+.signUpBtn:hover {
+  background-color: transparent;
+  color: #d10248;
+}
+
+.signUpBtn:focus {
+  outline: none;
+}
