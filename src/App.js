@@ -1,6 +1,13 @@
 import "./App.css";
 import React, { useEffect } from "react";
-import { NavLink, Switch, Route, useLocation } from "react-router-dom";
+import {
+  NavLink,
+  Switch,
+  Route,
+  useLocation,
+  Redirect,
+  useHistory,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,6 +25,8 @@ import Orders from "./screens/orders/Orders";
 import Signup from "./screens/signup/signup";
 import { Box } from "@material-ui/core";
 import HomePage from "./screens/HomePage/HomePage";
+import { Store, UpdateStore } from "./context/StoreContext";
+import auth from "./services/authService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -114,14 +123,21 @@ function App() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const { pathname } = useLocation();
-
+  const { token: authToken } = Store();
+  const updateStore = UpdateStore();
+  const history = useHistory();
   const handleDrawerClose = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    console.log("pathname", pathname);
-  }, [pathname]);
+    const token = auth.getJwt();
+    if (token) {
+      updateStore({ token });
+    } else {
+      history.push("/signup");
+    }
+  }, [pathname, authToken]);
 
   return (
     <React.Fragment>
@@ -142,13 +158,17 @@ function App() {
               <Route path="/signup">
                 <Signup />
               </Route>
-              <Route path="/menu">
-                <Menu />
-              </Route>
-              <Route path="/order">
-                <Orders />
-              </Route>
-              <Route path="/">
+              {authToken.length > 1 && (
+                <Route path="/menu">
+                  <Menu />
+                </Route>
+              )}
+              {authToken.length > 1 && (
+                <Route path="/order">
+                  <Orders />
+                </Route>
+              )}
+              <Route exact path="/">
                 <HomePage />
               </Route>
             </Switch>

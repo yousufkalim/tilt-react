@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import {
   makeStyles,
@@ -13,6 +13,7 @@ import bike from "../../images/bike.png";
 import Basket from "./Basket";
 import DishCategoryList from "./DishCategoryList";
 import DishList from "./DishList";
+import { getDishesForUser } from "../../services/userService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +59,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Menu = () => {
   const classes = useStyles();
+  const [dishes, setDishes] = useState();
+
+  const getDishes = async () => {
+    const dishes = await getDishesForUser();
+    setDishes(dishes);
+  };
+
+  useEffect(() => {
+    getDishes();
+  }, []);
+
   return (
     <Grid className={classes.root} container spacing={3}>
       <Grid item sm={9}>

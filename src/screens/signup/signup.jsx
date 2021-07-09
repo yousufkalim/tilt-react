@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import Joi from "joi-browser";
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,7 +10,7 @@ import { Logo } from "../../images/images";
 // import * as userService from "../services/userService";
 import auth from "../../services/authService";
 import { toast } from "react-toastify";
-import { UpdateStore } from "../../context/StoreContext";
+import { UpdateStore, Store } from "../../context/StoreContext";
 import "../../styles/signup.css";
 
 const useStyles = makeStyles({
@@ -61,8 +61,12 @@ const Signup = () => {
   const [loginErrors, setLoginErrors] = useState({});
   const [formType, setFormType] = useState("signin");
   const history = useHistory();
-
   const updateStore = UpdateStore();
+  const { user: currentUser } = Store();
+
+  // useEffect(() => {
+  //   console.log("currentUser", currentUser);
+  // });
 
   const registerSchema = {
     name: Joi.string().min(5).required().label("Name"),
@@ -192,10 +196,11 @@ const Signup = () => {
       const { email, password } = loginData;
       const data = await auth.login(email, password);
       localStorage.setItem("token", `Bearer ${data.token}`);
-      // updateStore({ user: data.user, token: data.token });
+      updateStore({ user: data.user, token: data.token });
+      history.replace("/menu");
     } catch (error) {
-      console.log(error.message);
-      // toast.error(error.response);
+      // console.log(error.message);
+      toast.error(error.message);
     }
   };
 
