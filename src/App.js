@@ -27,6 +27,7 @@ import { Box } from "@material-ui/core";
 import HomePage from "./screens/HomePage/HomePage";
 import { Store, UpdateStore } from "./context/StoreContext";
 import auth from "./services/authService";
+import History from "./screens/History/history";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     marginLeft: `calc(${theme.spacing(9)}px)`,
-    paddingLeft: "10px",
+    // paddingLeft: "10px",
     width: `calc(100% - ${theme.spacing(9)}px)`,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
@@ -157,6 +158,9 @@ function App() {
             <Switch>
               <Route path="/signup">
                 <Signup />
+              </Route>
+              <Route path="/history">
+                <History />
               </Route>
               {authToken.length > 1 && (
                 <Route path="/menu">
