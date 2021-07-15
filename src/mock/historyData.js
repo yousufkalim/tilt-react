@@ -1,0 +1,42 @@
+export const historyData = [
+  {
+    _id: 1,
+    date: "01/01/2021",
+    restaurant: "Bella Ciao",
+    statut: "Livré",
+    total: "13,90€",
+    credit: "1 crédit (Pack 1)",
+  },
+  {
+    _id: 2,
+    date: "01/01/2021",
+    restaurant: "Bella Ciao",
+    statut: "Livré",
+    total: "13,90€",
+    credit: "1 crédit (Pack 1)",
+  },
+  {
+    _id: 3,
+    date: "01/01/2021",
+    restaurant: "Bella Ciao",
+    statut: "Livré",
+    total: "13,90€",
+    credit: "1 crédit (Pack 1)",
+  },
+  {
+    _id: 4,
+    date: "01/01/2021",
+    restaurant: "Bella Ciao",
+    statut: "Livré",
+    total: "13,90€",
+    credit: "1 crédit (Pack 1)",
+  },
+  {
+    _id: 5,
+    date: "01/01/2021",
+    restaurant: "Bella Ciao",
+    statut: "Livré",
+    total: "13,90€",
+    credit: "No Package",
+  },
+];

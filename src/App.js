@@ -28,6 +28,7 @@ import HomePage from "./screens/HomePage/HomePage";
 import { Store, UpdateStore } from "./context/StoreContext";
 import auth from "./services/authService";
 import History from "./screens/History/history";
+import Profile from "./screens/Profile/profile";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBarShift: {
     marginLeft: `calc(${drawerWidth}px)`,
-    paddingLeft: "10px",
+    // paddingLeft: "10px",
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -161,6 +162,9 @@ function App() {
               </Route>
               <Route path="/history">
                 <History />
+              </Route>
+              <Route path="/profile">
+                <Profile />
               </Route>
               {authToken.length > 1 && (
                 <Route path="/menu">

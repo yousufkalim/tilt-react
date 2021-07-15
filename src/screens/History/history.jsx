@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Typography, Box, Grid } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import HistoryTable from "./historyTable";
 
 const useStyles = makeStyles({
@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     minHeight: "100vh",
     paddingLeft: "40px",
     paddingRight: "50px",
-    minWidth: "100vw",
+    // minWidth: "100vw",
   },
   historyGrid: { marginTop: "40px" },
   container: {
@@ -28,41 +28,6 @@ const History = () => {
       <Typography variant="h5">Historique des commandes</Typography>
 
       <HistoryTable />
-
-      {/* <Box className={classes.historyGrid}>
-        <Grid container spacing={1} className={classes.container}>
-          <Grid item xs={2}>
-            <Typography variant="subtitle1" className={classes.mainHeading}>
-              <b>Date</b>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography variant="subtitle1" className={classes.mainHeading}>
-              <b>Restaurant</b>
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography variant="subtitle1" className={classes.mainHeading}>
-              <b>Statut</b>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography variant="subtitle1" className={classes.mainHeading}>
-              <b>Total</b>
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography variant="subtitle1" className={classes.mainHeading}>
-              <b>Crédit livraison</b>
-            </Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Typography variant="subtitle1" className={classes.mainHeading}>
-              <b>Action</b>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box> */}
     </div>
   );
 };
