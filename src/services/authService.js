@@ -1,4 +1,5 @@
 import http from "./httpServices";
+import jwtDecode from "jwt-decode";
 
 const apiEndPoint = "/auth";
 const token = "token";
@@ -18,4 +19,13 @@ export function getJwt() {
   return localStorage.getItem(token);
 }
 
-export default { login, getJwt };
+export function getUserFromJwt() {
+  try {
+    const jwt = localStorage.getItem(token);
+    return jwtDecode(jwt);
+  } catch (ex) {
+    return null;
+  }
+}
+
+export default { login, getJwt, getUserFromJwt };

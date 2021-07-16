@@ -1,6 +1,6 @@
 import { Box, Typography, IconButton } from "@material-ui/core";
 import React from "react";
-import dish from "../../images/Dish.png";
+import DishImg from "../../images/Dish.png";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 
@@ -11,7 +11,9 @@ const cardStyle = {
   margin: "auto",
 };
 
-const Dish = () => {
+const Dish = ({ dish }) => {
+  const baseUrl = process.env.REACT_APP_API_URL;
+
   return (
     <>
       <Box
@@ -23,14 +25,19 @@ const Dish = () => {
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
-            <img style={{ height: "60px" }} src={dish} alt="dish" />
+            <img
+              style={{ height: "60px", width: "60px", borderRadius: "50%" }}
+              // src={`${baseUrl}/${dish.restaurantImage}`}
+              src={`http://160.153.249.64:9092/${dish.restaurantImage}`}
+              alt="dish"
+            />
           </Box>
           <Box paddingLeft="10px">
             <Typography variant="body1" color="initial">
-              Pancakes Zucchini
+              {dish.name}
             </Typography>
             <Typography variant="caption" color="initial">
-              <RestaurantIcon /> &nbsp; Bella Restaurant
+              <RestaurantIcon /> &nbsp; {dish.restaurantName}
             </Typography>
           </Box>
         </Box>

@@ -7,4 +7,20 @@ const getDishesForUser = async () => {
   return dishes.dishesArray;
 };
 
-export { getDishesForUser };
+const getFilteredDishes = async (filter) => {
+  const { data: dishes } = await http.get(
+    `${apiEndPoint}/filtered-dishes?filter=${filter}`
+  );
+  return dishes.dishesArray;
+};
+
+const getLoggedinUser = async () => {
+  try {
+    const user = await http.get(`${apiEndPoint}/get`);
+    return user;
+  } catch (ex) {
+    return null;
+  }
+};
+
+export { getDishesForUser, getLoggedinUser, getFilteredDishes };

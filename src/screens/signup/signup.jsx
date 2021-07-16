@@ -196,8 +196,12 @@ const Signup = () => {
       const { email, password } = loginData;
       const data = await auth.login(email, password);
       localStorage.setItem("token", `Bearer ${data.token}`);
-      updateStore({ user: data.user, token: data.token });
-      history.replace("/menu");
+      updateStore({ user: data.user, token: data.token, role: data.user.role });
+      if (data.user.role === "user") {
+        history.replace("/menu");
+      } else {
+        history.replace("/order");
+      }
     } catch (error) {
       // console.log(error.message);
       toast.error(error.message);

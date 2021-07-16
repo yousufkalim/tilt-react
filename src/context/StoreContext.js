@@ -19,6 +19,7 @@ export function StoreProvider({ children }) {
   // Initializing State
   let [store, setStore] = useState({
     token: "",
+    role: "",
     user: {},
     cart: [],
   });

@@ -13,13 +13,17 @@ import bike from "../../images/bike.png";
 import Basket from "./Basket";
 import DishCategoryList from "./DishCategoryList";
 import DishList from "./DishList";
-import { getDishesForUser } from "../../services/userService";
+import {
+  getDishesForUser,
+  getFilteredDishes,
+} from "../../services/userService";
+import { Store } from "../../context/StoreContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#FAF9FB",
     width: "100%",
-    height: "100vh",
+    minHeight: "100vh",
   },
   ButtonStyle: {
     backgroundColor: "#D20249",
@@ -55,15 +59,27 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "capitalize",
     marginTop: "15px",
   },
+  categoryBox: {
+    width: "80%",
+  },
 }));
 
 const Menu = () => {
   const classes = useStyles();
-  const [dishes, setDishes] = useState();
+  const [dishes, setDishes] = useState([]);
+  const [filter, setFilter] = useState("all");
+  const { user: currentUser } = Store();
 
   const getDishes = async () => {
-    const dishes = await getDishesForUser();
-    setDishes(dishes);
+    const dishesInDB = await getFilteredDishes(filter);
+    setDishes(dishesInDB);
+  };
+
+  const handleFilterChange = async (filt) => {
+    setFilter(filt);
+
+    const dishesInDB = await getFilteredDishes(filt);
+    setDishes(dishesInDB);
   };
 
   useEffect(() => {
@@ -100,7 +116,7 @@ const Menu = () => {
                 </Box>
                 <Box>
                   <Typography variant="h6" color="initial">
-                    Bienvenue Laurent !
+                    Bienvenue {currentUser.firstName} !
                   </Typography>
                   <Typography variant="body2" color="initial">
                     Invite tes collègues et obtient des réductions !
@@ -114,14 +130,21 @@ const Menu = () => {
                 </Box>
               </Box>
             </Box>
-            <Container>
+            <Box
+              alignSelf="center"
+              marginX="auto"
+              className={classes.categoryBox}
+            >
               <Box>
-                <DishCategoryList />
+                <DishCategoryList
+                  handleChange={handleFilterChange}
+                  filter={filter}
+                />
               </Box>
-              <Box>
-                <DishList />
-              </Box>
-            </Container>
+            </Box>
+            <Box>
+              <DishList dishes={dishes} />
+            </Box>
           </Box>
         </Box>
       </Grid>

@@ -27,6 +27,7 @@ import { Box } from "@material-ui/core";
 import HomePage from "./screens/HomePage/HomePage";
 import { Store, UpdateStore } from "./context/StoreContext";
 import auth from "./services/authService";
+import { getLoggedinUser } from "./services/userService";
 import History from "./screens/History/history";
 import Profile from "./screens/Profile/profile";
 
@@ -125,17 +126,22 @@ function App() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const { pathname } = useLocation();
-  const { token: authToken } = Store();
+  const { token: authToken, role } = Store();
   const updateStore = UpdateStore();
   const history = useHistory();
   const handleDrawerClose = () => {
     setOpen(!open);
   };
 
+  const getLoggedUser = async (token) => {
+    const { data } = await getLoggedinUser();
+    updateStore({ token, role: data.user.role, user: data.user });
+  };
+
   useEffect(() => {
     const token = auth.getJwt();
     if (token) {
-      updateStore({ token });
+      getLoggedUser(token);
     } else {
       history.push("/signup");
     }
@@ -160,18 +166,22 @@ function App() {
               <Route path="/signup">
                 <Signup />
               </Route>
-              <Route path="/history">
-                <History />
-              </Route>
-              <Route path="/profile">
-                <Profile />
-              </Route>
-              {authToken.length > 1 && (
+              {role === "user" && (
+                <Route path="/history">
+                  <History />
+                </Route>
+              )}
+              {role === "user" && (
+                <Route path="/profile">
+                  <Profile />
+                </Route>
+              )}
+              {role === "user" && (
                 <Route path="/menu">
                   <Menu />
                 </Route>
               )}
-              {authToken.length > 1 && (
+              {(role === "user" || role === "restaurant") && (
                 <Route path="/order">
                   <Orders />
                 </Route>

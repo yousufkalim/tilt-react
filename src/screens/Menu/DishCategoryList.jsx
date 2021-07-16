@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     justifyContent: "space-around",
     overflow: "hidden",
+    cursor: "pointer",
   },
   gridList: {
     flexWrap: "nowrap",
@@ -26,39 +27,38 @@ const useStyles = makeStyles((theme) => ({
 
 const dishList = [
   {
+    title: "All",
+    key: "all",
+    icon: <Dish2 style={{ height: "40px" }} />,
+  },
+  {
     title: "Entrée",
+    key: "Starter",
     icon: <Dish1 style={{ height: "40px" }} />,
   },
   {
-    title: "Plat",
+    title: "Plats",
+    key: "Dish",
     icon: <Dish2 style={{ height: "40px" }} />,
   },
   {
     title: "Dessert",
-    icon: <Dish3 style={{ height: "40px" }} />,
-  },
-  {
-    title: "Dessert",
-    icon: <Dish3 style={{ height: "40px" }} />,
-  },
-  {
-    title: "Dessert",
+    key: "Dessert",
     icon: <Dish3 style={{ height: "40px" }} />,
   },
 ];
-const DishCategoryList = () => {
-  const [isActive, setIsActive] = useState(false);
-
+const DishCategoryList = ({ handleChange, filter }) => {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
-      <GridList cols={3} spacing={100} className={classes.gridList}>
+      <GridList cols={4} spacing={60} className={classes.gridList}>
         {dishList.map((dish) => (
-          <GridListTile style={{ height: "200px" }}>
+          <GridListTile style={{ height: "160px" }} key={dish.key}>
             <DishCategory
-              isActive={isActive}
+              isActive={dish.key === filter ? true : false}
               title={dish.title}
-              onClick={() => setIsActive(!isActive)}
+              onClick={() => handleChange(dish.key)}
             >
               {dish.icon}
             </DishCategory>
