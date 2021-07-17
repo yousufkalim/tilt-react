@@ -7,7 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { historyData } from "../../mock/historyData";
+import moment from "moment";
 
 const useStyles = makeStyles({
   table: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   row: {
     backgroundColor: "white",
     fontSize: "10px",
-    border: "2px red solid",
+    border: "2px red solid", 
     borderRadius: "10px",
     "& :first-child": {
       borderTopLeftRadius: "10px",
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
   cell: { border: "none" },
   headerCells: {
     border: "none",
-    fontWeight: "bold",
+    fontWeight: "bold", 
   },
   btn: {
     background: "#C72E54",
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
   },
 });
 
-const HistoryTable = () => {
+const HistoryTable = ({ history }) => {
   const classes = useStyles();
 
   return (
@@ -82,22 +82,22 @@ const HistoryTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {historyData.map((row) => (
+          {history.map((row) => (
             <TableRow classes={{ root: classes.row }} key={row._id}>
               <TableCell classes={{ root: classes.cell }} align="center">
-                {row.date}
+                {moment(row.time).format("DD/MM/YYYY")}
               </TableCell>
               <TableCell classes={{ root: classes.cell }} align="center">
-                {row.restaurant}
+                {row.order[0].restaurant.firstName}
               </TableCell>
               <TableCell classes={{ root: classes.cell }} align="center">
-                {row.statut}
+                {row.status}
               </TableCell>
               <TableCell classes={{ root: classes.cell }} align="center">
-                {row.total}
+                {row.totalPrice}
               </TableCell>
               <TableCell classes={{ root: classes.cell }} align="center">
-                {row.credit}
+                No Package
               </TableCell>
               <TableCell classes={{ root: classes.cell }} align="center">
                 <Button size="small" className={classes.btn}>

@@ -30,6 +30,7 @@ import auth from "./services/authService";
 import { getLoggedinUser } from "./services/userService";
 import History from "./screens/History/history";
 import Profile from "./screens/Profile/profile";
+import { Logout } from "./images/images";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -138,6 +139,12 @@ function App() {
     updateStore({ token, role: data.user.role, user: data.user });
   };
 
+  const handleLogout = () => {
+    console.log("CHecking");
+    auth.logout();
+    history.replace("/signup");
+  };
+
   useEffect(() => {
     const token = auth.getJwt();
     if (token) {
@@ -166,7 +173,7 @@ function App() {
               <Route path="/signup">
                 <Signup />
               </Route>
-              {role === "user" && (
+              {(role === "user" || role === "restaurant") && (
                 <Route path="/history">
                   <History />
                 </Route>
@@ -181,7 +188,7 @@ function App() {
                   <Menu />
                 </Route>
               )}
-              {(role === "user" || role === "restaurant") && (
+              {role === "restaurant" && (
                 <Route path="/order">
                   <Orders />
                 </Route>
@@ -248,7 +255,7 @@ function App() {
                       </ListItem>
                       <ListItem
                         button
-                        to="/order"
+                        to="/history"
                         component={NavLink}
                         activeClassName={classes.active}
                         className={classes.Link}
@@ -260,7 +267,7 @@ function App() {
                       </ListItem>
                       <ListItem
                         button
-                        to="/"
+                        to="/profile"
                         component={NavLink}
                         className={classes.Link}
                         exact
@@ -273,6 +280,20 @@ function App() {
                       </ListItem>
                     </List>
                   </Box>
+
+                  <List>
+                    <ListItem
+                      component="nav"
+                      button
+                      className={classes.Link}
+                      onClick={handleLogout}
+                    >
+                      <ListItemIcon>
+                        <img src={Logout} alt="logout" />
+                      </ListItemIcon>
+                      <ListItemText primary="Déconnexion" />
+                    </ListItem>
+                  </List>
                 </Drawer>
               </Box>
             </>

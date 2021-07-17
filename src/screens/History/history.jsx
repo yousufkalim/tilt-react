@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import HistoryTable from "./historyTable";
+import { getOrderHistory } from "../../services/userService";
 
 const useStyles = makeStyles({
   main: {
@@ -22,12 +23,22 @@ const useStyles = makeStyles({
 
 const History = () => {
   const classes = useStyles();
+  const [history, setHistory] = useState([]);
+
+  const getHistory = async () => {
+    const orderHistory = await getOrderHistory();
+    setHistory(orderHistory);
+  };
+
+  useEffect(() => {
+    getHistory();
+  }, []);
 
   return (
     <div className={classes.main}>
       <Typography variant="h5">Historique des commandes</Typography>
 
-      <HistoryTable />
+      <HistoryTable history={history} />
     </div>
   );
 };

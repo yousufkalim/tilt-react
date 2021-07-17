@@ -9,6 +9,7 @@ import {
 import { makeStyles, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import moment from "moment";
 
 const useStyles = makeStyles({
   profileGrid: { marginTop: "40px" },
@@ -34,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ProfileGrid = () => {
+const ProfileGrid = ({ user }) => {
   const classes = useStyles();
 
   return (
@@ -51,11 +52,9 @@ const ProfileGrid = () => {
                   <b>Mon Compte</b>
                 </Typography>
                 <Typography variant="subtitle2" className={classes.subtitle}>
-                  Laurent Robert
+                  {user.firstName + " " + user.lastName}
                 </Typography>
-                <Typography variant="subtitle2">
-                  Laurent.robert@gmail.com
-                </Typography>
+                <Typography variant="subtitle2">{user.email}</Typography>
               </Grid>
             </Grid>
             <div className={classes.buttonDiv}>
@@ -75,13 +74,13 @@ const ProfileGrid = () => {
                   <b>Mon Enterprise</b>
                 </Typography>
                 <Typography variant="subtitle2" className={classes.subtitle}>
-                  CUR Enterprise
+                  {user.user.company.name}
                 </Typography>
                 <Typography variant="subtitle2">
-                  20, allée Jacques Deprez
+                  {user.user.company.street}
                 </Typography>
                 <Typography variant="subtitle2">
-                  Saint-Jacques, Martinique
+                  {user.user.company.city}
                 </Typography>
               </Grid>
             </Grid>
@@ -105,7 +104,10 @@ const ProfileGrid = () => {
                   Carte de crédite
                 </Typography>
                 <Typography variant="subtitle2">
-                  **** ***** **** 3233
+                  **** **** ****
+                  {user.user.creditCard.number.substr(
+                    user.user.creditCard.number.length - 4
+                  )}
                 </Typography>
               </Grid>
             </Grid>
@@ -125,16 +127,31 @@ const ProfileGrid = () => {
                 <Typography variant="h6">
                   <b>Pack de livraison</b>
                 </Typography>
-                <Typography variant="subtitle2" className={classes.subtitle}>
-                  You currently have the Package 1
-                </Typography>
-                <Typography variant="subtitle2">2 credits left</Typography>
-                <Typography variant="subtitle2">
-                  Each credit=2€ discount on Delivery Fee
-                </Typography>
-                <Typography variant="subtitle2">
-                  Expires on : 12/4/2020
-                </Typography>
+                {user.user && user.user.package ? (
+                  <>
+                    <Typography
+                      variant="subtitle2"
+                      className={classes.subtitle}
+                    >
+                      You currently have the {user.user.package.name}
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      {user.user.credits} credits left
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      Each credit = {user.user.package.offPrice}€ discount on
+                      Delivery Fee
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      Expires on :{" "}
+                      {moment(user.user.package.packageExpiration).format(
+                        "DD/MM/YYYY"
+                      )}
+                    </Typography>
+                  </>
+                ) : (
+                  "No Package"
+                )}
               </Grid>
             </Grid>
             <div className={classes.buttonDiv}>

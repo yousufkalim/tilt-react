@@ -28,4 +28,8 @@ export function getUserFromJwt() {
   }
 }
 
-export default { login, getJwt, getUserFromJwt };
+export function logout() {
+  return localStorage.removeItem(token);
+}
+
+export default { login, getJwt, getUserFromJwt, logout };

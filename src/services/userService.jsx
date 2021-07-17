@@ -19,8 +19,18 @@ const getLoggedinUser = async () => {
     const user = await http.get(`${apiEndPoint}/get`);
     return user;
   } catch (ex) {
-    return null;
+    return {};
   }
 };
 
-export { getDishesForUser, getLoggedinUser, getFilteredDishes };
+const getOrderHistory = async (filter) => {
+  const { data: orders } = await http.get(`${apiEndPoint}/orders`);
+  return orders.history.orderHistory;
+};
+
+export {
+  getDishesForUser,
+  getLoggedinUser,
+  getFilteredDishes,
+  getOrderHistory,
+};

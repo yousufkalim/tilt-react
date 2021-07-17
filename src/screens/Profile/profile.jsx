@@ -3,6 +3,7 @@ import { makeStyles, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ProfileGrid from "./profileGrid";
+import { Store } from "../../context/StoreContext";
 
 const useStyles = makeStyles({
   main: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles({
 
 const Profile = () => {
   const classes = useStyles();
+  const { user } = Store();
 
   return (
     <div className={classes.main}>
@@ -45,13 +47,13 @@ const Profile = () => {
         </Grid>
         <Grid item xs={12} md={10} className={classes.subheadingBox}>
           <Typography variant="subtitle1" className={classes.affiliateCode}>
-            Mon code affilié : Az124de
+            Mon code affilié : {user.user.affiliateCode}
           </Typography>
           <Button className={classes.deleteBtn}>Delete account</Button>
         </Grid>
       </Grid>
 
-      <ProfileGrid />
+      <ProfileGrid user={user} />
     </div>
   );
 };

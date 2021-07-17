@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Orders = () => {
   const classes = useStyles();
-  return (
+  return ( 
     <Grid className={classes.root}>
       <Box>
         <Typography style={{ padding: "50px" }} variant="h5">
