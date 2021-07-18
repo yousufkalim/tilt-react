@@ -198,9 +198,11 @@ const Signup = () => {
       localStorage.setItem("token", `Bearer ${data.token}`);
       updateStore({ user: data.user, token: data.token, role: data.user.role });
       if (data.user.role === "user") {
-        history.replace("/menu");
+        // history.replace("/menu");
+        window.location = "/menu";
       } else {
-        history.replace("/order");
+        // history.replace("/order");
+        window.location = "/order";
       }
     } catch (error) {
       // console.log(error.message);

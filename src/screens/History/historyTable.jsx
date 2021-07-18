@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import Button from "@material-ui/core/Button";
@@ -7,7 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import moment from "moment";
+import { Store } from "../../context/StoreContext";
 
 const useStyles = makeStyles({
   table: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
   row: {
     backgroundColor: "white",
     fontSize: "10px",
-    border: "2px red solid", 
+    border: "2px red solid",
     borderRadius: "10px",
     "& :first-child": {
       borderTopLeftRadius: "10px",
@@ -33,7 +34,7 @@ const useStyles = makeStyles({
   cell: { border: "none" },
   headerCells: {
     border: "none",
-    fontWeight: "bold", 
+    fontWeight: "bold",
   },
   btn: {
     background: "#C72E54",
@@ -53,8 +54,9 @@ const useStyles = makeStyles({
   },
 });
 
-const HistoryTable = ({ history }) => {
+const HistoryTable = ({ history, handleOpen }) => {
   const classes = useStyles();
+  const { role } = Store();
 
   return (
     <TableContainer>
@@ -82,30 +84,68 @@ const HistoryTable = ({ history }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {history.map((row) => (
-            <TableRow classes={{ root: classes.row }} key={row._id}>
-              <TableCell classes={{ root: classes.cell }} align="center">
-                {moment(row.time).format("DD/MM/YYYY")}
-              </TableCell>
-              <TableCell classes={{ root: classes.cell }} align="center">
-                {row.order[0].restaurant.firstName}
-              </TableCell>
-              <TableCell classes={{ root: classes.cell }} align="center">
-                {row.status}
-              </TableCell>
-              <TableCell classes={{ root: classes.cell }} align="center">
-                {row.totalPrice}
-              </TableCell>
-              <TableCell classes={{ root: classes.cell }} align="center">
-                No Package
-              </TableCell>
-              <TableCell classes={{ root: classes.cell }} align="center">
-                <Button size="small" className={classes.btn}>
-                  Voir détail
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {role === "user" &&
+            history.map((row) => (
+              <TableRow classes={{ root: classes.row }} key={row._id}>
+                <TableCell classes={{ root: classes.cell }} align="center">
+                  {moment(row.time).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell classes={{ root: classes.cell }} align="center">
+                  {row.order[0].restaurant.firstName}
+                </TableCell>
+                <TableCell classes={{ root: classes.cell }} align="center">
+                  {row.status}
+                </TableCell>
+                <TableCell classes={{ root: classes.cell }} align="center">
+                  {row.totalPrice}
+                </TableCell>
+                <TableCell classes={{ root: classes.cell }} align="center">
+                  No Package
+                </TableCell>
+                <TableCell classes={{ root: classes.cell }} align="center">
+                  <Button
+                    size="small"
+                    className={classes.btn}
+                    onClick={() => handleOpen(row._id)}
+                  >
+                    Voir détail
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          {role === "restaurant" &&
+            history.map((row) => (
+              <>
+                <TableRow classes={{ root: classes.row }} key={row._id}>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {moment(row.completedAt).format("DD/MM/YYYY")}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {row.company.name}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {row.status}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {row.carts.map((cart) => (
+                      <>{cart.totalPrice}</>
+                    ))}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    No Package
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    <Button
+                      size="small"
+                      className={classes.btn}
+                      onClick={() => handleOpen(row._id)}
+                    >
+                      Voir détail
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

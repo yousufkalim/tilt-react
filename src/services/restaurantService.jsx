@@ -2,9 +2,9 @@ import http from "./httpServices";
 
 const apiEndPoint = "/restaurant";
 
-const getRestaurantOrderHistory = async () => {
+const getOrderHistory = async () => {
   const { data } = await http.get(`${apiEndPoint}/history`);
-  return data;
+  return data.history;
 };
 
-export { getRestaurantOrderHistory };
+export { getOrderHistory };

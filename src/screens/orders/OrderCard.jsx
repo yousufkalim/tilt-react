@@ -1,6 +1,6 @@
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
-import dish from "../../images/Dish.png";
+import dishImg from "../../images/Dish.png";
 import OneOrder from "./OneOrder";
 
 const useStyles = makeStyles(() => ({
@@ -15,23 +15,31 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const OrderCard = () => {
+const OrderCard = ({ order }) => {
   const classes = useStyles();
   return (
     <Box className={classes.card}>
-      <Typography variant="body1" color="initial">
-        CAR-SCH-001
-      </Typography>
+      {order.carts.map((cart) => (
+        <>
+          <Typography variant="body1" color="initial">
+            {cart.id.userCode}
+          </Typography>
 
-      <OneOrder dishImage={dish} />
-      <OneOrder dishImage={dish} />
-      <OneOrder dishImage={dish} />
-      <Box marginLeft="20px" marginTop="20px" display="flex">
-        <Typography variant="subtitle2">2 Plats</Typography>
-        <Typography className={classes.textStyle} variant="subtitle2">
-          25€
-        </Typography>
-      </Box>
+          {cart.dishes.map((dish) => (
+            <>
+              <OneOrder dish={dish} dishImage={dishImg} />
+            </>
+          ))}
+          <Box marginLeft="20px" marginTop="20px" display="flex">
+            <Typography variant="subtitle2">
+              {cart.dishes.length} {cart.dishes.length === 1 ? "Plat" : "Plats"}
+            </Typography>
+            <Typography className={classes.textStyle} variant="subtitle2">
+              {cart.totalPrice}€
+            </Typography>
+          </Box>
+        </>
+      ))}
     </Box>
   );
 };

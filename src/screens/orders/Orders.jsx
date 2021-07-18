@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import emoji from "../../images/emoji.png";
 import OrderList from "./OrderList";
+import { getOrderHistory } from "../../services/restaurantService";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#FAF9FB",
@@ -16,7 +18,18 @@ const useStyles = makeStyles((theme) => ({
 
 const Orders = () => {
   const classes = useStyles();
-  return ( 
+  const [orders, setOrders] = useState([]);
+
+  const getOrders = async () => {
+    const data = await getOrderHistory();
+    setOrders(data);
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  return (
     <Grid className={classes.root}>
       <Box>
         <Typography style={{ padding: "50px" }} variant="h5">
@@ -36,7 +49,7 @@ const Orders = () => {
         </Typography>
       </Box>
       <Box>
-        <OrderList />
+        <OrderList orders={orders} />
       </Box>
     </Grid>
   );

@@ -19,11 +19,11 @@ const getLoggedinUser = async () => {
     const user = await http.get(`${apiEndPoint}/get`);
     return user;
   } catch (ex) {
-    return {};
+    return null;
   }
 };
 
-const getOrderHistory = async (filter) => {
+const getOrderHistory = async () => {
   const { data: orders } = await http.get(`${apiEndPoint}/orders`);
   return orders.history.orderHistory;
 };

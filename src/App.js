@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     color: " #fff",
   },
   Link: {
+    color: "black",
     "&:hover, :visited": {
       color: "#C72E54 !important",
     },
@@ -233,51 +234,90 @@ function App() {
                     style={{ height: "100%" }}
                   >
                     <List>
-                      <ListItem
-                        to="/menu"
-                        component={NavLink}
-                        activeClassName={
-                          open ? classes.active : classes.activeOpen
-                        }
-                        className={classes.Link}
-                      >
-                        <ListItemIcon
-                          to="/menu"
-                          component={NavLink}
-                          activeClassName={classes.activeIcon}
-                        >
-                          <HomeIcon stroke="#6f7070" />
-                        </ListItemIcon>
-                        <ListItemText
-                          activeClassName={classes.active}
-                          primary="Accueil"
-                        />
-                      </ListItem>
-                      <ListItem
-                        button
-                        to="/history"
-                        component={NavLink}
-                        activeClassName={classes.active}
-                        className={classes.Link}
-                      >
-                        <ListItemIcon>
-                          <HistoricIcon stroke="#6f7070" />
-                        </ListItemIcon>
-                        <ListItemText primary="Historique" />
-                      </ListItem>
-                      <ListItem
-                        button
-                        to="/profile"
-                        component={NavLink}
-                        className={classes.Link}
-                        exact
-                        activeClassName={classes.active}
-                      >
-                        <ListItemIcon>
-                          <UserIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
-                        </ListItemIcon>
-                        <ListItemText primary="Mon compte" />
-                      </ListItem>
+                      {role === "user" && (
+                        <>
+                          {" "}
+                          <ListItem
+                            to="/menu"
+                            component={NavLink}
+                            activeClassName={
+                              open ? classes.active : classes.activeOpen
+                            }
+                            className={classes.Link}
+                          >
+                            <ListItemIcon
+                              to="/menu"
+                              component={NavLink}
+                              activeClassName={classes.activeIcon}
+                            >
+                              <HomeIcon stroke="#6f7070" />
+                            </ListItemIcon>
+                            <ListItemText
+                              activeClassName={classes.active}
+                              primary="Accueil"
+                            />
+                          </ListItem>
+                          <ListItem
+                            button
+                            to="/history"
+                            component={NavLink}
+                            activeClassName={classes.active}
+                            className={classes.Link}
+                          >
+                            <ListItemIcon>
+                              <HistoricIcon stroke="#6f7070" />
+                            </ListItemIcon>
+                            <ListItemText primary="Historique" />
+                          </ListItem>
+                          <ListItem
+                            button
+                            to="/profile"
+                            component={NavLink}
+                            className={classes.Link}
+                            exact
+                            activeClassName={classes.active}
+                          >
+                            <ListItemIcon>
+                              <UserIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
+                            </ListItemIcon>
+                            <ListItemText primary="Mon compte" />
+                          </ListItem>
+                        </>
+                      )}
+                      {role === "restaurant" && (
+                        <>
+                          <ListItem
+                            to="/order"
+                            component={NavLink}
+                            activeClassName={
+                              open ? classes.active : classes.activeOpen
+                            }
+                            className={classes.Link}
+                          >
+                            <ListItemIcon>
+                              <HomeIcon stroke="#6f7070" />
+                            </ListItemIcon>
+                            <ListItemText
+                              activeClassName={classes.active}
+                              primary="Accueil"
+                            />
+                          </ListItem>
+                          <ListItem
+                            button
+                            to="/history"
+                            component={NavLink}
+                            activeClassName={
+                              open ? classes.active : classes.activeOpen
+                            }
+                            className={classes.Link}
+                          >
+                            <ListItemIcon>
+                              <HistoricIcon stroke="#6f7070" />
+                            </ListItemIcon>
+                            <ListItemText primary="Historique" />
+                          </ListItem>
+                        </>
+                      )}
                     </List>
                   </Box>
 
