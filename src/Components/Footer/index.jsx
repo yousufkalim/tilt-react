@@ -44,7 +44,6 @@ const index = () => {
                 Falcon Consulting
               </span>
             </a>
-            , made with love for a better web
           </p>
         </div>
       </div>
