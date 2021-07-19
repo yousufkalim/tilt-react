@@ -27,7 +27,7 @@ import { Box } from "@material-ui/core";
 import HomePage from "./screens/HomePage/HomePage";
 import { Store, UpdateStore } from "./context/StoreContext";
 import auth from "./services/authService";
-import { getLoggedinUser } from "./services/userService";
+import { getLoggedinUser, getUserCart } from "./services/userService";
 import History from "./screens/History/history";
 import Profile from "./screens/Profile/profile";
 import { Logout } from "./images/images";
@@ -140,6 +140,11 @@ function App() {
     updateStore({ token, role: data.user.role, user: data.user });
   };
 
+  const handleGetUserCart = async () => {
+    const cart = await getUserCart();
+   updateStore({ cart });
+  };
+
   const handleLogout = () => {
     console.log("CHecking");
     auth.logout();
@@ -150,6 +155,7 @@ function App() {
     const token = auth.getJwt();
     if (token) {
       getLoggedUser(token);
+      handleGetUserCart();
     } else {
       history.push("/signup");
     }

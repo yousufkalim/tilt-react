@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton } from "@material-ui/core";
+import { makeStyles, Box, Typography, IconButton } from "@material-ui/core";
 import React from "react";
 import DishImg from "../../images/Dish.png";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
@@ -11,7 +11,16 @@ const cardStyle = {
   margin: "auto",
 };
 
-const Dish = ({ dish }) => {
+const useStyles = makeStyles({
+  iconBtn: {
+    "&:focus": {
+      outline: "none",
+    },
+  },
+});
+
+const Dish = ({ dish, handleSelect }) => {
+  const classes = useStyles();
   const baseUrl = process.env.REACT_APP_API_URL;
 
   return (
@@ -27,8 +36,7 @@ const Dish = ({ dish }) => {
           <Box>
             <img
               style={{ height: "60px", width: "60px", borderRadius: "50%" }}
-              // src={`${baseUrl}/${dish.restaurantImage}`}
-              src={`http://160.153.249.64:9092/${dish.restaurantImage}`}
+              src={`${baseUrl}/${dish.restaurantImage}`}
               alt="dish"
             />
           </Box>
@@ -41,8 +49,16 @@ const Dish = ({ dish }) => {
             </Typography>
           </Box>
         </Box>
+        <Box paddingLeft="10%">
+          <Typography variant="body1" color="initial">
+            <b>{dish.price}€</b>
+          </Typography>
+        </Box>
 
-        <IconButton aria-label="" onClick={console.log("clicked")}>
+        <IconButton
+          onClick={() => handleSelect(dish._id)}
+          className={classes.iconBtn}
+        >
           <BsFillPlusCircleFill
             style={{ color: "#C72E54", fontSize: "35px" }}
           />

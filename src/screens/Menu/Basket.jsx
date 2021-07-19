@@ -2,7 +2,9 @@ import React from "react";
 import { Typography, Box } from "@material-ui/core";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 
-const Basket = () => {
+const Basket = ({ item }) => {
+  const baseUrl = process.env.REACT_APP_API_URL;
+  console.log("item", item);
   return (
     <Box
       display="flex"
@@ -13,22 +15,23 @@ const Basket = () => {
       style={{ width: "100%" }}
     >
       <Box>
-        <div
+        <img
+          src={`${baseUrl}/${item.id.image}`}
+          alt="dish_image"
           style={{
             width: "92px",
             height: "92px",
             borderRadius: "100%",
-            backgroundColor: "#D20249",
           }}
-        ></div>
+        />
       </Box>
       <Box flexGrow={1} style={{ marginLeft: "10px" }}>
         <Typography variant="body2" color="initial">
-          PanCake
+          {item.id.name} <br />x{item.count}
         </Typography>
         <Box
           display="flex"
-          style={{ marginTop: "15%" }}
+          style={{ marginTop: "10%" }}
           justifyContent="space-between"
         >
           <Box>
@@ -38,7 +41,7 @@ const Basket = () => {
           </Box>
           <Box>
             <Typography variant="body2" color="initial">
-              140€
+              {item.id.price}€
             </Typography>
           </Box>
         </Box>

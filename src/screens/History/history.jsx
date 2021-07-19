@@ -4,7 +4,7 @@ import HistoryTable from "./historyTable";
 import { getOrderHistory } from "../../services/userService";
 import { getOrderHistory as restaurantHistory } from "../../services/restaurantService";
 import { Store } from "../../context/StoreContext";
-import TransitionsModal from "../../Components/common/modal";
+import TransitionsModal from "../../Components/common/transitionsModal";
 import UserHistoryModal from "./userHistoryModal";
 import RestaurantHistoryModal from "./restaurantHistoryModal";
 

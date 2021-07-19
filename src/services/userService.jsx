@@ -28,9 +28,25 @@ const getOrderHistory = async () => {
   return orders.history.orderHistory;
 };
 
+const addToCart = async (body) => {
+  const { data } = await http.post(`${apiEndPoint}/cart`, body);
+  return data.cart;
+};
+
+const getUserCart = async () => {
+  try {
+    const { data } = await http.get(`${apiEndPoint}/cart`);
+    return data.cart;
+  } catch (err) {
+    return { userCarts: [] };
+  }
+};
+
 export {
   getDishesForUser,
   getLoggedinUser,
   getFilteredDishes,
   getOrderHistory,
+  getUserCart,
+  addToCart,
 };

@@ -32,14 +32,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DishList = ({ dishes }) => {
+const DishList = ({ dishes, handleSelect }) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <GridList className={classes.gridList} cols={1}>
         {dishes.map((dish) => (
           <GridListTile style={{ height: "85px" }}>
-            <Dish dish={dish} />
+            <Dish dish={dish} handleSelect={handleSelect} />
           </GridListTile>
         ))}
       </GridList>

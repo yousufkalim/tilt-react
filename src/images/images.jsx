@@ -4,5 +4,14 @@ import MonEnterPrize from "./profile2.svg";
 import PaymentMethod from "./profile3.svg";
 import Package from "./profile4.svg";
 import Logout from "./logout.svg";
+import EmptyCart from "./emptyCart.png";
 
-export { Logo, MonCompte, MonEnterPrize, PaymentMethod, Package, Logout };
+export {
+  Logo,
+  MonCompte,
+  MonEnterPrize,
+  PaymentMethod,
+  Package,
+  Logout,
+  EmptyCart,
+};
