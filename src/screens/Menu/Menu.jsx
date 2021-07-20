@@ -20,6 +20,10 @@ import TransitionsModal from "../../Components/common/transitionsModal";
 import DishDetailModal from "./dishDetailModal";
 import DrinkModal from "./drinkModal";
 import { EmptyCart } from "../../images/images";
+import { toast } from "react-toastify";
+import { loadStripe } from "@stripe/stripe-js";
+
+const Stripe = loadStripe(process.env.REACT_APP_Stripe_PK);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -176,6 +180,91 @@ const Menu = () => {
     updateStore({ cart });
     getDrinksOfRestaurant();
     handleDishModalClose();
+  };
+
+  const verifyOrder = () => {
+    if (currentUser.creditCard) {
+      let isComplete1 = true;
+      let totalrest = [];
+
+      currentUser.cart.userCarts.map(async (restaurantCart) => {
+        let isComplete = false;
+        let ammount = 0;
+
+        await Promise.all(
+          restaurantCart.dishes.map((restaurantItem) => {
+            if (
+              restaurantItem.id.dishType === "Dish" ||
+              restaurantItem.id.dishType === "Dessert"
+            ) {
+              isComplete = true;
+            }
+            ammount +=
+              parseInt(restaurantItem.count) *
+              parseInt(restaurantItem.id.price);
+          })
+        );
+
+        totalrest.push({
+          restaurant: restaurantCart.restaurant,
+          value: ammount,
+        });
+        if (!isComplete) {
+          isComplete1 = false;
+          return;
+        }
+      });
+      if (!isComplete1) {
+        toast.error("Starter/Drink cannot be ordered alone.");
+      } else {
+        onPayment(totalrest);
+      }
+    } else {
+      toast.error("Add a credit card to order!");
+    }
+  };
+
+  const onPayment = async (totalres) => {
+    // try {
+    //   const params = {
+    //     // mandatory
+    //     number: String(currentUser.creditCard.number),
+    //     expMonth: parseInt(currentUser.creditCard.date),
+    //     expYear: parseInt("20" + currentUser.creditCard.year),
+    //     cvc: String(currentUser.creditCard.code),
+    //     // optional
+    //     name: currentUser.firstName + " " + currentUser.lastName,
+    //     currency: "eur",
+    //     addressLine1: "123 Test Street",
+    //     addressLine2: "Apt. 5",
+    //     addressCity: "Test City",
+    //     addressState: "Test State",
+    //     addressCountry: "Test Country",
+    //     addressZip: "55555",
+    //   };
+    //   const cardObjectWithToken = await Stripe.createTokenWithCardAsync(params);
+    //   const price = totalPrice();
+    //   await GLOBALS.API({
+    //     uri: GLOBALS.Constants.USER_PAYMENT,
+    //     method: "POST",
+    //     token: context.context.token,
+    //     body: JSON.stringify({
+    //       name:
+    //         context.context.user.firstName +
+    //         " " +
+    //         context.context.user.lastName,
+    //       email: context.context.user.email,
+    //       token: cardObjectWithToken.tokenId,
+    //       card: cardObjectWithToken,
+    //       amount: price,
+    //       totalres: totalres,
+    //     }),
+    //   });
+    //   makeOrder();
+    // } catch (err) {
+    //   setState({ ...state, loading: false });
+    //   snackBarContext.toggleSnackBar(`Error: ${err}`, "error");
+    // }
   };
 
   return (

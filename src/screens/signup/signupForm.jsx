@@ -13,7 +13,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles({
   formControl: { width: "100%" },
-  // input: { height: "50px" },
   checkBox: {
     width: "100%",
     color: "#d10248",
