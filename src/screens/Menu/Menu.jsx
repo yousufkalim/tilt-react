@@ -14,9 +14,11 @@ import Basket from "./Basket";
 import DishCategoryList from "./DishCategoryList";
 import DishList from "./DishList";
 import { getFilteredDishes, addToCart } from "../../services/userService";
+import { getAllByRestaurantById } from "../../services/dishService";
 import { Store, UpdateStore } from "../../context/StoreContext";
 import TransitionsModal from "../../Components/common/transitionsModal";
 import DishDetailModal from "./dishDetailModal";
+import DrinkModal from "./drinkModal";
 import { EmptyCart } from "../../images/images";
 
 const useStyles = makeStyles((theme) => ({
@@ -75,8 +77,10 @@ const Menu = () => {
   const [dishes, setDishes] = useState([]);
   const [filter, setFilter] = useState("all");
   const [selectedDish, setSelectedDish] = useState({});
+  const [restaurantDrinks, setRestaurantDrinks] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [openDishModal, setOpenDishModal] = useState(false);
+  const [openDrinkModal, setOpenDrinkModal] = useState(false);
   const { user: currentUser, cart } = Store();
   const updateStore = UpdateStore();
 
@@ -87,6 +91,45 @@ const Menu = () => {
   const getDishes = async () => {
     const dishesInDB = await getFilteredDishes(filter);
     setDishes(dishesInDB);
+  };
+
+  const getDrinksOfRestaurant = async () => {
+    const data = await getAllByRestaurantById({
+      restaurantId: selectedDish.restaurant,
+      dishType: "Drink",
+    });
+    const dishes = data.dishes.map((dish) => ({ ...dish, quantity: 0 }));
+    setRestaurantDrinks(dishes);
+    setOpenDrinkModal(true);
+  };
+
+  const handleAddDrinkToCart = () => {
+    restaurantDrinks.forEach(async (drink) => {
+      if (drink.quantity === 0) return;
+      else {
+        const cart = await addToCart({
+          dishId: drink._id,
+          dishPrice: drink.price,
+          dishCount: drink.quantity,
+        });
+        updateStore({ cart });
+      }
+    });
+    handleDrinkModalClose();
+  };
+
+  const handleDrinkIncrement = (_id) => {
+    const drinks = [...restaurantDrinks];
+    const index = drinks.findIndex((d) => d._id === _id);
+    ++drinks[index].quantity;
+    setRestaurantDrinks(drinks);
+  };
+
+  const handleDrinkDecrement = (_id) => {
+    const drinks = [...restaurantDrinks];
+    const index = drinks.findIndex((d) => d._id === _id);
+    --drinks[index].quantity;
+    setRestaurantDrinks(drinks);
   };
 
   const handleFilterChange = async (filt) => {
@@ -105,18 +148,23 @@ const Menu = () => {
   const handleDishModalClose = () => {
     setOpenDishModal(false);
     setQuantity(1);
+    setSelectedDish({});
+    setRestaurantDrinks([]);
+  };
+
+  const handleDrinkModalClose = () => {
+    setOpenDrinkModal(false);
+    setRestaurantDrinks([]);
   };
 
   const handleDishIncrement = () => {
     let increment = quantity;
-    increment++;
-    setQuantity(increment);
+    setQuantity(++increment);
   };
 
   const handleDishDecrement = () => {
     let decrement = quantity;
-    decrement--;
-    setQuantity(decrement);
+    setQuantity(--decrement);
   };
 
   const handleAddToCart = async () => {
@@ -126,6 +174,7 @@ const Menu = () => {
       dishCount: quantity,
     });
     updateStore({ cart });
+    getDrinksOfRestaurant();
     handleDishModalClose();
   };
 
@@ -237,18 +286,37 @@ const Menu = () => {
             </Typography>
             {cart.userCarts && cart.userCarts.length > 0 ? (
               <>
-                {cart.userCarts.map((item) => (
-                  <>
-                    {item.dishes.length > 0 ? (
-                      item.dishes.map((dish) => <Basket item={dish} />)
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                ))}
-                <Button variant="contained" className={classes.ButtonStyle}>
-                  Placer la commande
-                </Button>
+                {cart.userCarts.map((item) =>
+                  item.dishes.length > 0 ? (
+                    item.dishes.map((dish) => (
+                      <>
+                        <Basket item={dish} />
+                      </>
+                    ))
+                  ) : (
+                    <></>
+                  )
+                )}
+                {cart.userCarts.some((item) => item.dishes.length > 0) ? (
+                  <Button variant="contained" className={classes.ButtonStyle}>
+                    Placer la commande
+                  </Button>
+                ) : (
+                  <div className={classes.emptyCart}>
+                    <img src={EmptyCart} alt="emptyCart" width="130px" />
+                    <Typography
+                      variant="caption"
+                      color="initial"
+                      style={{ paddingLeft: "5px" }}
+                    >
+                      Reçois des réductions aprèsVotre panier est vide.
+                      <br />
+                      <br />
+                      Commencez pas ajouter des plats à partir du menu de
+                      gauche. avoir invité tes collègues !
+                    </Typography>
+                  </div>
+                )}
               </>
             ) : (
               <div className={classes.emptyCart}>
@@ -269,20 +337,37 @@ const Menu = () => {
           </Box>
         </Grid>
       </Grid>
+      {openDishModal && (
+        <TransitionsModal
+          open={openDishModal}
+          handleClose={handleDishModalClose}
+          body={
+            <DishDetailModal
+              dish={selectedDish}
+              quantity={quantity}
+              onIncrement={handleDishIncrement}
+              onDecrement={handleDishDecrement}
+              onCartAdd={handleAddToCart}
+            />
+          }
+        />
+      )}
 
-      <TransitionsModal
-        open={openDishModal}
-        handleClose={handleDishModalClose}
-        body={
-          <DishDetailModal
-            dish={selectedDish}
-            quantity={quantity}
-            onIncrement={handleDishIncrement}
-            onDecrement={handleDishDecrement}
-            onCartAdd={handleAddToCart}
-          />
-        }
-      />
+      {openDrinkModal && (
+        <TransitionsModal
+          open={openDrinkModal}
+          handleClose={handleDrinkModalClose}
+          body={
+            <DrinkModal
+              drinks={restaurantDrinks}
+              onIncrement={handleDrinkIncrement}
+              onDecrement={handleDrinkDecrement}
+              onCartAdd={handleAddDrinkToCart}
+              onClose={handleDrinkModalClose}
+            />
+          }
+        />
+      )}
     </>
   );
 };

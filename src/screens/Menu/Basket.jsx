@@ -4,7 +4,7 @@ import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 
 const Basket = ({ item }) => {
   const baseUrl = process.env.REACT_APP_API_URL;
-  console.log("item", item);
+
   return (
     <Box
       display="flex"

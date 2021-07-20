@@ -2,6 +2,11 @@ import http from "./httpServices";
 
 const apiEndPoint = "/user";
 
+const register = async (body) => {
+  const { data } = await http.post(apiEndPoint, body);
+  return data;
+};
+
 const getDishesForUser = async () => {
   const { data: dishes } = await http.get(`${apiEndPoint}/dishes`);
   return dishes.dishesArray;
@@ -49,4 +54,5 @@ export {
   getOrderHistory,
   getUserCart,
   addToCart,
+  register,
 };

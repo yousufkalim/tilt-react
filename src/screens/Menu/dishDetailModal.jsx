@@ -91,7 +91,7 @@ const DishDetailModal = ({
             disabled={quantity === 1 ? true : false}
             variant="contained"
             className={classes.quantityBtn}
-            onClick={onIncrement}
+            onClick={onDecrement}
           >
             -
           </Button>

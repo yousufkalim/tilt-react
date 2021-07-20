@@ -6,12 +6,14 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 // import SignupForm from "./../components/auth/signupForm";
 import LoginForm from "./loginForm";
+import SignupForm from "./signupForm";
 import { Logo } from "../../images/images";
-// import * as userService from "../services/userService";
+import { register } from "../../services/userService";
 import auth from "../../services/authService";
 import { toast } from "react-toastify";
 import { UpdateStore, Store } from "../../context/StoreContext";
 import "../../styles/signup.css";
+import { getAllCompanies } from "../../services/companyService";
 
 const useStyles = makeStyles({
   root: {
@@ -46,58 +48,42 @@ const useStyles = makeStyles({
 const Signup = () => {
   const classes = useStyles();
   const [registerData, setRegisterData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    phoneCode: "",
-    phoneNumber: "",
-    day: "",
-    month: "",
-    year: "",
+    companyId: "",
+    affiliate: "",
+    terms: false,
   });
+  const [companies, setCompanies] = useState([]);
   const [registerErrors, setRegisterErrors] = useState({});
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [loginErrors, setLoginErrors] = useState({});
-  const [formType, setFormType] = useState("signin");
+  const [formType, setFormType] = useState("signup");
   const history = useHistory();
   const updateStore = UpdateStore();
   const { user: currentUser } = Store();
 
-  // useEffect(() => {
-  //   console.log("currentUser", currentUser);
-  // });
+  useEffect(() => {
+    getCompanies();
+  }, []);
+
+  const getCompanies = async () => {
+    const data = await getAllCompanies();
+    setCompanies(data);
+  };
 
   const registerSchema = {
-    name: Joi.string().min(5).required().label("Name"),
+    firstName: Joi.string().min(4).required().label("First Name"),
+    lastName: Joi.string().min(4).required().label("Last Name"),
     email: Joi.string().email().required().label("Email"),
     password: Joi.string().required().min(5).label("Password"),
     confirmPassword: Joi.string().required().min(5).label("Password"),
-    phoneCode: Joi.string()
-      .regex(/^[+][0-9][0-9]/)
-      .required()
-      .min(3)
-      .max(3)
-      .label("Phone Code"),
-    phoneNumber: Joi.number().required().label("Phone Number"),
-    day: Joi.string()
-      .regex(/^[0-9]/)
-      .min(1)
-      .max(2)
-      .required()
-      .label("Day"),
-    month: Joi.string()
-      .regex(/^[0-9]/)
-      .min(1)
-      .max(2)
-      .required()
-      .label("Month"),
-    year: Joi.string()
-      .regex(/^[0-9]/)
-      .min(4)
-      .max(4)
-      .required()
-      .label("Year"),
+    companyId: Joi.string().required().label("Company"),
+    affiliate: Joi.string().allow("").label("Code affilie"),
+    terms: Joi.required(),
   };
 
   const loginSchema = {
@@ -112,6 +98,23 @@ const Signup = () => {
     };
     const { error } = Joi.validate(obj, schema);
     return error ? error.details[0].message : null;
+  };
+
+  const handleRegisterFormChange = ({ target }) => {
+    const { name, value, checked } = target;
+    const allErrors = { ...registerErrors };
+    const errorMessage = validateProperty(name, value);
+    if (errorMessage) allErrors[name] = errorMessage;
+    else delete allErrors[name];
+    setRegisterErrors(allErrors);
+
+    const formData = { ...registerData };
+    if (name === "terms") {
+      formData[name] = checked;
+    } else {
+      formData[name] = value;
+    }
+    setRegisterData(formData);
   };
 
   const handleLoginFormChange = ({ target }) => {
@@ -131,15 +134,14 @@ const Signup = () => {
     if (formType === "signup") {
       setFormType("signin");
       setRegisterData({
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         confirmPassword: "",
-        phoneCode: "",
-        phoneNumber: "",
-        day: "",
-        month: "",
-        year: "",
+        companyId: "",
+        affiliate: "",
+        terms: false,
       });
       setRegisterErrors({});
     } else {
@@ -181,14 +183,37 @@ const Signup = () => {
           confirmPassword: "Password does not match",
         };
         setRegisterErrors(errors);
+      } else if (!errors && !registerData.terms) {
+        errors = {
+          terms: "Terms need to be checked",
+        };
+        setRegisterErrors(errors);
       }
     } else {
       setLoginErrors(errors || {});
     }
     if (errors) return;
 
-    if (formType === "signup") console.log("Submitted");
+    if (formType === "signup") registerUser();
     else loginUser();
+  };
+
+  const registerUser = async () => {
+    try {
+      const { firstName, lastName, email, password, companyId, affiliate } =
+        registerData;
+      await register({
+        firstName,
+        lastName,
+        email,
+        password,
+        companyId,
+        affiliate,
+      });
+      handleFormType();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   const loginUser = async () => {
@@ -242,14 +267,15 @@ const Signup = () => {
             {formType === "signup" ? (
               <>
                 <Typography variant="h2" className={classes.formHeading}>
-                  Create Account
+                  Register
                 </Typography>
-                {/* <SignupForm
+                <SignupForm
                   handleFormChange={handleRegisterFormChange}
                   handleFormSubmit={handleSubmit}
                   errors={registerErrors}
+                  companies={companies}
                   data={registerData}
-                /> */}
+                />
               </>
             ) : formType === "signin" ? (
               <>
