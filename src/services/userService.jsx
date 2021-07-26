@@ -47,12 +47,30 @@ const getUserCart = async () => {
   }
 };
 
+const getUserDiscounts = async () => {
+  const { data } = await http.get(`${apiEndPoint}/dishes`);
+  return data.discounts;
+};
+
+const userOrderPayment = async (body) => {
+  const { data } = await http.post(`${apiEndPoint}/payment`, body);
+  return data;
+};
+
+const getUserOrder = async () => {
+  const { data } = await http.get(`${apiEndPoint}/order`);
+  return data;
+};
+
 export {
   getDishesForUser,
   getLoggedinUser,
   getFilteredDishes,
   getOrderHistory,
+  getUserOrder,
   getUserCart,
+  getUserDiscounts,
+  userOrderPayment,
   addToCart,
   register,
 };

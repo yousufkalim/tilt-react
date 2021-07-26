@@ -22,6 +22,7 @@ export function StoreProvider({ children }) {
     role: "",
     user: {},
     cart: [],
+    discount: {},
   });
 
   const updateStore = (data) => {

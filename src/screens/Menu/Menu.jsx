@@ -13,7 +13,12 @@ import bike from "../../images/bike.png";
 import Basket from "./Basket";
 import DishCategoryList from "./DishCategoryList";
 import DishList from "./DishList";
-import { getFilteredDishes, addToCart } from "../../services/userService";
+import {
+  getFilteredDishes,
+  addToCart,
+  getUserOrder,
+  userOrderPayment,
+} from "../../services/userService";
 import { getAllByRestaurantById } from "../../services/dishService";
 import { Store, UpdateStore } from "../../context/StoreContext";
 import TransitionsModal from "../../Components/common/transitionsModal";
@@ -21,9 +26,7 @@ import DishDetailModal from "./dishDetailModal";
 import DrinkModal from "./drinkModal";
 import { EmptyCart } from "../../images/images";
 import { toast } from "react-toastify";
-import { loadStripe } from "@stripe/stripe-js";
-
-const Stripe = loadStripe(process.env.REACT_APP_Stripe_PK);
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,8 +88,10 @@ const Menu = () => {
   const [quantity, setQuantity] = useState(1);
   const [openDishModal, setOpenDishModal] = useState(false);
   const [openDrinkModal, setOpenDrinkModal] = useState(false);
-  const { user: currentUser, cart } = Store();
+  const { user: currentUser, cart, discount } = Store();
   const updateStore = UpdateStore();
+  const stripe = useStripe();
+  const elements = useElements();
 
   useEffect(() => {
     getDishes();
@@ -183,11 +188,11 @@ const Menu = () => {
   };
 
   const verifyOrder = () => {
-    if (currentUser.creditCard) {
+    if (currentUser.user.creditCard) {
       let isComplete1 = true;
       let totalrest = [];
 
-      currentUser.cart.userCarts.map(async (restaurantCart) => {
+      currentUser.user.cart.userCarts.map(async (restaurantCart) => {
         let isComplete = false;
         let ammount = 0;
 
@@ -225,47 +230,97 @@ const Menu = () => {
   };
 
   const onPayment = async (totalres) => {
-    // try {
-    //   const params = {
-    //     // mandatory
-    //     number: String(currentUser.creditCard.number),
-    //     expMonth: parseInt(currentUser.creditCard.date),
-    //     expYear: parseInt("20" + currentUser.creditCard.year),
-    //     cvc: String(currentUser.creditCard.code),
-    //     // optional
-    //     name: currentUser.firstName + " " + currentUser.lastName,
-    //     currency: "eur",
-    //     addressLine1: "123 Test Street",
-    //     addressLine2: "Apt. 5",
-    //     addressCity: "Test City",
-    //     addressState: "Test State",
-    //     addressCountry: "Test Country",
-    //     addressZip: "55555",
-    //   };
-    //   const cardObjectWithToken = await Stripe.createTokenWithCardAsync(params);
-    //   const price = totalPrice();
-    //   await GLOBALS.API({
-    //     uri: GLOBALS.Constants.USER_PAYMENT,
-    //     method: "POST",
-    //     token: context.context.token,
-    //     body: JSON.stringify({
-    //       name:
-    //         context.context.user.firstName +
-    //         " " +
-    //         context.context.user.lastName,
-    //       email: context.context.user.email,
-    //       token: cardObjectWithToken.tokenId,
-    //       card: cardObjectWithToken,
-    //       amount: price,
-    //       totalres: totalres,
-    //     }),
-    //   });
-    //   makeOrder();
-    // } catch (err) {
-    //   setState({ ...state, loading: false });
-    //   snackBarContext.toggleSnackBar(`Error: ${err}`, "error");
-    // }
+    try {
+      const params = {
+        // mandatory
+        number: String(currentUser.user.creditCard.number),
+        exp_month: parseInt(currentUser.user.creditCard.date),
+        exp_year: parseInt("20" + currentUser.user.creditCard.year),
+        cvc: String(currentUser.user.creditCard.code),
+        // optional
+        name: currentUser.firstName + " " + currentUser.lastName,
+        currency: "eur",
+        addressLine1: "123 Test Street",
+        addressLine2: "Apt. 5",
+        addressCity: "Test City",
+        addressState: "Test State",
+        addressCountry: "Test Country",
+        addressZip: "55555",
+      };
+      // const cardObjectWithToken = await stripe.createToken(params);
+      // console.log("cardObject", cardObjectWithToken);
+
+      // const cardObjectWithToken = await stripe.createPaymentMethod({
+      //   type: "card",
+      //   card: params,
+      // });
+      // console.log("cardObjectWithToken", cardObjectWithToken);
+
+      // const price = totalPrice();
+
+      // await userOrderPayment({
+      //   name: currentUser.firstName + " " + currentUser.lastName,
+      //   email: currentUser.email,
+      //   token: cardObjectWithToken.tokenId,
+      //   card: cardObjectWithToken,
+      //   amount: price,
+      //   totalres: totalres,
+      // });
+      // makeOrder();
+    } catch (err) {
+      toast.error("An Error Occurred 1");
+      console.log(err);
+    }
   };
+
+  const makeOrder = async () => {
+    try {
+      const data = await getUserOrder();
+
+      updateStore({
+        user: {
+          ...currentUser,
+          user: { ...data.user.user, cart: null },
+        },
+      });
+
+      toast.success("Order was successfull!");
+    } catch (err) {
+      toast.error("An Error Occurred 2");
+    }
+  };
+
+  const totalPrice = () => {
+    let totalPriced = +currentUser.user.company.block.deliveryCost;
+    if (currentUser.user.cart) {
+      totalPriced += +currentUser.user.cart.totalPrice;
+      if (currentUser.user.credits && currentUser.user.credits > 0) {
+        totalPriced -= currentUser.user.package.offPrice;
+      }
+      if (currentUser.user.referrals && currentUser.user.referrals > 0) {
+        totalPriced -= +discount.referralDiscount;
+      }
+    }
+    return totalPriced;
+  };
+
+  // const handleSubmit = async () => {
+  //   if (!stripe || !elements) {
+  //     // Stripe.js has not loaded yet. Make sure to disable
+  //     // form submission until Stripe.js has loaded.
+  //     return;
+  //   }
+
+  //   const cardElement = elements.getElement(CardElement);
+  //   const { error, paymentMethod } = await stripe.createPaymentMethod({
+  //     type: "card",
+  //     card: cardElement,
+  //   });
+  //   // const cardObjectWithToken = await stripe.createToken(cardElement);
+  //   // console.log("cardObjectWithToken", cardObjectWithToken);
+  //   console.log("cardElement", paymentMethod);
+  //   console.log("Error", error);
+  // };
 
   return (
     <>
@@ -273,6 +328,10 @@ const Menu = () => {
         <Grid item sm={9}>
           <Box display="flex" flexDirection="column">
             <Box marginLeft="10%" marginTop="20px">
+              {/* <CardElement />
+              <button type="submit" disabled={!stripe} onClick={handleSubmit}>
+                Pay
+              </button> */}
               <Typography variant="h5">
                 Votre menu du jour{" "}
                 <img src={emoji} alt="emoji" style={{ width: "25px" }} />
@@ -387,7 +446,22 @@ const Menu = () => {
                   )
                 )}
                 {cart.userCarts.some((item) => item.dishes.length > 0) ? (
-                  <Button variant="contained" className={classes.ButtonStyle}>
+                  <Button
+                    variant="contained"
+                    className={classes.ButtonStyle}
+                    onClick={() => {
+                      if (
+                        +currentUser.user.cart.totalPrice <
+                        +discount.leastCartValue
+                      ) {
+                        alert(
+                          `Your cart value should be at least of ${discount.leastCartValue}€`
+                        );
+                      } else {
+                        verifyOrder();
+                      }
+                    }}
+                  >
                     Placer la commande
                   </Button>
                 ) : (

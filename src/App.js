@@ -27,10 +27,18 @@ import { Box } from "@material-ui/core";
 import HomePage from "./screens/HomePage/HomePage";
 import { Store, UpdateStore } from "./context/StoreContext";
 import auth from "./services/authService";
-import { getLoggedinUser, getUserCart } from "./services/userService";
+import {
+  getLoggedinUser,
+  getUserCart,
+  getUserDiscounts,
+} from "./services/userService";
 import History from "./screens/History/history";
 import Profile from "./screens/Profile/profile";
 import { Logout } from "./images/images";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(process.env.REACT_APP_Stripe_PK);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -140,13 +148,17 @@ function App() {
     updateStore({ token, role: data.user.role, user: data.user });
   };
 
+  const getDiscounts = async () => {
+    const discount = await getUserDiscounts();
+    updateStore({ discount });
+  };
+
   const handleGetUserCart = async () => {
     const cart = await getUserCart();
-   updateStore({ cart });
+    updateStore({ cart });
   };
 
   const handleLogout = () => {
-    console.log("CHecking");
     auth.logout();
     history.replace("/signup");
   };
@@ -156,13 +168,14 @@ function App() {
     if (token) {
       getLoggedUser(token);
       handleGetUserCart();
+      getDiscounts();
     } else {
       history.push("/signup");
     }
   }, [pathname, authToken]);
 
   return (
-    <React.Fragment>
+    <Elements stripe={stripePromise}>
       <>
         <ToastContainer />
         <div
@@ -346,7 +359,7 @@ function App() {
           )}
         </div>
       </>
-    </React.Fragment>
+    </Elements>
   );
 }
 
