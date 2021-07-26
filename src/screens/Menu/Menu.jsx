@@ -18,6 +18,7 @@ import {
   addToCart,
   getUserOrder,
   userOrderPayment,
+  removeDishFromCart,
 } from "../../services/userService";
 import { getAllByRestaurantById } from "../../services/dishService";
 import { Store, UpdateStore } from "../../context/StoreContext";
@@ -322,6 +323,30 @@ const Menu = () => {
   //   console.log("Error", error);
   // };
 
+  const handleDeleteDish = async (item) => {
+    console.log(item.id._id, item.id.price);
+    try {
+      const data = await removeDishFromCart({
+        dishId: item.id._id,
+        dishPrice: item.id.price,
+      });
+
+      updateStore({
+        user: {
+          ...currentUser,
+          user: {
+            ...currentUser.user,
+            cart: data.cart,
+          },
+        },
+        cart: data.cart,
+      });
+      alert("Dish removed from cart successfully!"); 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Grid className={classes.root} container spacing={3}>
@@ -438,7 +463,7 @@ const Menu = () => {
                   item.dishes.length > 0 ? (
                     item.dishes.map((dish) => (
                       <>
-                        <Basket item={dish} />
+                        <Basket item={dish} onDelete={handleDeleteDish} />
                       </>
                     ))
                   ) : (

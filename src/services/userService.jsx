@@ -62,6 +62,11 @@ const getUserOrder = async () => {
   return data;
 };
 
+const removeDishFromCart = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/cart`, body);
+  return data;
+};
+
 export {
   getDishesForUser,
   getLoggedinUser,
@@ -71,6 +76,7 @@ export {
   getUserCart,
   getUserDiscounts,
   userOrderPayment,
+  removeDishFromCart,
   addToCart,
   register,
 };

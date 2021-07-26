@@ -160,7 +160,8 @@ function App() {
 
   const handleLogout = () => {
     auth.logout();
-    history.replace("/signup");
+    updateStore({ token: "", role: "", user: {}, cart: [], discount: {} });
+    window.location = "/signup";
   };
 
   useEffect(() => {
@@ -169,8 +170,6 @@ function App() {
       getLoggedUser(token);
       handleGetUserCart();
       getDiscounts();
-    } else {
-      history.push("/signup");
     }
   }, [pathname, authToken]);
 
@@ -190,9 +189,18 @@ function App() {
         >
           <Box flexGrow={1}>
             <Switch>
-              <Route path="/signup">
-                <Signup />
-              </Route>
+              <Route
+                path="/signup"
+                render={() =>
+                  !authToken ? (
+                    <Signup />
+                  ) : role === "user" ? (
+                    history.push("/menu")
+                  ) : (
+                    history.push("/order")
+                  )
+                }
+              />
               {(role === "user" || role === "restaurant") && (
                 <Route path="/history">
                   <History />

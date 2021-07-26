@@ -1,8 +1,9 @@
 import React from "react";
 import { Typography, Box } from "@material-ui/core";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
+import ClearIcon from "@material-ui/icons/Clear";
 
-const Basket = ({ item }) => {
+const Basket = ({ item, onDelete }) => {
   const baseUrl = process.env.REACT_APP_API_URL;
 
   return (
@@ -12,8 +13,18 @@ const Basket = ({ item }) => {
       marginTop="5%"
       alignContent="center"
       alignItems="center"
-      style={{ width: "100%" }}
+      style={{ width: "100%", position: "relative" }}
     >
+      <ClearIcon
+        onClick={() => onDelete(item)}
+        fontSize="small"
+        style={{
+          position: "absolute",
+          cursor: "pointer",
+          top: 7,
+          right: 0,
+        }}
+      />
       <Box>
         <img
           src={`${baseUrl}/${item.id.image}`}

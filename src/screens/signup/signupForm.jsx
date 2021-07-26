@@ -139,7 +139,7 @@ const SignupForm = ({
                 name="terms"
               />
             }
-            label="Secondary"
+            label="Terms and Conditions"
           />
           {errors["terms"] && (
             <FormHelperText style={{ color: "#d10248" }}>
