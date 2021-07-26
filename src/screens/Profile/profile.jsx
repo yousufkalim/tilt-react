@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ProfileGrid from "./profileGrid";
 import { Store } from "../../context/StoreContext";
+import TransitionsModal from "../../Components/common/transitionsModal";
+import CompanyModal from "./companyModal";
+import { getAllCompanies } from "../../services/companyService";
 
 const useStyles = makeStyles({
   main: {
@@ -38,6 +41,27 @@ const useStyles = makeStyles({
 const Profile = () => {
   const classes = useStyles();
   const { user } = Store();
+  const [openCompanyModal, setOpenCompanyModal] = useState(false);
+  const [companies, setCompanies] = useState([]);
+  const [selectedCompany, setselectedCompany] = useState("");
+
+  useEffect(() => {
+    getCompanies();
+    setselectedCompany(user.user.company._id);
+  }, []);
+
+  const handleCompanyModalOpen = () => {
+    setOpenCompanyModal(true);
+  };
+
+  const handleCompanyModalclose = () => {
+    setOpenCompanyModal(false);
+  };
+
+  const getCompanies = async () => {
+    const data = await getAllCompanies();
+    setCompanies(data);
+  };
 
   return (
     <div className={classes.main}>
@@ -53,7 +77,18 @@ const Profile = () => {
         </Grid>
       </Grid>
 
-      <ProfileGrid user={user} />
+      <ProfileGrid user={user} handleCompanyModal={handleCompanyModalOpen} />
+
+      <TransitionsModal
+        open={openCompanyModal}
+        handleClose={handleCompanyModalclose}
+        body={
+          <CompanyModal
+            companies={companies}
+            selectedCompany={selectedCompany}
+          />
+        }
+      />
     </div>
   );
 };

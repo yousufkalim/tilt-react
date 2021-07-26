@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ProfileGrid = ({ user }) => {
+const ProfileGrid = ({ user, handleCompanyModal }) => {
   const classes = useStyles();
 
   return (
@@ -85,7 +85,9 @@ const ProfileGrid = ({ user }) => {
               </Grid>
             </Grid>
             <div className={classes.buttonDiv}>
-              <Button className={classes.editBtn}>Modifier</Button>
+              <Button className={classes.editBtn} onClick={handleCompanyModal}>
+                Modifier
+              </Button>
             </div>
           </Paper>
         </Grid>
