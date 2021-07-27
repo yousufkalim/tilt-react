@@ -96,6 +96,10 @@ const Menu = () => {
 
   useEffect(() => {
     getDishes();
+    const variable = document.getElementsByClassName(
+      "CardNumberField-input-wrapper"
+    ).first;
+    console.log(variable);
   }, []);
 
   const getDishes = async () => {
@@ -341,7 +345,7 @@ const Menu = () => {
         },
         cart: data.cart,
       });
-      alert("Dish removed from cart successfully!"); 
+      alert("Dish removed from cart successfully!");
     } catch (error) {
       console.log(error);
     }
@@ -353,8 +357,8 @@ const Menu = () => {
         <Grid item sm={9}>
           <Box display="flex" flexDirection="column">
             <Box marginLeft="10%" marginTop="20px">
-              {/* <CardElement />
-              <button type="submit" disabled={!stripe} onClick={handleSubmit}>
+              {/* <CardElement /> */}
+              {/* <button type="submit" disabled={!stripe} onClick={handleSubmit}>
                 Pay
               </button> */}
               <Typography variant="h5">

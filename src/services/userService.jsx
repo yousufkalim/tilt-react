@@ -67,6 +67,21 @@ const removeDishFromCart = async (body) => {
   return data;
 };
 
+const editUserCompany = async (_id) => {
+  const { data } = await http.put(`${apiEndPoint}/company/${_id}`);
+  return data;
+};
+
+const editUserDetails = async (_id, body) => {
+  const { data } = await http.put(`${apiEndPoint}/edit/${_id}`, body);
+  return data;
+};
+
+const editUserPassword = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/editpassword`, body);
+  return data;
+};
+
 export {
   getDishesForUser,
   getLoggedinUser,
@@ -77,6 +92,9 @@ export {
   getUserDiscounts,
   userOrderPayment,
   removeDishFromCart,
+  editUserCompany,
+  editUserDetails,
+  editUserPassword,
   addToCart,
   register,
 };

@@ -35,7 +35,12 @@ const useStyles = makeStyles({
   },
 });
 
-const ProfileGrid = ({ user, handleCompanyModal }) => {
+const ProfileGrid = ({
+  user,
+  handleCompanyModal,
+  handlePaymentyModal,
+  handleProfileModal,
+}) => {
   const classes = useStyles();
 
   return (
@@ -58,7 +63,9 @@ const ProfileGrid = ({ user, handleCompanyModal }) => {
               </Grid>
             </Grid>
             <div className={classes.buttonDiv}>
-              <Button className={classes.editBtn}>Modifier</Button>
+              <Button className={classes.editBtn} onClick={handleProfileModal}>
+                Modifier
+              </Button>
             </div>
           </Paper>
         </Grid>
@@ -114,7 +121,12 @@ const ProfileGrid = ({ user, handleCompanyModal }) => {
               </Grid>
             </Grid>
             <div className={classes.buttonDiv}>
-              <Button className={classes.editBtn}>Modifier</Button>
+              <Button
+                className={classes.editBtn}
+                // onClick={handlePaymentyModal}
+              >
+                Modifier
+              </Button>
             </div>
           </Paper>
         </Grid>
@@ -146,9 +158,7 @@ const ProfileGrid = ({ user, handleCompanyModal }) => {
                     </Typography>
                     <Typography variant="subtitle2">
                       Expires on :{" "}
-                      {moment(user.user.package.packageExpiration).format(
-                        "DD/MM/YYYY"
-                      )}
+                      {moment(user.user.packageExpiration).format("DD/MM/YYYY")}
                     </Typography>
                   </>
                 ) : (
@@ -156,9 +166,11 @@ const ProfileGrid = ({ user, handleCompanyModal }) => {
                 )}
               </Grid>
             </Grid>
-            <div className={classes.buttonDiv}>
-              <Button className={classes.editBtn}>Buy Package</Button>
-            </div>
+            {user.user && !user.user.package && (
+              <div className={classes.buttonDiv}>
+                <Button className={classes.editBtn}>Buy Package</Button>
+              </div>
+            )}
           </Paper>
         </Grid>
       </Grid>

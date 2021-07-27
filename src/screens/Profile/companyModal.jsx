@@ -2,7 +2,7 @@ import React from "react";
 import { Typography, makeStyles } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
@@ -18,9 +18,28 @@ const useStyles = makeStyles({
       borderColor: "#d10248 !important",
     },
   },
+  btn: {
+    marginTop: "15px",
+    backgroundColor: "#D20249",
+    color: "white",
+    "&:focus": {
+      outline: "none",
+      backgroundColor: "#D20249",
+      color: "white",
+    },
+    "&:hover": {
+      backgroundColor: "#D20249",
+      color: "white",
+    },
+  },
 });
 
-const CompanyModal = ({ companies, selectedCompany }) => {
+const CompanyModal = ({
+  companies,
+  selectedCompany,
+  handleChange,
+  handleSubmit,
+}) => {
   const classes = useStyles();
   return (
     <div>
@@ -35,7 +54,7 @@ const CompanyModal = ({ companies, selectedCompany }) => {
         <Select
           value={selectedCompany}
           name="companyId"
-          // onChange={handleFormChange}
+          onChange={handleChange}
           label="Selectionner une enterprise"
           className={classes.outlined}
         >
@@ -43,11 +62,14 @@ const CompanyModal = ({ companies, selectedCompany }) => {
             <MenuItem value={company._id}>{company.name}</MenuItem>
           ))}
         </Select>
-        {/* {errors["companyId"] && (
-          <FormHelperText style={{ color: "#d10248" }}>
-            {errors["companyId"]}
-          </FormHelperText>
-        )} */}
+        <Button
+          variant="contained"
+          className={classes.btn}
+          color="secondary"
+          onClick={handleSubmit}
+        >
+          Modifier
+        </Button>
       </FormControl>
     </div>
   );
