@@ -37,6 +37,7 @@ import Profile from "./screens/Profile/profile";
 import { Logout } from "./images/images";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import RestaurantProfile from "./screens/Restaurant/restaurantProfile";
 
 const stripePromise = loadStripe(process.env.REACT_APP_Stripe_PK);
 
@@ -221,6 +222,11 @@ function App() {
                   <Orders />
                 </Route>
               )}
+              {role === "restaurant" && (
+                <Route path="/profile">
+                  <RestaurantProfile onLogout={handleLogout} />
+                </Route>
+              )}
               <Route exact path="/">
                 <HomePage />
               </Route>
@@ -342,6 +348,19 @@ function App() {
                               <HistoricIcon stroke="#6f7070" />
                             </ListItemIcon>
                             <ListItemText primary="Historique" />
+                          </ListItem>
+                          <ListItem
+                            button
+                            to="/profile"
+                            component={NavLink}
+                            className={classes.Link}
+                            exact
+                            activeClassName={classes.active}
+                          >
+                            <ListItemIcon>
+                              <UserIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
+                            </ListItemIcon>
+                            <ListItemText primary="Mon compte" />
                           </ListItem>
                         </>
                       )}

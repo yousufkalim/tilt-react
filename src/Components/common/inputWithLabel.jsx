@@ -28,6 +28,7 @@ const InputWithLabel = ({
   handleChange,
   error = false,
   errorMessage = "",
+  multiline = false,
   min,
   max,
 }) => {
@@ -72,6 +73,7 @@ const InputWithLabel = ({
         id={name}
         name={name}
         label={label}
+        multiline={multiline}
         type={type}
         className={classes.field}
         variant="outlined"

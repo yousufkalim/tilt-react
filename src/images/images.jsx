@@ -5,10 +5,12 @@ import PaymentMethod from "./profile3.svg";
 import Package from "./profile4.svg";
 import Logout from "./logout.svg";
 import EmptyCart from "./emptyCart.png";
+import EditIcon from "./edit.png";
 
 export {
   Logo,
   MonCompte,
+  EditIcon,
   MonEnterPrize,
   PaymentMethod,
   Package,
