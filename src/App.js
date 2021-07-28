@@ -208,7 +208,7 @@ function App() {
               )}
               {role === "user" && (
                 <Route path="/profile">
-                  <Profile />
+                  <Profile onLogout={handleLogout} />
                 </Route>
               )}
               {role === "user" && (

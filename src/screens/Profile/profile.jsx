@@ -9,6 +9,7 @@ import TransitionsModal from "../../Components/common/transitionsModal";
 import CompanyModal from "./companyModal";
 import { getAllCompanies } from "../../services/companyService";
 import {
+  deleteProfile,
   editUserCompany,
   editUserDetails,
   editUserPassword,
@@ -47,7 +48,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Profile = () => {
+const Profile = ({ onLogout }) => {
   const classes = useStyles();
   const { user } = Store();
   const updateStore = UpdateStore();
@@ -239,6 +240,20 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteProfile = async () => {
+    const check = window.confirm(
+      "Are you Sure you want to delete tyour account?"
+    );
+    if (check) {
+      try {
+        await deleteProfile(user._id);
+        onLogout();
+      } catch (err) {
+        toast.error(err.response.data.message);
+      }
+    }
+  };
+
   return (
     <div className={classes.main}>
       <Grid container spacing={2}>
@@ -249,7 +264,9 @@ const Profile = () => {
           <Typography variant="subtitle1" className={classes.affiliateCode}>
             Mon code affilié : {user.user.affiliateCode}
           </Typography>
-          <Button className={classes.deleteBtn}>Delete account</Button>
+          <Button className={classes.deleteBtn} onClick={handleDeleteProfile}>
+            Delete account
+          </Button>
         </Grid>
       </Grid>
 

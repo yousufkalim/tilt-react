@@ -113,9 +113,20 @@ const ProfileGrid = ({
                   Carte de crédite
                 </Typography>
                 <Typography variant="subtitle2">
-                  **** **** ****
-                  {user.user.creditCard.number.substr(
-                    user.user.creditCard.number.length - 4
+                  {user.user.creditCard && user.user.creditCard.number ? (
+                    <>
+                      {"**** **** ****" +
+                        user.user.creditCard.number.substr(
+                          user.user.creditCard.number.length - 4
+                        )}
+                    </>
+                  ) : (
+                    <Typography
+                      variant="subtitle2"
+                      className={classes.subtitle}
+                    >
+                      No Card
+                    </Typography>
                   )}
                 </Typography>
               </Grid>

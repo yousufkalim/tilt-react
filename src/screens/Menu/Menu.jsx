@@ -28,6 +28,8 @@ import DrinkModal from "./drinkModal";
 import { EmptyCart } from "../../images/images";
 import { toast } from "react-toastify";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import moment from "moment";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -434,21 +436,43 @@ const Menu = () => {
                 />
               </Box>
               <Box>
-                <Typography style={{ color: "#D20249" }} variant="body1">
-                  2 crédits
-                </Typography>
-                <Typography style={{ fontSize: "10px" }}>
-                  You currently have the Package 1. <br />
-                  Each credit gives you 2€ discount on Delivery Fee.
-                  <br />
-                  Expires on : 12/4/2020
-                </Typography>
-                <Button
-                  variant="contained"
-                  className={classes.Primarycontained}
-                >
-                  En savoir plus
-                </Button>
+                {currentUser.user && currentUser.user.package ? (
+                  <>
+                    <Typography style={{ color: "#D20249" }} variant="body1">
+                      {currentUser.user.credits} crédits
+                    </Typography>
+                    <Typography style={{ fontSize: "10px" }}>
+                      You currently have the {currentUser.user.package.name}
+                      <br />
+                      Each credit gives you {currentUser.user.package.offPrice}€
+                      discount on Delivery Fee
+                      <br />
+                      Expires on :{" "}
+                      {moment(currentUser.user.packageExpiration).format(
+                        "DD/MM/YYYY"
+                      )}
+                    </Typography>
+                  </>
+                ) : (
+                  <>
+                    <Typography style={{ color: "#D20249" }} variant="body1">
+                      Aucun crédit
+                    </Typography>
+                    <Typography style={{ fontSize: "12px" }}>
+                      Achetez un pack de livraison afin <br /> de profiter de
+                      réductions sur les <br /> coûts de livraison.
+                    </Typography>
+                    <Link to="/profile">
+                      <Button
+                        to="/profile"
+                        variant="contained"
+                        className={classes.Primarycontained}
+                      >
+                        En savoir plus
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </Box>
             </Box>
           </Box>
@@ -491,7 +515,7 @@ const Menu = () => {
                       }
                     }}
                   >
-                    Placer la commande
+                    Payer
                   </Button>
                 ) : (
                   <div className={classes.emptyCart}>

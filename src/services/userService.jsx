@@ -82,6 +82,11 @@ const editUserPassword = async (body) => {
   return data;
 };
 
+const deleteProfile = async (_id) => {
+  const { data } = await http.delete(`${apiEndPoint}/delete/${_id}`);
+  return data;
+};
+
 export {
   getDishesForUser,
   getLoggedinUser,
@@ -97,4 +102,5 @@ export {
   editUserPassword,
   addToCart,
   register,
+  deleteProfile,
 };
