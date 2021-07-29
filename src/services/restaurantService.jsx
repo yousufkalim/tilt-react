@@ -12,4 +12,9 @@ const getDishes = async () => {
   return data.dishes;
 };
 
-export { getOrderHistory, getDishes };
+const createDish = async (body) => {
+  const { data } = await http.post(`${apiEndPoint}/dish`, body);
+  return data;
+};
+
+export { getOrderHistory, getDishes, createDish };

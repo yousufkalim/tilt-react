@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import Joi from "joi-browser";
 import makeStyles from "@material-ui/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import { getDishes } from "../../services/restaurantService";
+import { createDish, getDishes } from "../../services/restaurantService";
 import { Store } from "../../context/StoreContext";
 import { deleteProfile } from "../../services/userService";
 import { toast } from "react-toastify";
@@ -108,6 +109,20 @@ const RestaurantProfile = ({ onLogout }) => {
     desserts: [],
     drinks: [],
   });
+  const [dishData, setDishData] = useState({
+    name: "",
+    price: "",
+    type: "",
+    image: "",
+    description: "",
+    specials: [],
+  });
+  const [dishImageBlob, setDishImageBlob] = useState("");
+  const [dishErrors, setDishErrors] = useState({});
+  const [restaurantData, setRestaurantData] = useState({
+    name: "",
+  });
+  const [restaurantErrors, setRestaurantErrors] = useState({});
 
   const getRestaurantDishes = async () => {
     const data = await getDishes();
@@ -133,7 +148,19 @@ const RestaurantProfile = ({ onLogout }) => {
 
   const handleDishModalOpen = () => setOpenDishModal(true);
 
-  const handleDishModalClose = () => setOpenDishModal(false);
+  const handleDishModalClose = () => {
+    setOpenDishModal(false);
+    setDishData({
+      name: "",
+      price: "",
+      type: "",
+      image: "",
+      description: "",
+      specials: [],
+    });
+    setDishErrors({});
+    setDishImageBlob("");
+  };
 
   const handleDeleteProfile = async () => {
     const check = window.confirm(
@@ -149,7 +176,96 @@ const RestaurantProfile = ({ onLogout }) => {
     }
   };
 
-  // console.log(user);
+  const dishSchema = {
+    name: Joi.string().min(3).required().label("Name"),
+    price: Joi.number().min(1).required().label("Price"),
+    image: Joi.required().label("Dish Image"),
+    type: Joi.string().required().label("Type"),
+    description: Joi.string().required().min(5).label("Description"),
+    specials: Joi.array(),
+  };
+
+  const validateDishProperty = (name, value) => {
+    const obj = { [name]: value };
+    const schema = {
+      [name]: dishSchema[name],
+    };
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
+  };
+
+  const validateProfile = () => {
+    const options = { abortEarly: false };
+    let errors = {};
+    const result = Joi.validate(dishData, dishSchema, options);
+    if (!result.error) return null;
+    for (let item of result.error.details) {
+      errors[item.path] = item.message;
+    }
+
+    return errors;
+  };
+
+  const handleDishDataChange = (e) => {
+    const { name, value, checked } = e.target;
+
+    if (name === "specials") {
+      const allSpecials = [...dishData.specials];
+      if (checked) {
+        allSpecials.push(value);
+        setDishData({ ...dishData, specials: allSpecials });
+      } else {
+        const index = allSpecials.indexOf(value);
+        allSpecials.splice(index, 1);
+        setDishData({ ...dishData, specials: allSpecials });
+      }
+    } else {
+      const allErrors = { ...dishErrors };
+      const errorMessage = validateDishProperty(name, value);
+      if (errorMessage) allErrors[name] = errorMessage;
+      else delete allErrors[name];
+      setDishErrors(allErrors);
+
+      const formData = { ...dishData };
+      if (name === "image") {
+        formData[name] = e.target.files[0];
+        if (e.target.files[0]) {
+          setDishImageBlob(URL.createObjectURL(e.target.files[0]));
+        }
+      } else {
+        formData[name] = value;
+      }
+      setDishData(formData);
+    }
+  };
+
+  const handleDishSubmit = async () => {
+    let errors = validateProfile();
+    setDishErrors(errors || {});
+    if (errors) return;
+    try {
+      await createDish(appendToFormData());
+      getRestaurantDishes();
+      handleDishModalClose();
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
+
+  const appendToFormData = () => {
+    const data = { ...dishData };
+
+    const fd = new FormData();
+    fd.append("name", data.name);
+    fd.append("price", data.price);
+    fd.append("dishType", data.type);
+    fd.append("description", data.description);
+    fd.append("specials", JSON.stringify(data.specials));
+    fd.append("image", data.image);
+    // if (data.image) {
+    // }
+    return fd;
+  };
 
   return (
     <div className={classes.main}>
@@ -215,10 +331,11 @@ const RestaurantProfile = ({ onLogout }) => {
         handleClose={handleDishModalClose}
         body={
           <DishModal
-          //     companies={companies}
-          //     selectedCompany={selectedCompany}
-          //     handleChange={handleCompanyChange}
-          //     handleProfileSubmit={handleCompanySubmit}
+            dish={dishData}
+            errors={dishErrors}
+            handleChange={handleDishDataChange}
+            handleSubmit={handleDishSubmit}
+            imageBlob={dishImageBlob}
           />
         }
       />

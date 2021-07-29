@@ -15,6 +15,9 @@ const useStyles = makeStyles(() => ({
   input: {
     height: "50px",
   },
+  multilineInput: {
+    height: "auto",
+  },
 }));
 
 const InputWithLabel = ({
@@ -74,11 +77,12 @@ const InputWithLabel = ({
         name={name}
         label={label}
         multiline={multiline}
+        rows={multiline ? 4 : 1}
         type={type}
         className={classes.field}
         variant="outlined"
         InputProps={{
-          className: classes.input,
+          className: multiline ? classes.multilineInput : classes.input,
         }}
         InputLabelProps={{
           shrink: true,
