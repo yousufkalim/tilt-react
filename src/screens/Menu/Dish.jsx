@@ -36,7 +36,7 @@ const Dish = ({ dish, handleSelect }) => {
           <Box>
             <img
               style={{ height: "60px", width: "60px", borderRadius: "50%" }}
-              src={`${baseUrl}/${dish.restaurantImage}`}
+              src={`${baseUrl}/${dish.image}`}
               alt="dish"
             />
           </Box>
