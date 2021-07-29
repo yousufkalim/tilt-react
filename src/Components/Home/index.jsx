@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import image from '../../images/Image 2.png'
 import image2 from '../../images/Group 37.png'
+import { Store } from "../../context/StoreContext";
 import './Home.css'
-export default class indes extends Component {
-    render() {
+
+const indes = () => {  
+      const { token } = Store();
         return (
           <div className="" style={{paddingBottom:"100px"}}>
                 <div className="home text-center"   style={{ width:"100%",height:"98vh" ,zIndex:"0"}}>
@@ -16,6 +19,9 @@ export default class indes extends Component {
                        <li className="" ><a href="#operation"> Fonctionnement </a></li>
                     <li className=""><a href="#features"> Fonctionnalités </a></li>
                     <li className=""><a href="#download"> Télécharger </a></li>
+                    {!token &&
+                      <li className=""><Link to="/signup"> Signup </Link></li>
+                    }
                        </ul>
                    </li>
                   </ul>
@@ -34,5 +40,6 @@ export default class indes extends Component {
             </div>
           </div>
         )
-    }
 }
+
+export default indes;

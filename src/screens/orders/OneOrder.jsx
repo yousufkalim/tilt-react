@@ -1,7 +1,9 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
 
-const OneOrder = ({ dishImage }) => {
+const OneOrder = ({ dish, dishImage }) => {
+  const baseUrl = process.env.REACT_APP_API_URL;
+
   return (
     <Box
       marginTop="10px"
@@ -11,19 +13,24 @@ const OneOrder = ({ dishImage }) => {
     >
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box>
-          <img style={{ height: "60px" }} src={dishImage} alt="dish" />
+          <img
+            style={{ height: "60px" }}
+            // src={`${baseUrl}/${dish.id.image}`}
+            src={dishImage}
+            alt="dish"
+          />
         </Box>
         <Box paddingLeft="10px">
           <Typography variant="body1" color="initial">
-            Pancakes Zucchini
+            {dish.id.name}
           </Typography>
           <Typography variant="caption" color="initial">
-            13€
+            {dish.id.price}€
           </Typography>
         </Box>
       </Box>
 
-      <Box>Q:1</Box>
+      <Box>Q:{dish.count}</Box>
     </Box>
   );
 };

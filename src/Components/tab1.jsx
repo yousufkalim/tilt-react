@@ -19,11 +19,18 @@ export default function Tab1() {
           </h3>
           <p
             className="feature-tab-para    text-white  text-left  w-75"
-            style={{ fontSize: "22px" }}
+            style={{ fontSize: "18px" }}
           >
             Notre service de livraison de plats en entreprise vous permet de
             profiter pleinement de votre potentiel de vente auprès de tous les
             clients aux alentours !
+            <br />
+            <br />
+            Optimisez vos ventes en réduisant votre investissement .
+            <br />
+            <br />
+            Un nouvel axe de communication ,une nouvelle visibilité auprès d'une
+            clientèle professionnelle ( à reformuler maybe).
           </p>
         </div>
       </div>

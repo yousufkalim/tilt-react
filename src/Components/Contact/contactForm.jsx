@@ -107,7 +107,7 @@ const ContactForm = () => {
 
   return (
     <div className={classes.contactForm}>
-      <h1 className={classes.heading}>Contact Us</h1>
+      <h1 className={classes.heading}>Contactez-nous</h1>
       <div className={classes.formDiv}>
         <form
           autoComplete="on"
@@ -125,7 +125,7 @@ const ContactForm = () => {
               variant="contained"
               color="secondary"
             >
-              Submit
+              Envoyer
             </Button>
           </div>
         </form>

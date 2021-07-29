@@ -36,52 +36,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderList = () => {
+const OrderList = ({ orders }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
       <div className={classes.gridList}>
         <Grid container spacing={8}>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
-          <Grid item xs={4}>
-            <OrderCard></OrderCard>
-          </Grid>
+          {orders.map((order) => (
+            <Grid item xs={4}>
+              <OrderCard order={order} />
+            </Grid>
+          ))}
         </Grid>
       </div>
     </div>

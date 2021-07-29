@@ -19,10 +19,17 @@ export default function Tab1() {
           </h3>
           <p
             className="feature-tab-para    text-white  text-left w-75"
-            style={{ fontSize: "22px" }}
+            style={{ fontSize: "18px" }}
           >
             Commander un repas devient maintenant un instant de plaisir !
-            Choisissez parmi les plats proposés et soyez livrés au travail.
+            Choisissez parmi les plats proposés et soyez livrés au travail.{" "}
+            <br />
+            <br />
+            Bénéficiez de réduction en choisissant des packages à la semaine .{" "}
+            <br />
+            <br />
+            Commander chez plusieurs restaurateurs à travers une même et seule
+            commande .
           </p>
         </div>
       </div>

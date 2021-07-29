@@ -1,6 +1,6 @@
-import { Box, Typography, IconButton } from "@material-ui/core";
+import { makeStyles, Box, Typography, IconButton } from "@material-ui/core";
 import React from "react";
-import dish from "../../images/Dish.png";
+import DishImg from "../../images/Dish.png";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 
@@ -11,7 +11,18 @@ const cardStyle = {
   margin: "auto",
 };
 
-const Dish = () => {
+const useStyles = makeStyles({
+  iconBtn: {
+    "&:focus": {
+      outline: "none",
+    },
+  },
+});
+
+const Dish = ({ dish, handleSelect }) => {
+  const classes = useStyles();
+  const baseUrl = process.env.REACT_APP_API_URL;
+
   return (
     <>
       <Box
@@ -23,19 +34,31 @@ const Dish = () => {
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
-            <img style={{ height: "60px" }} src={dish} alt="dish" />
+            <img
+              style={{ height: "60px", width: "60px", borderRadius: "50%" }}
+              src={`${baseUrl}/${dish.restaurantImage}`}
+              alt="dish"
+            />
           </Box>
           <Box paddingLeft="10px">
             <Typography variant="body1" color="initial">
-              Pancakes Zucchini
+              {dish.name}
             </Typography>
             <Typography variant="caption" color="initial">
-              <RestaurantIcon /> &nbsp; Bella Restaurant
+              <RestaurantIcon /> &nbsp; {dish.restaurantName}
             </Typography>
           </Box>
         </Box>
+        <Box paddingLeft="10%">
+          <Typography variant="body1" color="initial">
+            <b>{dish.price}€</b>
+          </Typography>
+        </Box>
 
-        <IconButton aria-label="" onClick={console.log("clicked")}>
+        <IconButton
+          onClick={() => handleSelect(dish._id)}
+          className={classes.iconBtn}
+        >
           <BsFillPlusCircleFill
             style={{ color: "#C72E54", fontSize: "35px" }}
           />

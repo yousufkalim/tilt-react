@@ -27,34 +27,21 @@ const useStyles = makeStyles((theme) => ({
       background: "#D2025a",
     },
     width: "100%",
-    height: "60vh",
+    maxHeight: "60vh",
     flexGrow: "1",
   },
 }));
 
-const DishList = () => {
+const DishList = ({ dishes, handleSelect }) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <GridList className={classes.gridList} cols={1} spacing={1}>
-        <GridListTile style={{ height: "85px" }}>
-          <Dish></Dish>
-        </GridListTile>
-        <GridListTile style={{ height: "85px" }}>
-          <Dish></Dish>
-        </GridListTile>
-        <GridListTile style={{ height: "85px" }}>
-          <Dish></Dish>
-        </GridListTile>
-        <GridListTile style={{ height: "85px" }}>
-          <Dish></Dish>
-        </GridListTile>
-        <GridListTile style={{ height: "85px" }}>
-          <Dish></Dish>
-        </GridListTile>
-        <GridListTile style={{ height: "85px" }}>
-          <Dish></Dish>
-        </GridListTile>
+      <GridList className={classes.gridList} cols={1}>
+        {dishes.map((dish) => (
+          <GridListTile style={{ height: "85px" }}>
+            <Dish dish={dish} handleSelect={handleSelect} />
+          </GridListTile>
+        ))}
       </GridList>
     </div>
   );

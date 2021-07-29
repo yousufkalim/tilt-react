@@ -5,9 +5,9 @@ import Tab2 from "../tab2";
 import Tab3 from "../tab3";
 
 export default function Index() {
-  const [tab1, setTab1] = useState(true);
+  const [tab1, setTab1] = useState(false);
   const [tab2, setTab2] = useState(false);
-  const [tab3, setTab3] = useState(false);
+  const [tab3, setTab3] = useState(true);
 
   const ActiveTab1 = () => {
     setTab1(true);
@@ -53,10 +53,10 @@ export default function Index() {
             <ul className=" linkList text-white">
               <li>
                 <a
-                  onClick={ActiveTab1}
-                  className={tab1 === true ? "font-weight-bold" : null}
+                  onClick={ActiveTab3}
+                  className={tab3 === true ? "font-weight-bold" : null}
                 >
-                  Pour les restaurants
+                  Utilisateurs
                 </a>
               </li>
               <li>
@@ -64,15 +64,15 @@ export default function Index() {
                   onClick={ActiveTab2}
                   className={tab2 === true ? "font-weight-bold" : null}
                 >
-                  Pour les livreurs
+                  Entreprises
                 </a>{" "}
               </li>
               <li>
                 <a
-                  onClick={ActiveTab3}
-                  className={tab3 === true ? "font-weight-bold" : null}
+                  onClick={ActiveTab1}
+                  className={tab1 === true ? "font-weight-bold" : null}
                 >
-                  Pour les utilisateurs
+                  Restaurateurs
                 </a>
               </li>
             </ul>
