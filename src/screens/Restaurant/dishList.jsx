@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
 });
 
-const DishList = ({ dishes, handleEditDish }) => {
+const DishList = ({ dishes, handleEditDish, handleDishDelete }) => {
   const classes = useStyles();
 
   return (
@@ -45,7 +45,11 @@ const DishList = ({ dishes, handleEditDish }) => {
         </Typography>
 
         {dishes.entrees.length > 0 ? (
-          <MenuList dishes={dishes.entrees} handleEdit={handleEditDish} />
+          <MenuList
+            dishes={dishes.entrees}
+            handleEdit={handleEditDish}
+            handleDelete={handleDishDelete}
+          />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>
             Pas de Entrée
@@ -56,7 +60,11 @@ const DishList = ({ dishes, handleEditDish }) => {
           <b>Plats</b>
         </Typography>
         {dishes.plats.length > 0 ? (
-          <MenuList dishes={dishes.plats} handleEdit={handleEditDish} />
+          <MenuList
+            dishes={dishes.plats}
+            handleEdit={handleEditDish}
+            handleDelete={handleDishDelete}
+          />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>
             Pas de Plats
@@ -67,7 +75,11 @@ const DishList = ({ dishes, handleEditDish }) => {
           <b>Desserts</b>
         </Typography>
         {dishes.desserts.length > 0 ? (
-          <MenuList dishes={dishes.desserts} handleEdit={handleEditDish} />
+          <MenuList
+            dishes={dishes.desserts}
+            handleEdit={handleEditDish}
+            handleDelete={handleDishDelete}
+          />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>
             Pas de Desserts
@@ -78,7 +90,11 @@ const DishList = ({ dishes, handleEditDish }) => {
           <b>Drinks</b>
         </Typography>
         {dishes.drinks.length > 0 ? (
-          <MenuList dishes={dishes.drinks} handleEdit={handleEditDish} />
+          <MenuList
+            dishes={dishes.drinks}
+            handleEdit={handleEditDish}
+            handleDelete={handleDishDelete}
+          />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>
             Pas de Drinks

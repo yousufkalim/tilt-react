@@ -4,7 +4,13 @@ import makeStyles from "@material-ui/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import { createDish, getDishes } from "../../services/restaurantService";
+import {
+  createDish,
+  deleteDish,
+  getDishById,
+  getDishes,
+  updateDish,
+} from "../../services/restaurantService";
 import { Store } from "../../context/StoreContext";
 import { deleteProfile } from "../../services/userService";
 import { toast } from "react-toastify";
@@ -118,6 +124,8 @@ const RestaurantProfile = ({ onLogout }) => {
     specials: [],
   });
   const [dishImageBlob, setDishImageBlob] = useState("");
+  const [dishUpdate, setDishUpdate] = useState(false);
+  const [selectedDishId, setSelectedDishId] = useState("");
   const [dishErrors, setDishErrors] = useState({});
   const [restaurantData, setRestaurantData] = useState({
     name: "",
@@ -142,10 +150,6 @@ const RestaurantProfile = ({ onLogout }) => {
     getRestaurantDishes();
   }, []);
 
-  const handleEditDish = (_id) => {
-    console.log(_id);
-  };
-
   const handleDishModalOpen = () => setOpenDishModal(true);
 
   const handleDishModalClose = () => {
@@ -160,6 +164,7 @@ const RestaurantProfile = ({ onLogout }) => {
     });
     setDishErrors({});
     setDishImageBlob("");
+    setDishUpdate(false);
   };
 
   const handleDeleteProfile = async () => {
@@ -239,31 +244,84 @@ const RestaurantProfile = ({ onLogout }) => {
     }
   };
 
-  const handleDishSubmit = async () => {
-    let errors = validateProfile();
-    setDishErrors(errors || {});
-    if (errors) return;
+  const handleEditDish = async (_id) => {
+    setDishUpdate(true);
+    setSelectedDishId(_id);
     try {
-      await createDish(appendToFormData());
-      getRestaurantDishes();
-      handleDishModalClose();
+      const data = await getDishById(_id);
+      setDishData({
+        name: data.name,
+        price: data.price,
+        specials: data.specials,
+        type: data.dishType,
+        description: data.description,
+        image: "",
+      });
+      setDishImageBlob(`${baseUrl}/${data.image}`);
+      handleDishModalOpen();
     } catch (error) {
       console.log(error.response.data.message);
     }
   };
 
-  const appendToFormData = () => {
-    const data = { ...dishData };
+  const handleDishDelete = async (_id) => {
+    const check = window.confirm("Are you sure you want to delete this?");
+    if (check) {
+      try {
+        await deleteDish(_id);
+        getRestaurantDishes();
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    }
+  };
 
+  const handleDishSubmit = async () => {
+    let errors = validateProfile();
+    if (dishUpdate && errors) {
+      delete errors.image;
+    }
+    setDishErrors(errors || {});
+    console.log(errors);
+    if (errors) return;
+
+    const data = { ...dishData };
+    if (dishUpdate) {
+      if (data.image.length < 1) {
+        delete data.image;
+      }
+      data._id = selectedDishId;
+      try {
+        await updateDish(appendToFormData(data));
+        getRestaurantDishes();
+        handleDishModalClose();
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    } else {
+      try {
+        await createDish(appendToFormData(data));
+        getRestaurantDishes();
+        handleDishModalClose();
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    }
+  };
+
+  const appendToFormData = (data) => {
     const fd = new FormData();
     fd.append("name", data.name);
     fd.append("price", data.price);
     fd.append("dishType", data.type);
     fd.append("description", data.description);
     fd.append("specials", JSON.stringify(data.specials));
-    fd.append("image", data.image);
-    // if (data.image) {
-    // }
+    if (data.image) {
+      fd.append("image", data.image);
+    }
+    if (data._id) {
+      fd.append("dishId", data._id);
+    }
     return fd;
   };
 
@@ -292,7 +350,11 @@ const RestaurantProfile = ({ onLogout }) => {
                   </Typography>
                 </Grid>
 
-                <DishList dishes={dishes} handleEditDish={handleEditDish} />
+                <DishList
+                  dishes={dishes}
+                  handleEditDish={handleEditDish}
+                  handleDishDelete={handleDishDelete}
+                />
               </Grid>
             </div>
           </Grid>

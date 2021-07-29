@@ -48,9 +48,15 @@ const Orders = () => {
           A préparer pour 11h30
         </Typography>
       </Box>
-      <Box>
-        <OrderList orders={orders} />
-      </Box>
+      {orders.length > 0 ? (
+        <Box>
+          <OrderList orders={orders} />
+        </Box>
+      ) : (
+        <Typography style={{ padding: "10px 50px" }} variant="subtitle1">
+          No orders Yet
+        </Typography>
+      )}
     </Grid>
   );
 };

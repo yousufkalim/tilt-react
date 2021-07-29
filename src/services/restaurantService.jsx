@@ -17,4 +17,26 @@ const createDish = async (body) => {
   return data;
 };
 
-export { getOrderHistory, getDishes, createDish };
+const updateDish = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/dish`, body);
+  return data;
+};
+
+const deleteDish = async (_id) => {
+  const { data } = await http.delete(`${apiEndPoint}/dish/${_id}`);
+  return data;
+};
+
+const getDishById = async (_id) => {
+  const { data } = await http.get(`${apiEndPoint}/dish/${_id}`);
+  return data.dish;
+};
+
+export {
+  getOrderHistory,
+  getDishes,
+  deleteDish,
+  createDish,
+  getDishById,
+  updateDish,
+};

@@ -88,7 +88,7 @@ const Signup = () => {
 
   const loginSchema = {
     email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().min(5).label("Password"),
+    password: Joi.string().required().min(4).label("Password"),
   };
 
   const validateProperty = (name, value) => {

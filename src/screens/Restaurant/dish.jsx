@@ -1,5 +1,6 @@
-import { makeStyles, Box, Typography, IconButton } from "@material-ui/core";
 import React from "react";
+import { makeStyles, Box, Typography, IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import DishImg from "../../images/Dish.png";
 import { EditIcon } from "../../images/images";
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Dish = ({ dish, handleEdit }) => {
+const Dish = ({ dish, handleEdit, handleDelete }) => {
   const classes = useStyles();
   const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -57,12 +58,15 @@ const Dish = ({ dish, handleEdit }) => {
           <Typography variant="body1" color="initial">
             <b>{dish.price}€</b>
           </Typography>
-
           <img
             src={EditIcon}
             alt=""
             style={{ cursor: "pointer" }}
             onClick={() => handleEdit(dish._id)}
+          />
+          <DeleteIcon
+            style={{ color: "#C72E54", cursor: "pointer" }}
+            onClick={() => handleDelete(dish._id)}
           />
         </Box>
       </Box>
