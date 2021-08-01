@@ -32,6 +32,11 @@ const getDishById = async (_id) => {
   return data.dish;
 };
 
+const editRestaurant = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/edit`, body);
+  return data;
+};
+
 export {
   getOrderHistory,
   getDishes,
@@ -39,4 +44,5 @@ export {
   createDish,
   getDishById,
   updateDish,
+  editRestaurant,
 };

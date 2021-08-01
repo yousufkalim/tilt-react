@@ -7,16 +7,19 @@ import Grid from "@material-ui/core/Grid";
 import {
   createDish,
   deleteDish,
+  editRestaurant,
   getDishById,
   getDishes,
   updateDish,
 } from "../../services/restaurantService";
-import { Store } from "../../context/StoreContext";
-import { deleteProfile } from "../../services/userService";
+import { Store, UpdateStore } from "../../context/StoreContext";
+import { deleteProfile, editUserPassword } from "../../services/userService";
 import { toast } from "react-toastify";
 import TransitionsModal from "../../Components/common/transitionsModal";
 import DishList from "./dishList";
 import DishModal from "./dishModal";
+import { EditIcon } from "../../images/images";
+import RestaurantModal from "./restaurantModal";
 
 const useStyles = makeStyles({
   main: {
@@ -72,34 +75,6 @@ const useStyles = makeStyles({
       outline: "none",
     },
   },
-  dishHeadings: {
-    width: "100%",
-    paddingLeft: "50px",
-    marginTop: "10px",
-    marginBottom: "20px",
-  },
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    flexWrap: "nowrap",
-    overflowY: "scroll",
-    overflowX: "hidden",
-    height: "60vh",
-    width: "100%",
-    "&::-webkit-scrollbar": {
-      width: "10px",
-    },
-    "&::-webkit-scrollbar-track": {
-      background: "rgba(0,0,0,0)",
-    },
-    "&::-webkit-scrollbar-thumb": {
-      background: "#D20249",
-      borderRadius: "10px",
-    },
-    "&::-webkit-scrollbar-thumb:hover": {
-      background: "#D2025a",
-    },
-  },
 });
 
 const RestaurantProfile = ({ onLogout }) => {
@@ -107,8 +82,10 @@ const RestaurantProfile = ({ onLogout }) => {
   const baseUrl = process.env.REACT_APP_API_URL;
 
   const { user } = Store();
+  const updateStore = UpdateStore();
   const [openDishModal, setOpenDishModal] = useState(false);
-  const [specials, setSpecials] = useState(false);
+  const [openRestaurantModal, setOpenRestaurantModal] = useState(false);
+  // const [specials, setSpecials] = useState(false);
   const [dishes, setDishes] = useState({
     entrees: [],
     plats: [],
@@ -127,10 +104,24 @@ const RestaurantProfile = ({ onLogout }) => {
   const [dishUpdate, setDishUpdate] = useState(false);
   const [selectedDishId, setSelectedDishId] = useState("");
   const [dishErrors, setDishErrors] = useState({});
+  const [restaurantPassword, setRestaurantPassword] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+  const [passwordErrors, setPasswordErrors] = useState({});
+
+  const [profileImageBlob, setProfileImageBlob] = useState("");
   const [restaurantData, setRestaurantData] = useState({
     name: "",
+    email: "",
+    street: "",
+    city: "",
+    postalCode: "",
+    pickupPlace: "",
+    image: "",
   });
   const [restaurantErrors, setRestaurantErrors] = useState({});
+  const [profileFormType, setProfileFormType] = useState("profile");
 
   const getRestaurantDishes = async () => {
     const data = await getDishes();
@@ -151,6 +142,18 @@ const RestaurantProfile = ({ onLogout }) => {
   }, []);
 
   const handleDishModalOpen = () => setOpenDishModal(true);
+  const handleRestaurantModalOpen = () => {
+    setRestaurantData({
+      name: user.firstName,
+      email: user.email,
+      street: user.address.street,
+      city: user.address.city,
+      postalCode: user.address.zip,
+      pickupPlace: user.restaurant.pickupPlace,
+    });
+    setProfileImageBlob(`${baseUrl}/${user.restaurant.image}`);
+    setOpenRestaurantModal(true);
+  };
 
   const handleDishModalClose = () => {
     setOpenDishModal(false);
@@ -165,6 +168,148 @@ const RestaurantProfile = ({ onLogout }) => {
     setDishErrors({});
     setDishImageBlob("");
     setDishUpdate(false);
+  };
+
+  const handleRestaurantModalClose = () => {
+    setOpenRestaurantModal(false);
+    setRestaurantData({
+      name: "",
+      email: "",
+      street: "",
+      city: "",
+      postalCode: "",
+      pickupPlace: "",
+      image: "",
+    });
+    setRestaurantErrors({});
+    setProfileFormType("profile");
+    setRestaurantPassword({ password: "", confirmPassword: "" });
+    setPasswordErrors({});
+    setProfileImageBlob("");
+    // setDishUpdate(false);
+  };
+
+  const restaurantSchema = {
+    name: Joi.string().min(3).required().label("Nom"),
+    email: Joi.string().email().required().label("Address e-mail"),
+    street: Joi.string().required().label("Rue"),
+    city: Joi.string().min(2).required().label("Ville"),
+    postalCode: Joi.string().min(3).required().label("Code Postal"),
+    pickupPlace: Joi.string().min(3).required().label("Pickup Place"),
+    image: Joi.allow(""),
+  };
+
+  const handleFormTypeChange = () => {
+    if (profileFormType === "profile") {
+      setProfileFormType("password");
+      setRestaurantErrors({});
+      setRestaurantData({
+        name: "",
+        email: "",
+        street: "",
+        city: "",
+        postalCode: "",
+        pickupPlace: "",
+        image: "",
+      });
+    } else {
+      setProfileFormType("profile");
+      setPasswordErrors({});
+      setRestaurantPassword({ password: "", confirmPassword: "" });
+    }
+  };
+
+  const handleRestaurantDataChange = (e) => {
+    const { name, value } = e.target;
+
+    if (profileFormType === "profile") {
+      const formData = { ...restaurantData };
+
+      if (name === "image") {
+        formData[name] = e.target.files[0];
+        if (e.target.files[0]) {
+          setProfileImageBlob(URL.createObjectURL(e.target.files[0]));
+        }
+      } else {
+        const allErrors = { ...restaurantErrors };
+        const errorMessage = validateProperty(name, value, restaurantSchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setRestaurantErrors(allErrors);
+
+        formData[name] = value;
+      }
+      setRestaurantData(formData);
+    }
+    if (profileFormType === "password") {
+      const formData = { ...restaurantPassword };
+      formData[name] = value;
+      setRestaurantPassword(formData);
+    }
+  };
+
+  const appendRestaurantToFormData = () => {
+    const data = { ...restaurantData };
+    const address = {
+      street: data.street,
+      city: data.city,
+      zip: data.postalCode,
+    };
+
+    var fd = new FormData();
+    fd.append("email", data.email);
+    fd.append("name", data.name);
+    fd.append("address", JSON.stringify(address));
+    fd.append("pickupPlace", data.pickupPlace);
+    if (data.image) {
+      fd.append("image", data.image);
+    }
+    return fd;
+  };
+
+  const handleRestaurantDataSubmit = async () => {
+    if (profileFormType === "profile") {
+      let errors = validate(restaurantData, restaurantSchema);
+      setRestaurantErrors(errors || {});
+      if (errors) return;
+
+      try {
+        const data = await editRestaurant(appendRestaurantToFormData());
+        updateStore({ user: data.restaurant });
+        handleRestaurantModalClose();
+      } catch (err) {
+        toast.error(err.response.data.message);
+      }
+    }
+    if (profileFormType === "password") {
+      const { password, confirmPassword } = restaurantPassword;
+      if (password.length === 0 || confirmPassword.length === 0) {
+        setPasswordErrors({
+          password: "Both Fields are required",
+          confirmPassword: "Both Fields are required",
+        });
+      } else if (password.length < 5 || confirmPassword.length < 5) {
+        setPasswordErrors({
+          password: "Password cannot be less than 5 characters",
+          confirmPassword: "Password cannot be less than 5 characters",
+        });
+      } else if (password !== confirmPassword) {
+        setPasswordErrors({
+          password: "Password does not match",
+          confirmPassword: "Password does not match",
+        });
+      } else {
+        setPasswordErrors({});
+        try {
+          await editUserPassword({
+            password: password,
+          });
+          handleRestaurantModalClose();
+        } catch (err) {
+          toast.error(err.response.data.message);
+        }
+      }
+    }
   };
 
   const handleDeleteProfile = async () => {
@@ -190,19 +335,19 @@ const RestaurantProfile = ({ onLogout }) => {
     specials: Joi.array(),
   };
 
-  const validateDishProperty = (name, value) => {
+  const validateProperty = (name, value, schemaName) => {
     const obj = { [name]: value };
     const schema = {
-      [name]: dishSchema[name],
+      [name]: schemaName[name],
     };
     const { error } = Joi.validate(obj, schema);
     return error ? error.details[0].message : null;
   };
 
-  const validateProfile = () => {
+  const validate = (data, schema) => {
     const options = { abortEarly: false };
     let errors = {};
-    const result = Joi.validate(dishData, dishSchema, options);
+    const result = Joi.validate(data, schema, options);
     if (!result.error) return null;
     for (let item of result.error.details) {
       errors[item.path] = item.message;
@@ -226,7 +371,7 @@ const RestaurantProfile = ({ onLogout }) => {
       }
     } else {
       const allErrors = { ...dishErrors };
-      const errorMessage = validateDishProperty(name, value);
+      const errorMessage = validateProperty(name, value, dishSchema);
       if (errorMessage) allErrors[name] = errorMessage;
       else delete allErrors[name];
       setDishErrors(allErrors);
@@ -277,12 +422,11 @@ const RestaurantProfile = ({ onLogout }) => {
   };
 
   const handleDishSubmit = async () => {
-    let errors = validateProfile();
+    let errors = validate(dishData, dishSchema);
     if (dishUpdate && errors) {
       delete errors.image;
     }
     setDishErrors(errors || {});
-    console.log(errors);
     if (errors) return;
 
     const data = { ...dishData };
@@ -360,7 +504,15 @@ const RestaurantProfile = ({ onLogout }) => {
           </Grid>
           <Grid item xs={12} md={4}>
             <div className={classes.restaurantDetails}>
-              <Typography variant="h5">{user.firstName}</Typography>
+              <Typography variant="h5">
+                {user.firstName}{" "}
+                <img
+                  src={EditIcon}
+                  alt=""
+                  style={{ cursor: "pointer", marginLeft: "6px" }}
+                  onClick={handleRestaurantModalOpen}
+                />
+              </Typography>
               <img
                 src={`${baseUrl}/${user.restaurant.image}`}
                 alt="Restaurant"
@@ -388,6 +540,7 @@ const RestaurantProfile = ({ onLogout }) => {
           </Grid>
         </Grid>
       </div>
+
       <TransitionsModal
         open={openDishModal}
         handleClose={handleDishModalClose}
@@ -398,6 +551,23 @@ const RestaurantProfile = ({ onLogout }) => {
             handleChange={handleDishDataChange}
             handleSubmit={handleDishSubmit}
             imageBlob={dishImageBlob}
+          />
+        }
+      />
+      <TransitionsModal
+        open={openRestaurantModal}
+        handleClose={handleRestaurantModalClose}
+        body={
+          <RestaurantModal
+            formType={profileFormType}
+            data={restaurantData}
+            errors={restaurantErrors}
+            onFormTypeChange={handleFormTypeChange}
+            handleChange={handleRestaurantDataChange}
+            passwordDetails={restaurantPassword}
+            passwordErrors={passwordErrors}
+            handleSubmit={handleRestaurantDataSubmit}
+            imageBlob={profileImageBlob}
           />
         }
       />
