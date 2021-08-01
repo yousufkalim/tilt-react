@@ -20,6 +20,7 @@ import DishList from "./dishList";
 import DishModal from "./dishModal";
 import { EditIcon } from "../../images/images";
 import RestaurantModal from "./restaurantModal";
+import BankDetailsModal from "./bankDetailsModal";
 
 const useStyles = makeStyles({
   main: {
@@ -84,8 +85,8 @@ const RestaurantProfile = ({ onLogout }) => {
   const { user } = Store();
   const updateStore = UpdateStore();
   const [openDishModal, setOpenDishModal] = useState(false);
+  const [openBankInfoModal, setOpenBankInfoModal] = useState(false);
   const [openRestaurantModal, setOpenRestaurantModal] = useState(false);
-  // const [specials, setSpecials] = useState(false);
   const [dishes, setDishes] = useState({
     entrees: [],
     plats: [],
@@ -122,6 +123,15 @@ const RestaurantProfile = ({ onLogout }) => {
   });
   const [restaurantErrors, setRestaurantErrors] = useState({});
   const [profileFormType, setProfileFormType] = useState("profile");
+  const [bankDetails, setBankDetails] = useState({
+    phone: "",
+    dateOfBirth: "",
+    bankName: "",
+    iban: "",
+    front: "",
+    back: "",
+  });
+  const [bankErrors, setBankErrors] = useState({});
 
   const getRestaurantDishes = async () => {
     const data = await getDishes();
@@ -187,6 +197,26 @@ const RestaurantProfile = ({ onLogout }) => {
     setPasswordErrors({});
     setProfileImageBlob("");
     // setDishUpdate(false);
+  };
+
+  const handleBankInfoOpen = () => setOpenBankInfoModal(true);
+  const handleBankInfoClose = () => {
+    setOpenBankInfoModal(false);
+    setBankDetails({
+      phone: "",
+      dateOfBirth: "",
+      bankName: "",
+      iban: "",
+      front: "",
+      back: "",
+    });
+  };
+
+  const bankSchema = {
+    phone: Joi.string().required().label("Phone Number"),
+    dateOfBirth: Joi.string().required().label("Date de Naissance"),
+    bankName: "",
+    iban: "",
   };
 
   const restaurantSchema = {
@@ -524,6 +554,7 @@ const RestaurantProfile = ({ onLogout }) => {
                 variant="contained"
                 size="small"
                 className={classes.dishBtn}
+                onClick={handleBankInfoOpen}
               >
                 Informations bancaires
               </Button>
@@ -570,6 +601,12 @@ const RestaurantProfile = ({ onLogout }) => {
             imageBlob={profileImageBlob}
           />
         }
+      />
+
+      <TransitionsModal
+        open={openBankInfoModal}
+        handleClose={handleBankInfoClose}
+        body={<BankDetailsModal />}
       />
     </div>
   );
