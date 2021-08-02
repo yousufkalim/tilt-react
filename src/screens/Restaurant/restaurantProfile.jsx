@@ -8,6 +8,7 @@ import {
   createDish,
   deleteDish,
   editRestaurant,
+  editRestaurantBank,
   getDishById,
   getDishes,
   updateDish,
@@ -132,6 +133,7 @@ const RestaurantProfile = ({ onLogout }) => {
     back: "",
   });
   const [bankErrors, setBankErrors] = useState({});
+  const [imageNames, setImageNames] = useState({ front: "", back: "" });
 
   const getRestaurantDishes = async () => {
     const data = await getDishes();
@@ -210,13 +212,69 @@ const RestaurantProfile = ({ onLogout }) => {
       front: "",
       back: "",
     });
+    setBankErrors({});
+    setImageNames({ front: "", back: "" });
+  };
+
+  const handleBankInfoChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "front" || name === "back") {
+      const formData = { ...bankDetails };
+      formData[name] = e.target.files[0];
+      setBankDetails(formData);
+      setImageNames({ ...imageNames, [name]: e.target.files[0].name });
+    } else {
+      const formData = { ...bankDetails };
+      const allErrors = { ...bankErrors };
+      const errorMessage = validateProperty(name, value, bankSchema);
+      if (errorMessage) allErrors[name] = errorMessage;
+      else delete allErrors[name];
+      setBankErrors(allErrors);
+
+      formData[name] = value;
+      setBankDetails(formData);
+    }
+  };
+
+  const handleBankInfoSubmit = async () => {
+    let errors = validate(bankDetails, bankSchema);
+    setBankErrors(errors || {});
+    if (errors) return;
+
+    const bankInfo = { ...bankDetails };
+    if (!bankInfo.front || !bankInfo.back) {
+      toast.error("Face Avant and Face Arrière are required");
+    }
+
+    try {
+      const data = await editRestaurantBank(appendBankInforToFormData());
+      updateStore({ user: data.restaurant });
+      handleBankInfoClose();
+    } catch (err) {
+      toast.error(err.response.data.msg);
+    }
+  };
+
+  const appendBankInforToFormData = () => {
+    const fd = new FormData();
+    const date = JSON.stringify(new Date(bankDetails.dateOfBirth));
+    fd.append("phone", bankDetails.phone);
+    fd.append("DOB", date);
+    fd.append("bankName", bankDetails.bankName);
+    fd.append("iban", bankDetails.iban);
+    fd.append("front", bankDetails.front);
+    fd.append("back", bankDetails.back);
+
+    return fd;
   };
 
   const bankSchema = {
     phone: Joi.string().required().label("Phone Number"),
-    dateOfBirth: Joi.string().required().label("Date de Naissance"),
-    bankName: "",
-    iban: "",
+    dateOfBirth: Joi.date().required().label("Date de Naissance"),
+    bankName: Joi.string().required().label("Nom de banque"),
+    iban: Joi.string().min(27).required().label("Iban"),
+    front: Joi.required().label("Face Avant"),
+    back: Joi.required().label("Face Arrière"),
   };
 
   const restaurantSchema = {
@@ -606,7 +664,15 @@ const RestaurantProfile = ({ onLogout }) => {
       <TransitionsModal
         open={openBankInfoModal}
         handleClose={handleBankInfoClose}
-        body={<BankDetailsModal />}
+        body={
+          <BankDetailsModal
+            data={bankDetails}
+            errors={bankErrors}
+            imageNames={imageNames}
+            handleChange={handleBankInfoChange}
+            handleSubmit={handleBankInfoSubmit}
+          />
+        }
       />
     </div>
   );

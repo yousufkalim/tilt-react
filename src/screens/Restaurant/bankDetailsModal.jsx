@@ -16,21 +16,21 @@ const useStyles = makeStyles({
     marginTop: "10px",
     marginBottom: "10px",
     width: "100%",
-    // backgroundColor: "#D20249",
-    // color: "white",
-    // "&:focus": {
-    //   outline: "none",
-    //   backgroundColor: "#D20249",
-    //   color: "white",
-    // },
-    // "&:hover": {
-    //   backgroundColor: "#D20249",
-    //   color: "white",
-    // },
+  },
+  textField: {
+    width: "100%",
+    // marginBottom: "15px",
+    color: "red",
   },
 });
 
-const BankDetailsModal = ({ data }) => {
+const BankDetailsModal = ({
+  data,
+  errors,
+  imageNames,
+  handleChange,
+  handleSubmit,
+}) => {
   const classes = useStyles();
 
   return (
@@ -41,56 +41,59 @@ const BankDetailsModal = ({ data }) => {
 
       <div className={classes.form}>
         <InputWithLabel
-          // value={data["name"]}
+          value={data["phone"]}
           label="Phone Number"
           required={true}
           name="phone"
           type="text"
-          // handleChange={handleChange}
-          // error={errors["name"] ? true : false}
-          // errorMessage={errors["name"]}
+          handleChange={handleChange}
+          error={errors["phone"] ? true : false}
+          errorMessage={errors["phone"]}
         />
         <InputWithLabel
-          // value={data["name"]}
-          label="Date de Naissance"
-          required={true}
-          name="dateOfBirth"
-          type="text"
-          // handleChange={handleChange}
-          // error={errors["name"] ? true : false}
-          // errorMessage={errors["name"]}
-        />
-        <InputWithLabel
-          // value={data["name"]}
+          value={data["bankName"]}
           label="Nom de banque"
           required={true}
           name="bankName"
           type="text"
-          // handleChange={handleChange}
-          // error={errors["name"] ? true : false}
-          // errorMessage={errors["name"]}
+          handleChange={handleChange}
+          error={errors["bankName"] ? true : false}
+          errorMessage={errors["bankName"]}
         />
         <InputWithLabel
-          // value={data["name"]}
+          value={data["iban"]}
           label="Iban"
           required={true}
           name="iban"
           type="text"
-          // handleChange={handleChange}
-          // error={errors["name"] ? true : false}
-          // errorMessage={errors["name"]}
+          placeholder="Entrez un numéro IBAN à 27 chiffres"
+          handleChange={handleChange}
+          error={errors["iban"] ? true : false}
+          errorMessage={errors["iban"]}
         />
 
         <TextField
-          id="date"
-          label="Birthday"
+          value={data["dateOfBirth"]}
+          name="dateOfBirth"
+          id="dateOfBirth"
+          label="Date de Naissance"
           type="date"
-          defaultValue="2017-05-24"
+          color="secondary"
           className={classes.textField}
+          onChange={handleChange}
           InputLabelProps={{
             shrink: true,
           }}
         />
+        {errors["dateOfBirth"] && (
+          <Typography
+            component="div"
+            variant="caption"
+            style={{ color: "red" }}
+          >
+            Date de Naissance is required and must be a valid Date
+          </Typography>
+        )}
 
         <Typography
           component="div"
@@ -109,9 +112,8 @@ const BankDetailsModal = ({ data }) => {
                 name="front"
                 type="file"
                 accept="image/png, image/jpeg"
-                // onChange={handleChange}
+                onChange={handleChange}
               />
-
               <Button
                 variant="contained"
                 component="span"
@@ -119,7 +121,9 @@ const BankDetailsModal = ({ data }) => {
                 style={{ fontSize: "10px" }}
               >
                 Face Avant
-              </Button>
+              </Button>{" "}
+              <br />
+              {imageNames.front ? imageNames.front : ""}
             </label>
           </div>
 
@@ -131,7 +135,7 @@ const BankDetailsModal = ({ data }) => {
                 name="back"
                 type="file"
                 accept="image/png, image/jpeg"
-                // onChange={handleChange}
+                onChange={handleChange}
               />
 
               <Button
@@ -142,6 +146,8 @@ const BankDetailsModal = ({ data }) => {
               >
                 Face Arrière
               </Button>
+              <br />
+              {imageNames.back ? imageNames.back : ""}
             </label>
           </div>
         </div>
@@ -150,7 +156,7 @@ const BankDetailsModal = ({ data }) => {
           className={classes.submitBtn}
           color="secondary"
           variant="contained"
-          // onClick={handleSubmit}
+          onClick={handleSubmit}
         >
           Mettre À jour
         </Button>
