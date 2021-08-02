@@ -30,6 +30,7 @@ import { toast } from "react-toastify";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import PaymentForm from "../../Components/Payment/paymentForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -91,6 +92,9 @@ const Menu = () => {
   const [quantity, setQuantity] = useState(1);
   const [openDishModal, setOpenDishModal] = useState(false);
   const [openDrinkModal, setOpenDrinkModal] = useState(false);
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
+  const [cardComplete, setCardComplete] = useState(false);
+
   const { user: currentUser, cart, discount } = Store();
   const updateStore = UpdateStore();
   const stripe = useStripe();
@@ -98,11 +102,9 @@ const Menu = () => {
 
   useEffect(() => {
     getDishes();
-    const variable = document.getElementsByClassName(
-      "CardNumberField-input-wrapper"
-    ).first;
-    console.log(variable);
   }, []);
+
+  const handleCompleteCardStatus = (status) => setCardComplete(status);
 
   const getDishes = async () => {
     const dishesInDB = await getFilteredDishes(filter);
@@ -117,6 +119,12 @@ const Menu = () => {
     const dishes = data.dishes.map((dish) => ({ ...dish, quantity: 0 }));
     setRestaurantDrinks(dishes);
     setOpenDrinkModal(true);
+  };
+
+  const handlePaymentModalOpen = () => setOpenPaymentModal(true);
+  const handlePaymentModalClose = () => {
+    setOpenPaymentModal(false);
+    setCardComplete(false);
   };
 
   const handleAddDrinkToCart = () => {
@@ -189,91 +197,86 @@ const Menu = () => {
       dishPrice: selectedDish.price,
       dishCount: quantity,
     });
-    updateStore({ cart });
+    updateStore({
+      cart,
+      user: {
+        ...currentUser,
+        user: {
+          ...currentUser.user,
+          cart: cart,
+        },
+      },
+    });
     getDrinksOfRestaurant();
     handleDishModalClose();
   };
 
-  const verifyOrder = () => {
-    if (currentUser.user.creditCard) {
-      let isComplete1 = true;
-      let totalrest = [];
-
-      currentUser.user.cart.userCarts.map(async (restaurantCart) => {
-        let isComplete = false;
-        let ammount = 0;
-
-        await Promise.all(
-          restaurantCart.dishes.map((restaurantItem) => {
-            if (
-              restaurantItem.id.dishType === "Dish" ||
-              restaurantItem.id.dishType === "Dessert"
-            ) {
-              isComplete = true;
-            }
-            ammount +=
-              parseInt(restaurantItem.count) *
-              parseInt(restaurantItem.id.price);
-          })
-        );
-
-        totalrest.push({
-          restaurant: restaurantCart.restaurant,
-          value: ammount,
-        });
-        if (!isComplete) {
-          isComplete1 = false;
-          return;
-        }
+  const verifyOrder = async () => {
+    let isComplete1 = true;
+    let totalrest = [];
+    currentUser.user.cart.userCarts.map(async (restaurantCart) => {
+      let isComplete = false;
+      let ammount = 0;
+      await Promise.all(
+        restaurantCart.dishes.map((restaurantItem) => {
+          if (
+            restaurantItem.id.dishType === "Dish" ||
+            restaurantItem.id.dishType === "Dessert"
+          ) {
+            isComplete = true;
+          }
+          ammount +=
+            parseInt(restaurantItem.count) * parseInt(restaurantItem.id.price);
+        })
+      );
+      totalrest.push({
+        restaurant: restaurantCart.restaurant,
+        value: ammount,
       });
-      if (!isComplete1) {
-        toast.error("Starter/Drink cannot be ordered alone.");
-      } else {
-        onPayment(totalrest);
+      if (!isComplete) {
+        isComplete1 = false;
+        return;
       }
+    });
+    if (!isComplete1) {
+      toast.error("Starter/Drink cannot be ordered alone.");
     } else {
-      toast.error("Add a credit card to order!");
+      const cardElement = elements.getElement(CardElement);
+      // const { error, paymentMethod } = await stripe.createPaymentMethod({
+      //   type: "card",
+      //   card: cardElement,
+      //   billing_details: {
+      //     name: currentUser.firstName + " " + currentUser.lastName,
+      //     address: {
+      //       line1: "123 Test Street",
+      //       line2: "Apt. 5",
+      //       postal_code: "55555",
+      //       city: "Test City",
+      //       country: "FR",
+      //       state: "Test State",
+      //     },
+      //   },
+      // });
+      // console.log("submitted", paymentMethod);
+
+      const cardObjectWithToken = await stripe.createToken(cardElement);
+
+      onPayment(totalrest, { tokenId: cardObjectWithToken.token.id });
     }
   };
 
-  const onPayment = async (totalres) => {
+  const onPayment = async (totalres, tokenObject) => {
     try {
-      const params = {
-        // mandatory
-        number: String(currentUser.user.creditCard.number),
-        exp_month: parseInt(currentUser.user.creditCard.date),
-        exp_year: parseInt("20" + currentUser.user.creditCard.year),
-        cvc: String(currentUser.user.creditCard.code),
-        // optional
+      const price = totalPrice();
+      await userOrderPayment({
         name: currentUser.firstName + " " + currentUser.lastName,
-        currency: "eur",
-        addressLine1: "123 Test Street",
-        addressLine2: "Apt. 5",
-        addressCity: "Test City",
-        addressState: "Test State",
-        addressCountry: "Test Country",
-        addressZip: "55555",
-      };
-      // const cardObjectWithToken = await stripe.createToken(params);
-      // console.log("cardObject", cardObjectWithToken);
-
-      // const cardObjectWithToken = await stripe.createPaymentMethod({
-      //   type: "card",
-      //   card: params,
-      // });
-      // console.log("cardObjectWithToken", cardObjectWithToken);
-
-      // const price = totalPrice();
-
-      // await userOrderPayment({
-      //   name: currentUser.firstName + " " + currentUser.lastName,
-      //   email: currentUser.email,
-      //   token: cardObjectWithToken.tokenId,
-      //   card: cardObjectWithToken,
-      //   amount: price,
-      //   totalres: totalres,
-      // });
-      // makeOrder();
+        email: currentUser.email,
+        token: tokenObject.tokenId,
+        card: tokenObject,
+        amount: price,
+        totalres: totalres,
+      });
+      makeOrder();
     } catch (err) {
       toast.error("An Error Occurred 1");
       console.log(err);
@@ -289,8 +292,9 @@ const Menu = () => {
           ...currentUser,
           user: { ...data.user.user, cart: null },
         },
+        cart: {},
       });
-
+      handlePaymentModalClose();
       toast.success("Order was successfull!");
     } catch (err) {
       toast.error("An Error Occurred 2");
@@ -330,7 +334,6 @@ const Menu = () => {
   // };
 
   const handleDeleteDish = async (item) => {
-    console.log(item.id._id, item.id.price);
     try {
       const data = await removeDishFromCart({
         dishId: item.id._id,
@@ -360,9 +363,7 @@ const Menu = () => {
           <Box display="flex" flexDirection="column">
             <Box marginLeft="10%" marginTop="20px">
               {/* <CardElement /> */}
-              {/* <button type="submit" disabled={!stripe} onClick={handleSubmit}>
-                Pay
-              </button> */}
+
               <Typography variant="h5">
                 Votre menu du jour{" "}
                 <img src={emoji} alt="emoji" style={{ width: "25px" }} />
@@ -511,7 +512,8 @@ const Menu = () => {
                           `Your cart value should be at least of ${discount.leastCartValue}€`
                         );
                       } else {
-                        verifyOrder();
+                        // verifyOrder();
+                        handlePaymentModalOpen();
                       }
                     }}
                   >
@@ -584,6 +586,19 @@ const Menu = () => {
           }
         />
       )}
+
+      <TransitionsModal
+        open={openPaymentModal}
+        handleClose={handlePaymentModalClose}
+        body={
+          <PaymentForm
+            stripe={stripe}
+            completeCardStatus={cardComplete}
+            handleCompleteCard={handleCompleteCardStatus}
+            handleSubmit={verifyOrder}
+          />
+        }
+      />
     </>
   );
 };

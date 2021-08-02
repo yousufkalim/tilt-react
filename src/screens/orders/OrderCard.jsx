@@ -17,6 +17,8 @@ const useStyles = makeStyles(() => ({
 
 const OrderCard = ({ order }) => {
   const classes = useStyles();
+  const baseUrl = process.env.REACT_APP_API_URL;
+
   return (
     <Box className={classes.card}>
       {order.carts.map((cart) => (
@@ -27,7 +29,7 @@ const OrderCard = ({ order }) => {
 
           {cart.dishes.map((dish) => (
             <>
-              <OneOrder dish={dish} dishImage={dishImg} />
+              <OneOrder dish={dish} dishImage={`${baseUrl}/${dish.id.image}`} />
             </>
           ))}
           <Box marginLeft="20px" marginTop="20px" display="flex">

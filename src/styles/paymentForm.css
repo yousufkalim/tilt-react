@@ -1,0 +1,9 @@
+.Form {
+  animation: fade 200ms ease-out;
+  margin-top: 15px;
+}
+
+.FormGroup {
+  padding: 0;
+  border-style: none;
+}

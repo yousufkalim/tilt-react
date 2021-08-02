@@ -3,7 +3,10 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles, Typography, Box } from "@material-ui/core";
 import emoji from "../../images/emoji.png";
 import OrderList from "./OrderList";
-import { getOrderHistory } from "../../services/restaurantService";
+import {
+  getOrderHistory,
+  getRestaurantCart,
+} from "../../services/restaurantService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,15 +21,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Orders = () => {
   const classes = useStyles();
-  const [orders, setOrders] = useState([]);
+  const [carts, setCarts] = useState([]);
 
-  const getOrders = async () => {
-    const data = await getOrderHistory();
-    setOrders(data);
+  const getCart = async () => {
+    const data = await getRestaurantCart();
+    setCarts(data.cart.restaurantCarts);
   };
 
   useEffect(() => {
-    getOrders();
+    getCart();
   }, []);
 
   return (
@@ -48,9 +51,9 @@ const Orders = () => {
           A préparer pour 11h30
         </Typography>
       </Box>
-      {orders.length > 0 ? (
+      {carts.length > 0 ? (
         <Box>
-          <OrderList orders={orders} />
+          <OrderList orders={carts} />
         </Box>
       ) : (
         <Typography style={{ padding: "10px 50px" }} variant="subtitle1">

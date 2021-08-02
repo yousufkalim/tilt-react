@@ -7,6 +7,11 @@ const getOrderHistory = async () => {
   return data.history;
 };
 
+const getRestaurantCart = async () => {
+  const { data } = await http.get(`${apiEndPoint}/cart`);
+  return data;
+};
+
 const getDishes = async () => {
   const { data } = await http.get(`${apiEndPoint}/dishes`);
   return data.dishes;
@@ -51,4 +56,5 @@ export {
   updateDish,
   editRestaurant,
   editRestaurantBank,
+  getRestaurantCart,
 };

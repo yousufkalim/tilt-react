@@ -2,8 +2,6 @@ import { Box, Typography } from "@material-ui/core";
 import React from "react";
 
 const OneOrder = ({ dish, dishImage }) => {
-  const baseUrl = process.env.REACT_APP_API_URL;
-
   return (
     <Box
       marginTop="10px"
@@ -14,13 +12,12 @@ const OneOrder = ({ dish, dishImage }) => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box>
           <img
-            style={{ height: "60px" }}
-            // src={`${baseUrl}/${dish.id.image}`}
+            style={{ height: "60px", width: "60px", borderRadius: "50%" }}
             src={dishImage}
             alt="dish"
           />
         </Box>
-        <Box paddingLeft="10px">
+        <Box paddingLeft="15px">
           <Typography variant="body1" color="initial">
             {dish.id.name}
           </Typography>
