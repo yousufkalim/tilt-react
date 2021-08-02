@@ -9,14 +9,21 @@ import TransitionsModal from "../../Components/common/transitionsModal";
 import CompanyModal from "./companyModal";
 import { getAllCompanies } from "../../services/companyService";
 import {
+  payForUserPackage,
   deleteProfile,
   editUserCompany,
   editUserDetails,
   editUserPassword,
+  updateUserCard,
+  addPackageToUser,
 } from "../../services/userService";
 import PaymentMethodModal from "./paymentMethodModal";
 import ProfileModal from "./profileModal";
 import { toast } from "react-toastify";
+import { getAllPackages } from "../../services/packageService";
+import PackageListModal from "./packageListModal";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import PaymentForm from "../../Components/Payment/paymentForm";
 
 const useStyles = makeStyles({
   main: {
@@ -51,13 +58,23 @@ const useStyles = makeStyles({
 const Profile = ({ onLogout }) => {
   const classes = useStyles();
   const { user } = Store();
+  const stripe = useStripe();
+  const elements = useElements();
   const updateStore = UpdateStore();
+
   const [openCompanyModal, setOpenCompanyModal] = useState(false);
   const [openPaymentyModal, setOpenPaymentyModal] = useState(false);
   const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [openPackageListModal, setOpenPackageListModal] = useState(false);
+  const [openPackagePaymentModal, setOpenPackagePaymentModal] = useState(false);
+  const [cardComplete, setCardComplete] = useState(false);
+
   const [profileFormType, setProfileFormType] = useState("profile");
   const [companies, setCompanies] = useState([]);
+  const [packages, setPackages] = useState([]);
+  const [selectedPackage, setSelectedPackage] = useState("");
   const [selectedCompany, setselectedCompany] = useState("");
+  const [profileErrors, setProfileErrors] = useState({});
   const [profileDetails, setProfileDetails] = useState({
     firstName: "",
     lastName: "",
@@ -71,8 +88,6 @@ const Profile = ({ onLogout }) => {
     cvc: "",
   });
   const [cardErrors, setCardErrors] = useState({});
-  const [profileErrors, setProfileErrors] = useState({});
-
   const [passwordDetails, setPasswordDetails] = useState({
     password: "",
     confirmPassword: "",
@@ -80,6 +95,7 @@ const Profile = ({ onLogout }) => {
 
   useEffect(() => {
     getCompanies();
+    getPackages();
     setProfileDetails({
       firstName: user.firstName,
       lastName: user.lastName,
@@ -91,8 +107,63 @@ const Profile = ({ onLogout }) => {
   const handleCompanyModalOpen = () => setOpenCompanyModal(true);
   const handleCompanyModalClose = () => setOpenCompanyModal(false);
 
+  const handlePackageListModalOpen = () => setOpenPackageListModal(true);
+  const handlePackageListModalClose = () => setOpenPackageListModal(false);
+
+  const handlePackageChange = ({ target }) => {
+    setSelectedPackage(target.value);
+  };
+  const handleCompleteCardStatus = (status) => setCardComplete(status);
+
+  const handlePackagePaymentModalOpen = () => setOpenPackagePaymentModal(true);
+  const handlePackagePaymentModalClose = () => {
+    setOpenPackagePaymentModal(false);
+    setSelectedPackage("");
+  };
+
+  const handlePackageSelectionSubmit = () => {
+    if (selectedPackage) {
+      handlePackageListModalClose();
+      handlePackagePaymentModalOpen();
+    } else {
+      toast.error("Select a Package First");
+    }
+  };
+
+  const handlePackagePayment = async () => {
+    const cardElement = elements.getElement(CardElement);
+    const cardObjectWithToken = await stripe.createToken(cardElement);
+    const card = { card: { id: cardObjectWithToken.token.card.id } };
+
+    try {
+      await payForUserPackage({
+        name: user.firstName + " " + user.lastName,
+        email: user.email,
+        token: cardObjectWithToken.token.id,
+        card: card,
+        amount: selectedPackage.price,
+      });
+
+      const data = await addPackageToUser(selectedPackage._id);
+      updateStore({ user: data.user });
+      handlePackagePaymentModalClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handlePaymentModalOpen = () => setOpenPaymentyModal(true);
-  const handlePaymentModalClose = () => setOpenPaymentyModal(false);
+  const handlePaymentModalClose = () => {
+    setOpenPaymentyModal(false);
+    setCardErrors({});
+    setCardDetails({
+      name: "",
+      number: "",
+      expiryMonth: "",
+      expiryYear: "",
+      cvc: "",
+    });
+  };
 
   const handleProfileModalOpen = () => setOpenProfileModal(true);
   const handleProfileModalClose = () => {
@@ -120,6 +191,11 @@ const Profile = ({ onLogout }) => {
     setCompanies(data);
   };
 
+  const getPackages = async () => {
+    const data = await getAllPackages();
+    setPackages(data);
+  };
+
   const handleCompanyChange = ({ target }) => {
     setselectedCompany(target.value);
   };
@@ -136,9 +212,9 @@ const Profile = ({ onLogout }) => {
   const paymentSchema = {
     name: Joi.string().min(3).required().label("Name"),
     number: Joi.string().min(16).max(16).required().label("Card Number"),
-    expiryMonth: Joi.string().min(2).required().label("Expiry Month"),
-    expiryYear: Joi.string().min(2).required().label("Expiry Year"),
-    cvc: Joi.string().min(2).required().label("CVC"),
+    expiryMonth: Joi.string().min(2).min(2).required().label("Expiry Month"),
+    expiryYear: Joi.string().min(2).min(2).required().label("Expiry Year"),
+    cvc: Joi.string().min(3).max(3).required().label("CVC"),
   };
 
   const handlePaymentFormChange = ({ target }) => {
@@ -152,6 +228,27 @@ const Profile = ({ onLogout }) => {
     const formData = { ...cardDetails };
     formData[name] = value;
     setCardDetails(formData);
+  };
+
+  const handlePaymentFormSubmit = async () => {
+    let errors = validate(cardDetails, paymentSchema);
+    setCardErrors(errors || {});
+    if (errors) return;
+
+    try {
+      const { name, number, expiryMonth, expiryYear, cvc } = cardDetails;
+      const data = await updateUserCard({
+        number,
+        name,
+        date: expiryMonth,
+        year: expiryYear,
+        code: cvc,
+      });
+      updateStore({ user: data.user });
+      handlePaymentModalClose();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleCompanySubmit = async () => {
@@ -188,10 +285,10 @@ const Profile = ({ onLogout }) => {
     return error ? error.details[0].message : null;
   };
 
-  const validateProfile = () => {
+  const validate = (data, schema) => {
     const options = { abortEarly: false };
     let errors = {};
-    const result = Joi.validate(profileDetails, profileSchema, options);
+    const result = Joi.validate(data, schema, options);
     if (!result.error) return null;
     for (let item of result.error.details) {
       errors[item.path] = item.message;
@@ -201,7 +298,7 @@ const Profile = ({ onLogout }) => {
   };
 
   const handleProfileFormSubmit = async () => {
-    let errors = validateProfile();
+    let errors = validate(profileDetails, profileSchema);
     setProfileErrors(errors || {});
 
     if (errors) return;
@@ -275,6 +372,7 @@ const Profile = ({ onLogout }) => {
         handleCompanyModal={handleCompanyModalOpen}
         handlePaymentyModal={handlePaymentModalOpen}
         handleProfileModal={handleProfileModalOpen}
+        handlePackageListModal={handlePackageListModalOpen}
       />
 
       <TransitionsModal
@@ -282,11 +380,10 @@ const Profile = ({ onLogout }) => {
         handleClose={handlePaymentModalClose}
         body={
           <PaymentMethodModal
-            handlePaymentFormChange={handlePaymentFormChange}
-            // companies={companies}
-            // selectedCompany={selectedCompany}
-            // handleChange={handleCompanyChange}
-            // handleSubmit={handleCompanySubmit}
+            data={cardDetails}
+            errors={cardErrors}
+            handleChange={handlePaymentFormChange}
+            handleSubmit={handlePaymentFormSubmit}
           />
         }
       />
@@ -318,6 +415,31 @@ const Profile = ({ onLogout }) => {
             handleFormChange={handleProfileFormTypeChange}
             handleProfileFormChange={handleProfileForm}
             handlePasswordChange={handlePasswordChange}
+          />
+        }
+      />
+
+      <TransitionsModal
+        open={openPackageListModal}
+        handleClose={handlePackageListModalClose}
+        body={
+          <PackageListModal
+            packages={packages}
+            handleSubmit={handlePackageSelectionSubmit}
+            handleChange={handlePackageChange}
+          />
+        }
+      />
+
+      <TransitionsModal
+        open={openPackagePaymentModal}
+        handleClose={handlePackagePaymentModalClose}
+        body={
+          <PaymentForm
+            stripe={stripe}
+            completeCardStatus={cardComplete}
+            handleCompleteCard={handleCompleteCardStatus}
+            handleSubmit={handlePackagePayment}
           />
         }
       />

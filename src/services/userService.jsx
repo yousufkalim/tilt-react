@@ -82,8 +82,23 @@ const editUserPassword = async (body) => {
   return data;
 };
 
+const updateUserCard = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/creditCard`, body);
+  return data;
+};
+
 const deleteProfile = async (_id) => {
   const { data } = await http.delete(`${apiEndPoint}/delete/${_id}`);
+  return data;
+};
+
+const payForUserPackage = async (body) => {
+  const { data } = await http.post(`${apiEndPoint}/package/payment`, body);
+  return data;
+};
+
+const addPackageToUser = async (_id) => {
+  const { data } = await http.put(`${apiEndPoint}/package/${_id}`);
   return data;
 };
 
@@ -95,12 +110,15 @@ export {
   getUserOrder,
   getUserCart,
   getUserDiscounts,
+  addToCart,
+  register,
+  addPackageToUser,
+  payForUserPackage,
   userOrderPayment,
   removeDishFromCart,
   editUserCompany,
   editUserDetails,
   editUserPassword,
-  addToCart,
-  register,
+  updateUserCard,
   deleteProfile,
 };

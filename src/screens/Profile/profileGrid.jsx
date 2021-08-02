@@ -40,6 +40,7 @@ const ProfileGrid = ({
   handleCompanyModal,
   handlePaymentyModal,
   handleProfileModal,
+  handlePackageListModal,
 }) => {
   const classes = useStyles();
 
@@ -132,10 +133,7 @@ const ProfileGrid = ({
               </Grid>
             </Grid>
             <div className={classes.buttonDiv}>
-              <Button
-                className={classes.editBtn}
-                // onClick={handlePaymentyModal}
-              >
+              <Button className={classes.editBtn} onClick={handlePaymentyModal}>
                 Modifier
               </Button>
             </div>
@@ -179,7 +177,12 @@ const ProfileGrid = ({
             </Grid>
             {user.user && !user.user.package && (
               <div className={classes.buttonDiv}>
-                <Button className={classes.editBtn}>Buy Package</Button>
+                <Button
+                  className={classes.editBtn}
+                  onClick={handlePackageListModal}
+                >
+                  Buy Package
+                </Button>
               </div>
             )}
           </Paper>
