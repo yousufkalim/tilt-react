@@ -47,6 +47,11 @@ const editRestaurantBank = async (body) => {
   return data;
 };
 
+const completeRestaurantOrder = async (_id) => {
+  const { data } = await http.put(`${apiEndPoint}/cart/complete/${_id}`);
+  return data;
+};
+
 export {
   getOrderHistory,
   getDishes,
@@ -57,4 +62,5 @@ export {
   editRestaurant,
   editRestaurantBank,
   getRestaurantCart,
+  completeRestaurantOrder,
 };

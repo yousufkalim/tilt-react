@@ -4,6 +4,7 @@ import { makeStyles, Typography, Box } from "@material-ui/core";
 import emoji from "../../images/emoji.png";
 import OrderList from "./OrderList";
 import {
+  completeRestaurantOrder,
   getOrderHistory,
   getRestaurantCart,
 } from "../../services/restaurantService";
@@ -22,10 +23,36 @@ const useStyles = makeStyles((theme) => ({
 const Orders = () => {
   const classes = useStyles();
   const [carts, setCarts] = useState([]);
+  const [pickupTime, setPickupTime] = useState("");
 
   const getCart = async () => {
     const data = await getRestaurantCart();
-    setCarts(data.cart.restaurantCarts);
+    if (data.cart) {
+      setCarts(data.cart.restaurantCarts);
+
+      const filtered = data.cart.restaurantCarts.filter(
+        (item) =>
+          item.company && item.company.block && item.company.block.pickUpTime
+      );
+      setPickupTime(filtered[0].company.block.pickUpTime);
+    } else {
+      setCarts([]);
+      setPickupTime("");
+    }
+  };
+
+  const handleCompleteOrder = async (_id) => {
+    const check = window.confirm(
+      "Are you sure you want to mark this as complete"
+    );
+    if (check) {
+      try {
+        await completeRestaurantOrder(_id);
+        getCart();
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   useEffect(() => {
@@ -48,12 +75,12 @@ const Orders = () => {
           Entreprise Carlier
         </Typography>
         <Typography style={{ padding: "10px 50px" }} variant="subtitle1">
-          A préparer pour 11h30
+          A préparer pour {pickupTime ? pickupTime : "11h30"}
         </Typography>
       </Box>
       {carts.length > 0 ? (
         <Box>
-          <OrderList orders={carts} />
+          <OrderList orders={carts} handleCompleteOrder={handleCompleteOrder} />
         </Box>
       ) : (
         <Typography style={{ padding: "10px 50px" }} variant="subtitle1">

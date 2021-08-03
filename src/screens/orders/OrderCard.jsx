@@ -1,6 +1,6 @@
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
-import dishImg from "../../images/Dish.png";
+import Button from "@material-ui/core/Button";
 import OneOrder from "./OneOrder";
 
 const useStyles = makeStyles(() => ({
@@ -13,9 +13,23 @@ const useStyles = makeStyles(() => ({
     fontWeight: "bold",
     marginLeft: "20px",
   },
+  btnDiv: { marginTop: "10px", display: "flex", justifyContent: "flex-end" },
+  btn: {
+    backgroundColor: "rgb(210, 2, 73)",
+    color: "white",
+    fontSize: "10px",
+    maxHeight: "100px",
+    "&:hover": {
+      backgroundColor: "rgb(210, 2, 73)",
+      color: "white",
+    },
+    "&:focus": {
+      outline: "none",
+    },
+  },
 }));
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order, onCompleteOrder }) => {
   const classes = useStyles();
   const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -42,6 +56,16 @@ const OrderCard = ({ order }) => {
           </Box>
         </>
       ))}
+      <div className={classes.btnDiv}>
+        <Button
+          className={classes.btn}
+          variant="contained"
+          color="secondary"
+          onClick={() => onCompleteOrder(order.company._id)}
+        >
+          Termine
+        </Button>
+      </div>
     </Box>
   );
 };

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderList = ({ orders }) => {
+const OrderList = ({ orders, handleCompleteOrder }) => {
   const classes = useStyles();
 
   return (
@@ -45,7 +45,7 @@ const OrderList = ({ orders }) => {
         <Grid container spacing={8}>
           {orders.map((order) => (
             <Grid item xs={4}>
-              <OrderCard order={order} />
+              <OrderCard order={order} onCompleteOrder={handleCompleteOrder} />
             </Grid>
           ))}
         </Grid>
