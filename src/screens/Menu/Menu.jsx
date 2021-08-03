@@ -31,6 +31,7 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import PaymentForm from "../../Components/Payment/paymentForm";
+import RestaurantMenuModal from "./restaurantMenuModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,6 +94,8 @@ const Menu = () => {
   const [openDishModal, setOpenDishModal] = useState(false);
   const [openDrinkModal, setOpenDrinkModal] = useState(false);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
+  const [openRestaurantMenuModal, setOpenRestaurantMenuModal] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState([]);
   const [cardComplete, setCardComplete] = useState(false);
 
   const { user: currentUser, cart, discount } = Store();
@@ -119,6 +122,21 @@ const Menu = () => {
     const dishes = data.dishes.map((dish) => ({ ...dish, quantity: 0 }));
     setRestaurantDrinks(dishes);
     setOpenDrinkModal(true);
+  };
+
+  const handleRestaurantModalOpen = async (_id) => {
+    const dishesInDB = await getFilteredDishes("all");
+    const filteredDishes = dishesInDB.filter(
+      (item) => item.restaurant === _id && item.dishType !== "Drink"
+    );
+    setSelectedMenu(filteredDishes);
+    setOpenRestaurantMenuModal(true);
+  };
+
+  const handleRestaurantModalClose = () => {
+    setOpenRestaurantMenuModal(false);
+    setSelectedMenu([]);
+    // setCardComplete(false);
   };
 
   const handlePaymentModalOpen = () => setOpenPaymentModal(true);
@@ -164,6 +182,7 @@ const Menu = () => {
   };
 
   const handleDishSelect = (_id) => {
+    handleRestaurantModalClose();
     const index = dishes.findIndex((d) => d._id === _id);
     setSelectedDish(dishes[index]);
     setOpenDishModal(true);
@@ -242,23 +261,6 @@ const Menu = () => {
       toast.error("Starter/Drink cannot be ordered alone.");
     } else {
       const cardElement = elements.getElement(CardElement);
-      // const { error, paymentMethod } = await stripe.createPaymentMethod({
-      //   type: "card",
-      //   card: cardElement,
-      //   billing_details: {
-      //     name: currentUser.firstName + " " + currentUser.lastName,
-      //     address: {
-      //       line1: "123 Test Street",
-      //       line2: "Apt. 5",
-      //       postal_code: "55555",
-      //       city: "Test City",
-      //       country: "FR",
-      //       state: "Test State",
-      //     },
-      //   },
-      // });
-      // console.log("submitted", paymentMethod);
-
       const cardObjectWithToken = await stripe.createToken(cardElement);
 
       onPayment(totalrest, { tokenId: cardObjectWithToken.token.id });
@@ -314,24 +316,6 @@ const Menu = () => {
     }
     return totalPriced;
   };
-
-  // const handleSubmit = async () => {
-  //   if (!stripe || !elements) {
-  //     // Stripe.js has not loaded yet. Make sure to disable
-  //     // form submission until Stripe.js has loaded.
-  //     return;
-  //   }
-
-  //   const cardElement = elements.getElement(CardElement);
-  //   const { error, paymentMethod } = await stripe.createPaymentMethod({
-  //     type: "card",
-  //     card: cardElement,
-  //   });
-  //   // const cardObjectWithToken = await stripe.createToken(cardElement);
-  //   // console.log("cardObjectWithToken", cardObjectWithToken);
-  //   console.log("cardElement", paymentMethod);
-  //   console.log("Error", error);
-  // };
 
   const handleDeleteDish = async (item) => {
     try {
@@ -566,6 +550,7 @@ const Menu = () => {
               onIncrement={handleDishIncrement}
               onDecrement={handleDishDecrement}
               onCartAdd={handleAddToCart}
+              onRestaurantModalOpen={handleRestaurantModalOpen}
             />
           }
         />
@@ -596,6 +581,18 @@ const Menu = () => {
             completeCardStatus={cardComplete}
             handleCompleteCard={handleCompleteCardStatus}
             handleSubmit={verifyOrder}
+          />
+        }
+      />
+
+      <TransitionsModal
+        open={openRestaurantMenuModal}
+        handleClose={handleRestaurantModalClose}
+        body={
+          <RestaurantMenuModal
+            selectedDish={selectedDish}
+            allDishes={selectedMenu}
+            handleDishSelect={handleDishSelect}
           />
         }
       />

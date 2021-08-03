@@ -149,7 +149,7 @@ const SignupForm = ({
         </FormControl>
 
         <button type="submit" className="signUpBtn" onClick={handleFormSubmit}>
-          Sign In
+          Sign Up
         </button>
       </form>
     </div>

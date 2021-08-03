@@ -48,6 +48,11 @@ const useStyles = makeStyles({
       outline: "none",
     },
   },
+  imgDiv: {
+    display: "flex",
+    justifyContent: "center",
+    maxHeight: "200px",
+  },
 });
 
 const DishDetailModal = ({
@@ -56,19 +61,27 @@ const DishDetailModal = ({
   onIncrement,
   onDecrement,
   onCartAdd,
+  onRestaurantModalOpen,
 }) => {
   const baseUrl = process.env.REACT_APP_API_URL;
   const classes = useStyles();
 
   return (
     <div>
-      <img src={`${baseUrl}/${dish.image}`} alt="dish_img" width="350px" />
+      <div className={classes.imgDiv}>
+        <img src={`${baseUrl}/${dish.image}`} alt="dish_img" width="200px" />
+      </div>
       <hr style={{ background: "black" }} />
       <div className={classes.heading}>
         <Typography variant="h6">
           <b>{dish.name}</b>
         </Typography>
-        <Button size="small" variant="contained" className={classes.smallBtn}>
+        <Button
+          size="small"
+          variant="contained"
+          className={classes.smallBtn}
+          onClick={() => onRestaurantModalOpen(dish.restaurant)}
+        >
           Voir le menu complet
         </Button>
       </div>
