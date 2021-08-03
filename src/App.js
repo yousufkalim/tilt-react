@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(11) + 1,
     },
   },
   toolbar: {
@@ -130,6 +130,23 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
+  },
+  listIcon: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "10px",
+    marginRight: "15px",
+    borderRadius: "50%",
+  },
+  activeListIcon: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(210, 2, 73)",
+    padding: "10px",
+    marginRight: "15px",
+    borderRadius: "50%",
   },
 }));
 
@@ -281,9 +298,17 @@ function App() {
                             <ListItemIcon
                               to="/menu"
                               component={NavLink}
-                              activeClassName={classes.activeIcon}
+                              className={
+                                pathname === "/menu"
+                                  ? classes.activeListIcon
+                                  : classes.listIcon
+                              }
                             >
-                              <HomeIcon stroke="#6f7070" />
+                              <HomeIcon
+                                stroke={
+                                  pathname === "/menu" ? "white" : "#6f7070"
+                                }
+                              />
                             </ListItemIcon>
                             <ListItemText
                               activeClassName={classes.active}
@@ -297,8 +322,18 @@ function App() {
                             activeClassName={classes.active}
                             className={classes.Link}
                           >
-                            <ListItemIcon>
-                              <HistoricIcon stroke="#6f7070" />
+                            <ListItemIcon
+                              className={
+                                pathname === "/history"
+                                  ? classes.activeListIcon
+                                  : classes.listIcon
+                              }
+                            >
+                              <HistoricIcon
+                                stroke={
+                                  pathname === "/history" ? "white" : "#6f7070"
+                                }
+                              />
                             </ListItemIcon>
                             <ListItemText primary="Historique" />
                           </ListItem>
@@ -310,8 +345,19 @@ function App() {
                             exact
                             activeClassName={classes.active}
                           >
-                            <ListItemIcon>
-                              <UserIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
+                            <ListItemIcon
+                              className={
+                                pathname === "/profile"
+                                  ? classes.activeListIcon
+                                  : classes.listIcon
+                              }
+                            >
+                              <UserIcon
+                                fill="rgba(0,0,0,0)"
+                                stroke={
+                                  pathname === "/profile" ? "white" : "#6f7070"
+                                }
+                              />
                             </ListItemIcon>
                             <ListItemText primary="Mon compte" />
                           </ListItem>
@@ -327,8 +373,18 @@ function App() {
                             }
                             className={classes.Link}
                           >
-                            <ListItemIcon>
-                              <HomeIcon stroke="#6f7070" />
+                            <ListItemIcon
+                              className={
+                                pathname === "/order"
+                                  ? classes.activeListIcon
+                                  : classes.listIcon
+                              }
+                            >
+                              <HomeIcon
+                                stroke={
+                                  pathname === "/order" ? "white" : "#6f7070"
+                                }
+                              />
                             </ListItemIcon>
                             <ListItemText
                               activeClassName={classes.active}
@@ -344,8 +400,18 @@ function App() {
                             }
                             className={classes.Link}
                           >
-                            <ListItemIcon>
-                              <HistoricIcon stroke="#6f7070" />
+                            <ListItemIcon
+                              className={
+                                pathname === "/history"
+                                  ? classes.activeListIcon
+                                  : classes.listIcon
+                              }
+                            >
+                              <HistoricIcon
+                                stroke={
+                                  pathname === "/history" ? "white" : "#6f7070"
+                                }
+                              />
                             </ListItemIcon>
                             <ListItemText primary="Historique" />
                           </ListItem>
@@ -357,8 +423,19 @@ function App() {
                             exact
                             activeClassName={classes.active}
                           >
-                            <ListItemIcon>
-                              <UserIcon fill="rgba(0,0,0,0)" stroke="#6f7070" />
+                            <ListItemIcon
+                              className={
+                                pathname === "/profile"
+                                  ? classes.activeListIcon
+                                  : classes.listIcon
+                              }
+                            >
+                              <UserIcon
+                                fill="rgba(0,0,0,0)"
+                                stroke={
+                                  pathname === "/profile" ? "white" : "#6f7070"
+                                }
+                              />
                             </ListItemIcon>
                             <ListItemText primary="Mon compte" />
                           </ListItem>
@@ -374,7 +451,7 @@ function App() {
                       className={classes.Link}
                       onClick={handleLogout}
                     >
-                      <ListItemIcon>
+                      <ListItemIcon className={classes.listIcon}>
                         <img src={Logout} alt="logout" />
                       </ListItemIcon>
                       <ListItemText primary="Déconnexion" />

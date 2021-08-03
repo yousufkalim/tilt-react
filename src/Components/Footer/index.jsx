@@ -58,7 +58,7 @@ const index = () => {
       <div className="container mt-1">
         <div className="tempFooter">
           <p className="tilt-footer-heading">
-            Adresse de l’entreprise, Martinique
+            41 lotissement les Frangipaniers 97228 Saint Luce
           </p>
           <div
             style={{ margin: "0 auto" }}
