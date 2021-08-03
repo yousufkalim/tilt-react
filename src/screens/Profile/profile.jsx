@@ -396,7 +396,7 @@ const Profile = ({ onLogout }) => {
             companies={companies}
             selectedCompany={selectedCompany}
             handleChange={handleCompanyChange}
-            handleProfileSubmit={handleCompanySubmit}
+            handleSubmit={handleCompanySubmit}
           />
         }
       />
