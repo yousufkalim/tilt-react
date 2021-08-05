@@ -5,12 +5,36 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-  text: { marginBottom: "10px" },
-  tableBody: { marginTop: "10px" },
-  divider: { backgroundColor: "black", broder: "1px solid black" },
-  total: {
+  text: { marginBottom: "40px" },
+  dishes: { marginBottom: "40px" },
+  userCode: {
+    borderRight: "1px solid gray",
     display: "flex",
-    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  dishDetails: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  allDishes: {
+    maxHeight: "400px",
+    maxWidth: "400px",
+    overflowY: "scroll",
+    overflowX: "hidden",
+    "&::-webkit-scrollbar": {
+      width: "10px",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "rgba(0,0,0,0)",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: "#D20249",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      background: "#D2025a",
+    },
   },
 });
 
@@ -20,67 +44,30 @@ const RestaurantHistoryModal = ({ data }) => {
   return (
     <div>
       <Typography variant="subtitle1" className={classes.text}>
-        <b>EnterPrise: </b> {data.company.name}
-      </Typography>
-      <Typography variant="subtitle2" className={classes.text}>
-        <b>Utilisateur: </b>
-        {data.carts.map((cart) => (
-          <>{cart.id.userCode}</>
-        ))}
+        <b>Enterprise: </b> {data.company.name}
       </Typography>
 
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <Typography variant="subtitle2">
-            <b>Nom</b>
-          </Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography variant="subtitle2">
-            <b>Compte</b>
-          </Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography variant="subtitle2">
-            <b>Prix</b>
-          </Typography>
-        </Grid>
-      </Grid>
-      <hr className={classes.divider} />
-
-      <Grid container spacing={3} className={classes.tableBody}>
-        {data.carts.map((cart) => (
-          <>
-            {cart.dishes.map((dish) => (
-              <>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle2">{dish.id.name}</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography variant="subtitle2">x{dish.count}</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography variant="subtitle2">{dish.id.price}</Typography>
-                </Grid>
-              </>
-            ))}
-          </>
-        ))}
-      </Grid>
-      <hr className={classes.divider} />
-
-      <Grid container spacing={3}>
-        {data.carts.map((cart) => (
-          <>
-            <Grid item xs={9}>
-              <Typography variant="subtitle2">Sous-Total</Typography>
+      {/* Order Details Section */}
+      <div className={classes.allDishes}>
+        {data.carts.map((item) => (
+          <div className={classes.dishes}>
+            <Grid container spacing={2}>
+              <Grid item xs={4} className={classes.userCode}>
+                <Typography variant="subtitle2">
+                  <b>{item.id.userCode}</b>
+                </Typography>
+              </Grid>
+              <Grid item xs={8} className={classes.dishDetails}>
+                {item.dishes.map((dish) => (
+                  <Typography variant="subtitle2">
+                    {`${dish.count} x ${dish.id.name}`}
+                  </Typography>
+                ))}
+              </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <Typography variant="subtitle2">{cart.totalPrice}</Typography>
-            </Grid>
-          </>
+          </div>
         ))}
-      </Grid>
+      </div>
     </div>
   );
 };

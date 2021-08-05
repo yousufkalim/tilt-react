@@ -61,75 +61,69 @@ const HistoryTable = ({ history, handleOpen }) => {
   return (
     <TableContainer>
       <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow classes={{ root: classes.row }}>
-            <TableCell classes={{ root: classes.headerCells }} align="center">
-              Date
-            </TableCell>
-            <TableCell classes={{ root: classes.headerCells }} align="center">
-              Restaurant
-            </TableCell>
-            <TableCell classes={{ root: classes.headerCells }} align="center">
-              Statut
-            </TableCell>
-            <TableCell classes={{ root: classes.headerCells }} align="center">
-              Total
-            </TableCell>
-            <TableCell classes={{ root: classes.headerCells }} align="center">
-              Crédit livraison
-            </TableCell>
-            <TableCell classes={{ root: classes.headerCells }} align="center">
-              Action
-            </TableCell>
-          </TableRow>
-        </TableHead>
+        {role === "user" ? (
+          <TableHead>
+            <TableRow classes={{ root: classes.row }}>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Date
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Restaurant
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Statut
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Total
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Crédit livraison
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Action
+              </TableCell>
+            </TableRow>
+          </TableHead>
+        ) : (
+          <TableHead>
+            <TableRow classes={{ root: classes.row }}>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Date
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Client Code
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Company
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Status
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Gain Restaurant
+              </TableCell>
+              <TableCell classes={{ root: classes.headerCells }} align="center">
+                Action
+              </TableCell>
+            </TableRow>
+          </TableHead>
+        )}
         <TableBody>
-          {role === "user" &&
-            history.map((row) => (
-              <TableRow classes={{ root: classes.row }} key={row._id}>
-                <TableCell classes={{ root: classes.cell }} align="center">
-                  {moment(row.time).format("DD/MM/YYYY")}
-                </TableCell>
-                <TableCell classes={{ root: classes.cell }} align="center">
-                  {row.order[0].restaurant.firstName}
-                </TableCell>
-                <TableCell classes={{ root: classes.cell }} align="center">
-                  {row.status}
-                </TableCell>
-                <TableCell classes={{ root: classes.cell }} align="center">
-                  {row.totalPrice}
-                </TableCell>
-                <TableCell classes={{ root: classes.cell }} align="center">
-                  No Package
-                </TableCell>
-                <TableCell classes={{ root: classes.cell }} align="center">
-                  <Button
-                    size="small"
-                    className={classes.btn}
-                    onClick={() => handleOpen(row._id)}
-                  >
-                    Voir détail
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          {role === "restaurant" &&
-            history.map((row) => (
-              <>
+          {role === "user" ? (
+            <>
+              {history.map((row) => (
                 <TableRow classes={{ root: classes.row }} key={row._id}>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {moment(row.completedAt).format("DD/MM/YYYY")}
+                    {moment(row.time).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {row.company.name}
+                    {row.order[0].restaurant.firstName}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     {row.status}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {row.carts.map((cart) => (
-                      <>{cart.totalPrice}</>
-                    ))}
+                    {row.totalPrice}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     No Package
@@ -144,8 +138,45 @@ const HistoryTable = ({ history, handleOpen }) => {
                     </Button>
                   </TableCell>
                 </TableRow>
-              </>
-            ))}
+              ))}
+            </>
+          ) : (
+            //Changes made to Restaurat Table
+            <>
+              {history.map((row) => (
+                <TableRow classes={{ root: classes.row }} key={row._id}>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {moment(row.completedAt).format("DD/MM/YYYY")}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {row.carts.map((cart) => (
+                      <span key={cart._id}>
+                        {cart.id.userCode} <br />
+                      </span>
+                    ))}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {row.company.name}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {row.status}
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    {row.gain} €
+                  </TableCell>
+                  <TableCell classes={{ root: classes.cell }} align="center">
+                    <Button
+                      size="small"
+                      className={classes.btn}
+                      onClick={() => handleOpen(row._id)}
+                    >
+                      Voir détail
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
