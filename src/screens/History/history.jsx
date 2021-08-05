@@ -61,7 +61,17 @@ const History = () => {
 
   const getRestaurantOrderHistory = async () => {
     const orderHistory = await restaurantHistory();
-    setHistory(orderHistory);
+    const updatedhistory = [];
+    let total = 0;
+    // Calculating the Total Gain of each Rstaurant in an order
+    orderHistory.forEach((item) => {
+      item.carts.forEach((cart) => {
+        total += cart.totalPrice;
+      });
+      updatedhistory.push({ ...item, gain: total });
+      total = 0;
+    });
+    setHistory(updatedhistory);
   };
 
   useEffect(() => {
