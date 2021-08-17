@@ -55,8 +55,12 @@ const History = () => {
   };
 
   const getUserOrderHistory = async () => {
-    const orderHistory = await getOrderHistory();
-    setHistory(orderHistory);
+    try {
+      const orderHistory = await getOrderHistory();
+      setHistory(orderHistory);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const getRestaurantOrderHistory = async () => {
@@ -86,12 +90,18 @@ const History = () => {
     <div className={classes.main}>
       <Typography variant="h5">Historique des commandes</Typography>
 
-      <HistoryTable
-        history={history}
-        handleOpen={
-          role === "user" ? handleUserHistoryOpen : handleRestHistoryOpen
-        }
-      />
+      {history.length > 0 ? (
+        <HistoryTable
+          history={history}
+          handleOpen={
+            role === "user" ? handleUserHistoryOpen : handleRestHistoryOpen
+          }
+        />
+      ) : (
+        <Typography variant="body1" style={{ marginTop: "20px" }}>
+          Aucun historique disponible
+        </Typography>
+      )}
 
       {role === "user" && (
         <TransitionsModal
