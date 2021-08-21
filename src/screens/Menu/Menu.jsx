@@ -183,6 +183,7 @@ const Menu = () => {
 
   const handleDishSelect = (_id) => {
     handleRestaurantModalClose();
+    setQuantity(1);
     const index = dishes.findIndex((d) => d._id === _id);
     setSelectedDish(dishes[index]);
     setOpenDishModal(true);

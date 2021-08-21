@@ -55,8 +55,12 @@ const History = () => {
   };
 
   const getUserOrderHistory = async () => {
-    const orderHistory = await getOrderHistory();
-    setHistory(orderHistory);
+    try {
+      const orderHistory = await getOrderHistory();
+      setHistory(orderHistory);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const getRestaurantOrderHistory = async () => {
@@ -66,7 +70,9 @@ const History = () => {
     // Calculating the Total Gain of each Rstaurant in an order
     orderHistory.forEach((item) => {
       item.carts.forEach((cart) => {
-        total += cart.totalPrice;
+        cart.dishes.forEach((dish) => {
+          total += dish.count * dish.id.price;
+        });
       });
       updatedhistory.push({ ...item, gain: total });
       total = 0;
@@ -86,12 +92,18 @@ const History = () => {
     <div className={classes.main}>
       <Typography variant="h5">Historique des commandes</Typography>
 
-      <HistoryTable
-        history={history}
-        handleOpen={
-          role === "user" ? handleUserHistoryOpen : handleRestHistoryOpen
-        }
-      />
+      {history.length > 0 ? (
+        <HistoryTable
+          history={history}
+          handleOpen={
+            role === "user" ? handleUserHistoryOpen : handleRestHistoryOpen
+          }
+        />
+      ) : (
+        <Typography variant="body1" style={{ marginTop: "20px" }}>
+          Aucun historique disponible
+        </Typography>
+      )}
 
       {role === "user" && (
         <TransitionsModal

@@ -30,7 +30,7 @@ const getLoggedinUser = async () => {
 
 const getOrderHistory = async () => {
   const { data: orders } = await http.get(`${apiEndPoint}/orders`);
-  return orders.history.orderHistory;
+  return orders.history ? orders.history.orderHistory : [];
 };
 
 const addToCart = async (body) => {

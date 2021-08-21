@@ -37,7 +37,11 @@ const OrderCard = ({ order, onCompleteOrder }) => {
     <Box className={classes.card}>
       {order.carts.map((cart) => (
         <>
-          <Typography variant="body1" color="initial">
+          <Typography
+            variant="body1"
+            color="initial"
+            style={{ marginTop: "20px" }}
+          >
             {cart.id.userCode}
           </Typography>
 
@@ -51,7 +55,8 @@ const OrderCard = ({ order, onCompleteOrder }) => {
               {cart.dishes.length} {cart.dishes.length === 1 ? "Plat" : "Plats"}
             </Typography>
             <Typography className={classes.textStyle} variant="subtitle2">
-              {cart.totalPrice}€
+              {/* {cart.totalPrice}€ */}
+              {cart.total[cart.total.length - 1]}€
             </Typography>
           </Box>
         </>

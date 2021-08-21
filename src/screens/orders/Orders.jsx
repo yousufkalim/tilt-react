@@ -28,8 +28,26 @@ const Orders = () => {
   const getCart = async () => {
     const data = await getRestaurantCart();
     if (data.cart) {
-      setCarts(data.cart.restaurantCarts);
-      
+      let restaurantCarts = [...data.cart.restaurantCarts];
+      restaurantCarts = restaurantCarts.map((item) => {
+        let total = 0;
+        return {
+          ...item,
+          carts: item.carts.map((item1) => {
+            const calculatedTotal = item1.dishes.map((dish) => {
+              return (total += dish.count * dish.id.price);
+            });
+            total = 0;
+            return {
+              ...item1,
+              total: calculatedTotal,
+            };
+          }),
+        };
+      });
+
+      setCarts(restaurantCarts);
+
       const filtered = data.cart.restaurantCarts.filter(
         (item) =>
           item.company && item.company.block && item.company.block.pickUpTime
