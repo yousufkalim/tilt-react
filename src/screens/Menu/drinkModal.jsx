@@ -31,6 +31,14 @@ const useStyles = makeStyles({
     justifyContent: "center",
     marginTop: "10px",
   },
+  quantityBtn: {
+    height: "30px",
+    marginRight: "8px",
+    marginLeft: "8px",
+    "&:focus": {
+      outline: "none",
+    },
+  },
 });
 
 const DrinkModal = ({

@@ -49,20 +49,24 @@ const Dish = ({ dish, handleSelect }) => {
             </Typography>
           </Box>
         </Box>
-        <Box paddingLeft="10%">
-          <Typography variant="body1" color="initial">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography
+            variant="body1"
+            color="initial"
+            style={{ marginRight: "30px" }}
+          >
             <b>{dish.price}€</b>
           </Typography>
-        </Box>
 
-        <IconButton
-          onClick={() => handleSelect(dish._id)}
-          className={classes.iconBtn}
-        >
-          <BsFillPlusCircleFill
-            style={{ color: "#C72E54", fontSize: "35px" }}
-          />
-        </IconButton>
+          <IconButton
+            onClick={() => handleSelect(dish._id)}
+            className={classes.iconBtn}
+          >
+            <BsFillPlusCircleFill
+              style={{ color: "#C72E54", fontSize: "35px" }}
+            />
+          </IconButton>
+        </Box>
       </Box>
     </>
   );
