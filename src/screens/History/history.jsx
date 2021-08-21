@@ -70,7 +70,9 @@ const History = () => {
     // Calculating the Total Gain of each Rstaurant in an order
     orderHistory.forEach((item) => {
       item.carts.forEach((cart) => {
-        total += cart.totalPrice;
+        cart.dishes.forEach((dish) => {
+          total += dish.count * dish.id.price;
+        });
       });
       updatedhistory.push({ ...item, gain: total });
       total = 0;
