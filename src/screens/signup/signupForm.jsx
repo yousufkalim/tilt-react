@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import InputWithLabel from "../../Components/common/inputWithLabel";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -10,6 +11,7 @@ import makeStyles from "@material-ui/styles/makeStyles";
 import "../../styles/signup.css";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import CGV from "../../assets/CGV.pdf";
 
 const useStyles = makeStyles({
   formControl: { width: "100%" },
@@ -40,7 +42,7 @@ const SignupForm = ({
           <Grid item zeroMinWidth xs>
             <InputWithLabel
               value={data["firstName"]}
-              label="Prenom"
+              label="Prénom"
               required={true}
               name="firstName"
               type="text"
@@ -64,7 +66,7 @@ const SignupForm = ({
         </Grid>
 
         <InputWithLabel
-          label="Email"
+          label="Adresse e-mail"
           value={data["email"]}
           required={true}
           name="email"
@@ -77,7 +79,7 @@ const SignupForm = ({
           <Grid item zeroMinWidth xs>
             <InputWithLabel
               value={data["password"]}
-              label="Password"
+              label="Mot de passe"
               required={true}
               name="password"
               type="password"
@@ -89,7 +91,7 @@ const SignupForm = ({
           <Grid item zeroMinWidth xs>
             <InputWithLabel
               value={data["confirmPassword"]}
-              label="Confirm Password"
+              label="Confirmer le mot de passe"
               required={true}
               name="confirmPassword"
               type="password"
@@ -100,7 +102,7 @@ const SignupForm = ({
           </Grid>
         </Grid>
         <InputWithLabel
-          label="Code affilie"
+          label="Code affilié"
           value={data["affiliate"]}
           name="affiliate"
           type="text"
@@ -116,7 +118,7 @@ const SignupForm = ({
             value={data["companyId"]}
             name="companyId"
             onChange={handleFormChange}
-            label="Selectionner une enterprise"
+            label="Sélectionner une entreprise"
             className={classes.outlined}
           >
             {companies.map((company) => (
@@ -133,13 +135,25 @@ const SignupForm = ({
           <FormControlLabel
             className={classes.checkBox}
             control={
-              <Checkbox
-                checked={data["terms"]}
-                onChange={handleFormChange}
-                name="terms"
-              />
+              <>
+                <Checkbox
+                  checked={data["terms"]}
+                  onChange={handleFormChange}
+                  name="terms"
+                  style={{ display: "inline" }}
+                />
+                <span>
+                  Accepter les &nbsp;
+                  <a target="blank" href={CGV}>
+                    <span
+                      style={{ textDecoration: "underline", color: "#d10248" }}
+                    >
+                      termes et conditions
+                    </span>
+                  </a>
+                </span>
+              </>
             }
-            label="Terms and Conditions"
           />
           {errors["terms"] && (
             <FormHelperText style={{ color: "#d10248" }}>
@@ -149,7 +163,7 @@ const SignupForm = ({
         </FormControl>
 
         <button type="submit" className="signUpBtn" onClick={handleFormSubmit}>
-          Sign Up
+          S’inscrire
         </button>
       </form>
     </div>
