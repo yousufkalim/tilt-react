@@ -247,17 +247,11 @@ const Signup = () => {
                 </Link>
                 <br />
                 <br />
-                {formType === "signup" ? "WELCOME !" : ""}
-                {formType === "signin" ? "HELLO !" : ""}
-              </Typography>
-              <Typography variant="subtitle2" className={classes.info}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                blanditiis iste magni sapiente autem nemo minima reprehenderit
-                illo assumenda eveniet.
+                Bienvenue !
               </Typography>
               <button className="signInBtn" onClick={handleFormType}>
-                {formType === "signup" ? "Sign In" : ""}
-                {formType === "signin" ? "Sign Up" : ""}
+                {formType === "signup" ? "Se connecter" : ""}
+                {formType === "signin" ? "S’inscrire" : ""}
               </button>
             </div>
           </div>
@@ -267,7 +261,7 @@ const Signup = () => {
             {formType === "signup" ? (
               <>
                 <Typography variant="h2" className={classes.formHeading}>
-                  Register
+                  S’inscrire
                 </Typography>
                 <SignupForm
                   handleFormChange={handleRegisterFormChange}

@@ -20,7 +20,7 @@ const indes = () => {
                     <li className=""><a href="#features"> Fonctionnalités </a></li>
                     <li className=""><a href="#download"> Télécharger </a></li>
                     {!token &&
-                      <li className=""><Link to="/signup"> Signup </Link></li>
+                      <li className=""><Link to="/signup"> S’inscrire </Link></li>
                     }
                        </ul>
                    </li>
