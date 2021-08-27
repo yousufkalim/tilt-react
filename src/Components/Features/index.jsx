@@ -29,11 +29,11 @@ export default function Index() {
       className="pb-3 main-feature "
       style={{ overflow: "hidden", position: "relative" }}
     >
-      <div className="main" style={{ position: "relative" }}>
+      <div className="main" style={{ position: "relative", height: "1000px" }}>
         <svg
           className="svgIcon1"
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
+          viewBox="0 0 1440 195"
         >
           <path
             fill="#fff"
