@@ -43,13 +43,8 @@ const Basket = ({ item, onDelete }) => {
         <Box
           display="flex"
           style={{ marginTop: "10%" }}
-          justifyContent="space-between"
+          justifyContent="flex-end"
         >
-          <Box>
-            <Typography variant="caption" color="initial">
-              <RestaurantIcon /> &nbsp; Bella Restaurant
-            </Typography>
-          </Box>
           <Box>
             <Typography variant="body2" color="initial">
               {item.id.price}€

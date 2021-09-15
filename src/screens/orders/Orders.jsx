@@ -61,7 +61,7 @@ const Orders = () => {
 
   const handleCompleteOrder = async (_id) => {
     const check = window.confirm(
-      "Are you sure you want to mark this as complete"
+      "Êtes-vous sûr de vouloir marquer ceci comme terminé"
     );
     if (check) {
       try {

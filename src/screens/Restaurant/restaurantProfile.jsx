@@ -402,7 +402,7 @@ const RestaurantProfile = ({ onLogout }) => {
 
   const handleDeleteProfile = async () => {
     const check = window.confirm(
-      "Are you Sure you want to delete tyour account?"
+      "Êtes-vous sûr de vouloir supprimer votre compte ?"
     );
     if (check) {
       try {
@@ -498,7 +498,7 @@ const RestaurantProfile = ({ onLogout }) => {
   };
 
   const handleDishDelete = async (_id) => {
-    const check = window.confirm("Are you sure you want to delete this?");
+    const check = window.confirm("Êtes-vous sûr de vouloir supprimer cela ?");
     if (check) {
       try {
         await deleteDish(_id);
