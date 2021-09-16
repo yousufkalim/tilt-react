@@ -1,8 +1,8 @@
 import React from "react";
-import { makeStyles, Box, Typography, IconButton } from "@material-ui/core";
+import { makeStyles, Box, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import DishImg from "../../images/Dish.png";
 import { EditIcon } from "../../images/images";
+import Switch from "@material-ui/core/Switch";
 
 const cardStyle = {
   backgroundColor: "#fff",
@@ -19,12 +19,13 @@ const useStyles = makeStyles({
   },
   priceBox: {
     display: "flex",
-    minWidth: "100px",
+    minWidth: "150px",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 
-const Dish = ({ dish, handleEdit, handleDelete }) => {
+const Dish = ({ dish, handleEdit, handleDelete, handleDishStatus }) => {
   const classes = useStyles();
   const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -61,8 +62,14 @@ const Dish = ({ dish, handleEdit, handleDelete }) => {
           <img
             src={EditIcon}
             alt=""
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", width: "20px", height: "25px" }}
             onClick={() => handleEdit(dish._id)}
+          />
+          <Switch
+            checked={dish.status === "Active" ? true : false}
+            onChange={(e) => handleDishStatus(e, dish._id, dish.dishType)}
+            name="status"
+            inputProps={{ "aria-label": "secondary checkbox" }}
           />
           <DeleteIcon
             style={{ color: "#C72E54", cursor: "pointer" }}

@@ -1,12 +1,8 @@
 import React from "react";
-import { GridList, GridListTile, makeStyles } from "@material-ui/core";
+import { GridList, GridListTile } from "@material-ui/core";
 import Dish from "./dish";
 
-// const useStyles = makeStyles({});
-
-const MenuList = ({ dishes, handleEdit, handleDelete }) => {
-  // const classes = useStyles();
-
+const MenuList = ({ dishes, handleEdit, handleDelete, handleDishStatus }) => {
   return (
     <GridList cols={1}>
       {dishes.map((dish) => (
@@ -15,6 +11,7 @@ const MenuList = ({ dishes, handleEdit, handleDelete }) => {
             dish={dish}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
+            handleDishStatus={handleDishStatus}
           />
         </GridListTile>
       ))}

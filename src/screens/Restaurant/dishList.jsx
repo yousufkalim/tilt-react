@@ -34,7 +34,12 @@ const useStyles = makeStyles({
   },
 });
 
-const DishList = ({ dishes, handleEditDish, handleDishDelete }) => {
+const DishList = ({
+  dishes,
+  handleEditDish,
+  handleDishDelete,
+  handleDishStatus,
+}) => {
   const classes = useStyles();
 
   return (
@@ -49,6 +54,7 @@ const DishList = ({ dishes, handleEditDish, handleDishDelete }) => {
             dishes={dishes.entrees}
             handleEdit={handleEditDish}
             handleDelete={handleDishDelete}
+            handleDishStatus={handleDishStatus}
           />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>
@@ -64,6 +70,7 @@ const DishList = ({ dishes, handleEditDish, handleDishDelete }) => {
             dishes={dishes.plats}
             handleEdit={handleEditDish}
             handleDelete={handleDishDelete}
+            handleDishStatus={handleDishStatus}
           />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>
@@ -79,6 +86,7 @@ const DishList = ({ dishes, handleEditDish, handleDishDelete }) => {
             dishes={dishes.desserts}
             handleEdit={handleEditDish}
             handleDelete={handleDishDelete}
+            handleDishStatus={handleDishStatus}
           />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>
@@ -94,6 +102,7 @@ const DishList = ({ dishes, handleEditDish, handleDishDelete }) => {
             dishes={dishes.drinks}
             handleEdit={handleEditDish}
             handleDelete={handleDishDelete}
+            handleDishStatus={handleDishStatus}
           />
         ) : (
           <Typography variant="body1" className={classes.dishHeadings}>

@@ -12,6 +12,7 @@ import {
   getDishById,
   getDishes,
   updateDish,
+  updateDishStatus,
 } from "../../services/restaurantService";
 import { Store, UpdateStore } from "../../context/StoreContext";
 import { deleteProfile, editUserPassword } from "../../services/userService";
@@ -557,6 +558,19 @@ const RestaurantProfile = ({ onLogout }) => {
     return fd;
   };
 
+  const handleDishStatus = async ({ target }, _id, dishType) => {
+    const body = {
+      dishId: _id,
+      status: target.checked ? "Active" : "Inactive",
+    };
+    try {
+      await updateDishStatus(body);
+    } catch (error) {
+      toast.error("Ann Error Occurred");
+    }
+    getRestaurantDishes();
+  };
+
   return (
     <div className={classes.main}>
       <Typography variant="h5">Mon Compte</Typography>
@@ -586,6 +600,7 @@ const RestaurantProfile = ({ onLogout }) => {
                   dishes={dishes}
                   handleEditDish={handleEditDish}
                   handleDishDelete={handleDishDelete}
+                  handleDishStatus={handleDishStatus}
                 />
               </Grid>
             </div>
