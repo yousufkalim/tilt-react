@@ -12,6 +12,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Select from "@material-ui/core/Select";
+import { Switch } from "@material-ui/core";
+import { Store } from "../../context/StoreContext";
 
 const useStyles = makeStyles({
   main: {
@@ -43,8 +45,17 @@ const useStyles = makeStyles({
   formControl: { width: "100%", marginBottom: "20px" },
 });
 
-const DishModal = ({ handleChange, dish, errors, imageBlob, handleSubmit }) => {
+const DishModal = ({
+  dish,
+  errors,
+  imageBlob,
+  handleChange,
+  handleDishPromoteStatus,
+  handleSubmit,
+  update,
+}) => {
   const classes = useStyles();
+  const { user } = Store();
 
   return (
     <div className={classes.main}>
@@ -92,6 +103,19 @@ const DishModal = ({ handleChange, dish, errors, imageBlob, handleSubmit }) => {
         )}
       </div>
       <div className={classes.form}>
+        {user.restaurant?.isPremium && update && (
+          <FormControlLabel
+            style={{ width: "100%", justifyContent: "center" }}
+            control={
+              <Switch
+                checked={dish["isPromoted"]}
+                name="promote"
+                onChange={handleDishPromoteStatus}
+              />
+            }
+            label="Promote Dish"
+          />
+        )}
         <InputWithLabel
           value={dish["name"]}
           label="Nom du Plat"

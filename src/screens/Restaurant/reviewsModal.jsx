@@ -42,7 +42,6 @@ const useStyles = makeStyles({
 
 const ReviewsModal = ({ data }) => {
   const classes = useStyles();
-  console.log(data);
 
   return (
     <div>

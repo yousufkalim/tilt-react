@@ -57,6 +57,16 @@ const updateDishStatus = async (body) => {
   return data;
 };
 
+const addPremiumDish = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/setPremiumDishes`, body);
+  return data;
+};
+
+const removePremiumDish = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/removePremiumDish`, body);
+  return data;
+};
+
 export {
   getOrderHistory,
   getDishes,
@@ -69,4 +79,6 @@ export {
   getRestaurantCart,
   completeRestaurantOrder,
   updateDishStatus,
+  addPremiumDish,
+  removePremiumDish,
 };

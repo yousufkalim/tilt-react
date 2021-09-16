@@ -13,6 +13,8 @@ import {
   getDishes,
   updateDish,
   updateDishStatus,
+  addPremiumDish,
+  removePremiumDish,
 } from "../../services/restaurantService";
 import { Store, UpdateStore } from "../../context/StoreContext";
 import {
@@ -108,9 +110,12 @@ const RestaurantProfile = ({ onLogout }) => {
     image: "",
     description: "",
     specials: [],
+    isPromoted: "",
   });
+  const [unchangedDishData, setUnchangedDishData] = useState({});
   const [dishImageBlob, setDishImageBlob] = useState("");
   const [dishUpdate, setDishUpdate] = useState(false);
+  const [promoteStatusChanged, setPromoteStatusChanged] = useState(false);
   const [selectedDishId, setSelectedDishId] = useState("");
   const [dishErrors, setDishErrors] = useState({});
   const [restaurantPassword, setRestaurantPassword] = useState({
@@ -185,6 +190,7 @@ const RestaurantProfile = ({ onLogout }) => {
 
   const handleDishModalClose = () => {
     setOpenDishModal(false);
+    setUnchangedDishData();
     setDishData({
       name: "",
       price: "",
@@ -192,10 +198,13 @@ const RestaurantProfile = ({ onLogout }) => {
       image: "",
       description: "",
       specials: [],
+      isPromoted: "",
     });
     setDishErrors({});
     setDishImageBlob("");
     setDishUpdate(false);
+    setSelectedDishId("");
+    setPromoteStatusChanged(false);
   };
 
   const handleRestaurantModalClose = () => {
@@ -444,6 +453,7 @@ const RestaurantProfile = ({ onLogout }) => {
     type: Joi.string().required().label("Type"),
     description: Joi.string().required().min(5).label("Description"),
     specials: Joi.array(),
+    isPromoted: Joi.boolean(),
   };
 
   const validateProperty = (name, value, schemaName) => {
@@ -511,13 +521,25 @@ const RestaurantProfile = ({ onLogout }) => {
         specials: data.specials,
         type: data.dishType,
         description: data.description,
+        isPromoted: data.isPromoted ? true : false,
         image: "",
       });
+      setUnchangedDishData({ isPromoted: data.isPromoted ? true : false });
       setDishImageBlob(`${baseUrl}/${data.image}`);
       handleDishModalOpen();
     } catch (error) {
       console.log(error.response.data.message);
     }
+  };
+
+  const handleDishPromoteStatus = ({ target }, _id) => {
+    const dish = { ...dishData };
+    if (unchangedDishData.isPromoted !== target.checked) {
+      setPromoteStatusChanged(true);
+    } else setPromoteStatusChanged(false);
+
+    dish.isPromoted = target.checked;
+    setDishData(dish);
   };
 
   const handleDishDelete = async (_id) => {
@@ -537,6 +559,7 @@ const RestaurantProfile = ({ onLogout }) => {
     if (dishUpdate && errors) {
       delete errors.image;
     }
+
     setDishErrors(errors || {});
     if (errors) return;
 
@@ -547,6 +570,17 @@ const RestaurantProfile = ({ onLogout }) => {
       }
       data._id = selectedDishId;
       try {
+        if (promoteStatusChanged) {
+          const body = {
+            restaurantId: user._id,
+            dishId: selectedDishId,
+          };
+          if (data.isPromoted) {
+            await addPremiumDish(body);
+          } else {
+            await removePremiumDish(body);
+          }
+        }
         await updateDish(appendToFormData(data));
         getRestaurantDishes();
         handleDishModalClose();
@@ -570,6 +604,7 @@ const RestaurantProfile = ({ onLogout }) => {
     fd.append("price", data.price);
     fd.append("dishType", data.type);
     fd.append("description", data.description);
+    fd.append("isPromoted", data.isPromoted);
     fd.append("specials", JSON.stringify(data.specials));
     if (data.image) {
       fd.append("image", data.image);
@@ -686,6 +721,8 @@ const RestaurantProfile = ({ onLogout }) => {
             handleChange={handleDishDataChange}
             handleSubmit={handleDishSubmit}
             imageBlob={dishImageBlob}
+            handleDishPromoteStatus={handleDishPromoteStatus}
+            update={dishUpdate}
           />
         }
       />
