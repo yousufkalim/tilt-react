@@ -122,6 +122,7 @@ const RestaurantProfile = ({ onLogout }) => {
     postalCode: "",
     pickupPlace: "",
     image: "",
+    googleLink: "",
   });
   const [restaurantErrors, setRestaurantErrors] = useState({});
   const [profileFormType, setProfileFormType] = useState("profile");
@@ -163,6 +164,7 @@ const RestaurantProfile = ({ onLogout }) => {
       city: user.address.city,
       postalCode: user.address.zip,
       pickupPlace: user.restaurant.pickupPlace,
+      googleLink: user.restaurant.googleLink ? user.restaurant.googleLink : "",
     });
     setProfileImageBlob(`${baseUrl}/${user.restaurant.image}`);
     setOpenRestaurantModal(true);
@@ -193,6 +195,7 @@ const RestaurantProfile = ({ onLogout }) => {
       postalCode: "",
       pickupPlace: "",
       image: "",
+      googleLink: "",
     });
     setRestaurantErrors({});
     setProfileFormType("profile");
@@ -286,6 +289,7 @@ const RestaurantProfile = ({ onLogout }) => {
     postalCode: Joi.string().min(3).required().label("Code Postal"),
     pickupPlace: Joi.string().min(3).required().label("Pickup Place"),
     image: Joi.allow(""),
+    googleLink: Joi.string().min(3).required(),
   };
 
   const handleFormTypeChange = () => {
@@ -300,6 +304,7 @@ const RestaurantProfile = ({ onLogout }) => {
         postalCode: "",
         pickupPlace: "",
         image: "",
+        googleLink: "",
       });
     } else {
       setProfileFormType("profile");
@@ -350,6 +355,7 @@ const RestaurantProfile = ({ onLogout }) => {
     fd.append("name", data.name);
     fd.append("address", JSON.stringify(address));
     fd.append("pickupPlace", data.pickupPlace);
+    fd.append("googleLink", data.googleLink);
     if (data.image) {
       fd.append("image", data.image);
     }
@@ -565,10 +571,10 @@ const RestaurantProfile = ({ onLogout }) => {
     };
     try {
       await updateDishStatus(body);
+      getRestaurantDishes();
     } catch (error) {
       toast.error("Ann Error Occurred");
     }
-    getRestaurantDishes();
   };
 
   return (

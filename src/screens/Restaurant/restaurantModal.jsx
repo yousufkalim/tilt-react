@@ -176,6 +176,16 @@ const RestaurantModal = ({
               error={errors["pickupPlace"] ? true : false}
               errorMessage={errors["pickupPlace"]}
             />
+            <InputWithLabel
+              value={data["googleLink"]}
+              label="Google Link"
+              required={true}
+              name="googleLink"
+              type="text"
+              handleChange={handleChange}
+              error={errors["googleLink"] ? true : false}
+              errorMessage={errors["googleLink"]}
+            />
           </div>
           <Button
             className={classes.submitBtn}
