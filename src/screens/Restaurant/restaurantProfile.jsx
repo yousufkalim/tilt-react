@@ -12,9 +12,16 @@ import {
   getDishById,
   getDishes,
   updateDish,
+  updateDishStatus,
+  addPremiumDish,
+  removePremiumDish,
 } from "../../services/restaurantService";
 import { Store, UpdateStore } from "../../context/StoreContext";
-import { deleteProfile, editUserPassword } from "../../services/userService";
+import {
+  deleteProfile,
+  editUserPassword,
+  getRestaurantReviews,
+} from "../../services/userService";
 import { toast } from "react-toastify";
 import TransitionsModal from "../../Components/common/transitionsModal";
 import DishList from "./dishList";
@@ -22,6 +29,7 @@ import DishModal from "./dishModal";
 import { EditIcon } from "../../images/images";
 import RestaurantModal from "./restaurantModal";
 import BankDetailsModal from "./bankDetailsModal";
+import ReviewsModal from "./reviewsModal";
 
 const useStyles = makeStyles({
   main: {
@@ -88,6 +96,7 @@ const RestaurantProfile = ({ onLogout }) => {
   const [openDishModal, setOpenDishModal] = useState(false);
   const [openBankInfoModal, setOpenBankInfoModal] = useState(false);
   const [openRestaurantModal, setOpenRestaurantModal] = useState(false);
+  const [openReviewsModal, setOpenReviewsModal] = useState(false);
   const [dishes, setDishes] = useState({
     entrees: [],
     plats: [],
@@ -101,9 +110,12 @@ const RestaurantProfile = ({ onLogout }) => {
     image: "",
     description: "",
     specials: [],
+    isPromoted: "",
   });
+  const [unchangedDishData, setUnchangedDishData] = useState({});
   const [dishImageBlob, setDishImageBlob] = useState("");
   const [dishUpdate, setDishUpdate] = useState(false);
+  const [promoteStatusChanged, setPromoteStatusChanged] = useState(false);
   const [selectedDishId, setSelectedDishId] = useState("");
   const [dishErrors, setDishErrors] = useState({});
   const [restaurantPassword, setRestaurantPassword] = useState({
@@ -121,6 +133,7 @@ const RestaurantProfile = ({ onLogout }) => {
     postalCode: "",
     pickupPlace: "",
     image: "",
+    googleLink: "",
   });
   const [restaurantErrors, setRestaurantErrors] = useState({});
   const [profileFormType, setProfileFormType] = useState("profile");
@@ -134,6 +147,7 @@ const RestaurantProfile = ({ onLogout }) => {
   });
   const [bankErrors, setBankErrors] = useState({});
   const [imageNames, setImageNames] = useState({ front: "", back: "" });
+  const [reviews, setReviews] = useState([]);
 
   const getRestaurantDishes = async () => {
     const data = await getDishes();
@@ -149,8 +163,14 @@ const RestaurantProfile = ({ onLogout }) => {
     });
   };
 
+  const getReviews = async () => {
+    const data = await getRestaurantReviews(user._id);
+    setReviews(data);
+  };
+
   useEffect(() => {
     getRestaurantDishes();
+    getReviews();
   }, []);
 
   const handleDishModalOpen = () => setOpenDishModal(true);
@@ -162,6 +182,7 @@ const RestaurantProfile = ({ onLogout }) => {
       city: user.address.city,
       postalCode: user.address.zip,
       pickupPlace: user.restaurant.pickupPlace,
+      googleLink: user.restaurant.googleLink ? user.restaurant.googleLink : "",
     });
     setProfileImageBlob(`${baseUrl}/${user.restaurant.image}`);
     setOpenRestaurantModal(true);
@@ -169,6 +190,7 @@ const RestaurantProfile = ({ onLogout }) => {
 
   const handleDishModalClose = () => {
     setOpenDishModal(false);
+    setUnchangedDishData();
     setDishData({
       name: "",
       price: "",
@@ -176,10 +198,13 @@ const RestaurantProfile = ({ onLogout }) => {
       image: "",
       description: "",
       specials: [],
+      isPromoted: "",
     });
     setDishErrors({});
     setDishImageBlob("");
     setDishUpdate(false);
+    setSelectedDishId("");
+    setPromoteStatusChanged(false);
   };
 
   const handleRestaurantModalClose = () => {
@@ -192,6 +217,7 @@ const RestaurantProfile = ({ onLogout }) => {
       postalCode: "",
       pickupPlace: "",
       image: "",
+      googleLink: "",
     });
     setRestaurantErrors({});
     setProfileFormType("profile");
@@ -268,6 +294,9 @@ const RestaurantProfile = ({ onLogout }) => {
     return fd;
   };
 
+  const handleReviewsModalOpen = () => setOpenReviewsModal(true);
+  const handleReviewsModalClose = () => setOpenReviewsModal(false);
+
   const bankSchema = {
     phone: Joi.string().required().label("Phone Number"),
     dateOfBirth: Joi.date().required().label("Date de Naissance"),
@@ -285,6 +314,7 @@ const RestaurantProfile = ({ onLogout }) => {
     postalCode: Joi.string().min(3).required().label("Code Postal"),
     pickupPlace: Joi.string().min(3).required().label("Pickup Place"),
     image: Joi.allow(""),
+    googleLink: Joi.string().min(3).required(),
   };
 
   const handleFormTypeChange = () => {
@@ -299,6 +329,7 @@ const RestaurantProfile = ({ onLogout }) => {
         postalCode: "",
         pickupPlace: "",
         image: "",
+        googleLink: "",
       });
     } else {
       setProfileFormType("profile");
@@ -349,6 +380,7 @@ const RestaurantProfile = ({ onLogout }) => {
     fd.append("name", data.name);
     fd.append("address", JSON.stringify(address));
     fd.append("pickupPlace", data.pickupPlace);
+    fd.append("googleLink", data.googleLink);
     if (data.image) {
       fd.append("image", data.image);
     }
@@ -421,6 +453,7 @@ const RestaurantProfile = ({ onLogout }) => {
     type: Joi.string().required().label("Type"),
     description: Joi.string().required().min(5).label("Description"),
     specials: Joi.array(),
+    isPromoted: Joi.boolean(),
   };
 
   const validateProperty = (name, value, schemaName) => {
@@ -488,13 +521,25 @@ const RestaurantProfile = ({ onLogout }) => {
         specials: data.specials,
         type: data.dishType,
         description: data.description,
+        isPromoted: data.isPromoted ? true : false,
         image: "",
       });
+      setUnchangedDishData({ isPromoted: data.isPromoted ? true : false });
       setDishImageBlob(`${baseUrl}/${data.image}`);
       handleDishModalOpen();
     } catch (error) {
       console.log(error.response.data.message);
     }
+  };
+
+  const handleDishPromoteStatus = ({ target }, _id) => {
+    const dish = { ...dishData };
+    if (unchangedDishData.isPromoted !== target.checked) {
+      setPromoteStatusChanged(true);
+    } else setPromoteStatusChanged(false);
+
+    dish.isPromoted = target.checked;
+    setDishData(dish);
   };
 
   const handleDishDelete = async (_id) => {
@@ -514,6 +559,7 @@ const RestaurantProfile = ({ onLogout }) => {
     if (dishUpdate && errors) {
       delete errors.image;
     }
+
     setDishErrors(errors || {});
     if (errors) return;
 
@@ -524,6 +570,17 @@ const RestaurantProfile = ({ onLogout }) => {
       }
       data._id = selectedDishId;
       try {
+        if (promoteStatusChanged) {
+          const body = {
+            restaurantId: user._id,
+            dishId: selectedDishId,
+          };
+          if (data.isPromoted) {
+            await addPremiumDish(body);
+          } else {
+            await removePremiumDish(body);
+          }
+        }
         await updateDish(appendToFormData(data));
         getRestaurantDishes();
         handleDishModalClose();
@@ -547,6 +604,7 @@ const RestaurantProfile = ({ onLogout }) => {
     fd.append("price", data.price);
     fd.append("dishType", data.type);
     fd.append("description", data.description);
+    fd.append("isPromoted", data.isPromoted);
     fd.append("specials", JSON.stringify(data.specials));
     if (data.image) {
       fd.append("image", data.image);
@@ -555,6 +613,19 @@ const RestaurantProfile = ({ onLogout }) => {
       fd.append("dishId", data._id);
     }
     return fd;
+  };
+
+  const handleDishStatus = async ({ target }, _id, dishType) => {
+    const body = {
+      dishId: _id,
+      status: target.checked ? "Active" : "Inactive",
+    };
+    try {
+      await updateDishStatus(body);
+      getRestaurantDishes();
+    } catch (error) {
+      toast.error("Ann Error Occurred");
+    }
   };
 
   return (
@@ -586,6 +657,7 @@ const RestaurantProfile = ({ onLogout }) => {
                   dishes={dishes}
                   handleEditDish={handleEditDish}
                   handleDishDelete={handleDishDelete}
+                  handleDishStatus={handleDishStatus}
                 />
               </Grid>
             </div>
@@ -620,6 +692,15 @@ const RestaurantProfile = ({ onLogout }) => {
               <Button
                 variant="contained"
                 size="small"
+                className={classes.dishBtn}
+                onClick={handleReviewsModalOpen}
+              >
+                Voir avis
+              </Button>
+
+              <Button
+                variant="contained"
+                size="small"
                 onClick={handleDeleteProfile}
                 className={classes.deleteBtn}
               >
@@ -640,6 +721,8 @@ const RestaurantProfile = ({ onLogout }) => {
             handleChange={handleDishDataChange}
             handleSubmit={handleDishSubmit}
             imageBlob={dishImageBlob}
+            handleDishPromoteStatus={handleDishPromoteStatus}
+            update={dishUpdate}
           />
         }
       />
@@ -673,6 +756,12 @@ const RestaurantProfile = ({ onLogout }) => {
             handleSubmit={handleBankInfoSubmit}
           />
         }
+      />
+
+      <TransitionsModal
+        open={openReviewsModal}
+        handleClose={handleReviewsModalClose}
+        body={<ReviewsModal data={reviews} />}
       />
     </div>
   );
