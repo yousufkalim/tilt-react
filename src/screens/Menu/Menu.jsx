@@ -335,7 +335,7 @@ const Menu = () => {
         },
         cart: data.cart,
       });
-      alert("Dish removed from cart successfully!");
+      alert("Plat retiré du panier avec succès !");
     } catch (error) {
       console.log(error);
     }
@@ -494,7 +494,7 @@ const Menu = () => {
                         +discount.leastCartValue
                       ) {
                         alert(
-                          `Your cart value should be at least of ${discount.leastCartValue}€`
+                          `La valeur de votre panier doit être d'au moins ${discount.leastCartValue}€`
                         );
                       } else {
                         // verifyOrder();

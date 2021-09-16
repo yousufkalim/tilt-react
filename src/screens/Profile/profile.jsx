@@ -339,7 +339,7 @@ const Profile = ({ onLogout }) => {
 
   const handleDeleteProfile = async () => {
     const check = window.confirm(
-      "Are you Sure you want to delete tyour account?"
+      "Êtes-vous sûr de vouloir supprimer votre compte ?"
     );
     if (check) {
       try {
