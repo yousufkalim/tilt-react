@@ -102,6 +102,11 @@ const addPackageToUser = async (_id) => {
   return data;
 };
 
+const getRestaurantReviews = async (_id) => {
+  const { data } = await http.get(`${apiEndPoint}/getReviews/${_id}`);
+  return data.result;
+};
+
 export {
   getDishesForUser,
   getLoggedinUser,
@@ -121,4 +126,5 @@ export {
   editUserPassword,
   updateUserCard,
   deleteProfile,
+  getRestaurantReviews,
 };

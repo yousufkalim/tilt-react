@@ -15,7 +15,11 @@ import {
   updateDishStatus,
 } from "../../services/restaurantService";
 import { Store, UpdateStore } from "../../context/StoreContext";
-import { deleteProfile, editUserPassword } from "../../services/userService";
+import {
+  deleteProfile,
+  editUserPassword,
+  getRestaurantReviews,
+} from "../../services/userService";
 import { toast } from "react-toastify";
 import TransitionsModal from "../../Components/common/transitionsModal";
 import DishList from "./dishList";
@@ -23,6 +27,7 @@ import DishModal from "./dishModal";
 import { EditIcon } from "../../images/images";
 import RestaurantModal from "./restaurantModal";
 import BankDetailsModal from "./bankDetailsModal";
+import ReviewsModal from "./reviewsModal";
 
 const useStyles = makeStyles({
   main: {
@@ -89,6 +94,7 @@ const RestaurantProfile = ({ onLogout }) => {
   const [openDishModal, setOpenDishModal] = useState(false);
   const [openBankInfoModal, setOpenBankInfoModal] = useState(false);
   const [openRestaurantModal, setOpenRestaurantModal] = useState(false);
+  const [openReviewsModal, setOpenReviewsModal] = useState(false);
   const [dishes, setDishes] = useState({
     entrees: [],
     plats: [],
@@ -136,6 +142,7 @@ const RestaurantProfile = ({ onLogout }) => {
   });
   const [bankErrors, setBankErrors] = useState({});
   const [imageNames, setImageNames] = useState({ front: "", back: "" });
+  const [reviews, setReviews] = useState([]);
 
   const getRestaurantDishes = async () => {
     const data = await getDishes();
@@ -151,8 +158,14 @@ const RestaurantProfile = ({ onLogout }) => {
     });
   };
 
+  const getReviews = async () => {
+    const data = await getRestaurantReviews(user._id);
+    setReviews(data);
+  };
+
   useEffect(() => {
     getRestaurantDishes();
+    getReviews();
   }, []);
 
   const handleDishModalOpen = () => setOpenDishModal(true);
@@ -271,6 +284,9 @@ const RestaurantProfile = ({ onLogout }) => {
 
     return fd;
   };
+
+  const handleReviewsModalOpen = () => setOpenReviewsModal(true);
+  const handleReviewsModalClose = () => setOpenReviewsModal(false);
 
   const bankSchema = {
     phone: Joi.string().required().label("Phone Number"),
@@ -641,6 +657,15 @@ const RestaurantProfile = ({ onLogout }) => {
               <Button
                 variant="contained"
                 size="small"
+                className={classes.dishBtn}
+                onClick={handleReviewsModalOpen}
+              >
+                Voir avis
+              </Button>
+
+              <Button
+                variant="contained"
+                size="small"
                 onClick={handleDeleteProfile}
                 className={classes.deleteBtn}
               >
@@ -694,6 +719,12 @@ const RestaurantProfile = ({ onLogout }) => {
             handleSubmit={handleBankInfoSubmit}
           />
         }
+      />
+
+      <TransitionsModal
+        open={openReviewsModal}
+        handleClose={handleReviewsModalClose}
+        body={<ReviewsModal data={reviews} />}
       />
     </div>
   );
