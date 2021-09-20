@@ -26,7 +26,7 @@ export default function Index() {
   };
   return (
     <div
-      className="pb-3 main-feature "
+      className=" main-feature "
       style={{ overflow: "hidden", position: "relative" }}
     >
       <div className="main" style={{ position: "relative", height: "1000px" }}>
