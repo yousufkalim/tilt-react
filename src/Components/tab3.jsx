@@ -21,15 +21,23 @@ export default function Tab1() {
             className="feature-tab-para    text-white  text-left w-75"
             style={{ fontSize: "18px" }}
           >
-            Commander un repas devient maintenant un instant de plaisir !
+            commander un repas devient maintenant un instant de plaisir !
             Choisissez parmi les plats proposés et soyez livrés au travail.{" "}
-            <br />
-            <br />
-            Bénéficiez de réduction en choisissant des packages à la semaine .{" "}
-            <br />
-            <br />
-            Commander chez plusieurs restaurateurs à travers une même et seule
-            commande .
+          </p>
+          <p
+            className="feature-tab-para    text-white  text-left w-75"
+            style={{ fontSize: "18px" }}
+          >
+            Bénéficiez de réduction en choisissant des packs de livraison à la
+            semaine.{" "}
+          </p>
+
+          <p
+            className="feature-tab-para    text-white  text-left w-75"
+            style={{ fontSize: "18px" }}
+          >
+            Commandez chez plusieurs restaurateurs à travers une seule et même
+            commande.
           </p>
         </div>
       </div>

@@ -29,7 +29,7 @@ export default function Index() {
       className=" main-feature "
       style={{ overflow: "hidden", position: "relative" }}
     >
-      <div className="main" style={{ position: "relative", height: "1000px" }}>
+      <div className="main" >
         <svg
           className="svgIcon1"
           xmlns="http://www.w3.org/2000/svg"

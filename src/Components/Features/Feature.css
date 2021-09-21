@@ -8,6 +8,10 @@
   /* background-repeat: no-repeat; */
   /* background-position: left; */
 }
+
+ol li {
+  padding: 3px;
+}
 .svgIcon {
   position: absolute;
   bottom: -6px !important;

@@ -23,14 +23,19 @@ export default function Tab1() {
           >
             Donnez l’opportunité à chacun de vos employés de profiter de manger
             des plats variés et équilibrés à des prix attractifs soit via :{" "}
-            <br /> <br /> Un partenariat avec Tilt sous forme d’abonnement
-            annuel <br /> <br />
-            L’utilisation du Titre restaurant dématérialisé (carte restaurant) a
-            plusieurs avantages pour les salariés, les entreprises et les
-            commerçants : Possibilité de régler au centime près une somme due
-            (pas de perte d'argent) Pas de livraison de carnets à attendre.
-            Rechargement automatique chaque mois
+          
           </p>
+          <p className="feature-tab-para    text-white  text-left w-75">Un partenariat avec Tilt sous forme d’abonnement annuel </p>
+          <p className="feature-tab-para    text-white  text-left w-75">  
+            L’utilisation du titre restaurant dématérialisé (carte restaurant) a plusieurs avantages pour les salariés, les entreprises et les commerçants :
+           </p>
+          <div>
+          <ol className="feature-tab-para w-75 text-white  text-left">
+              <li>Possibilité de régler au centime près une somme due (pas de perte d'argent)</li>
+              <li>Pas d'attentes pour la réception de carnets</li>
+              <li>Rechargement automatique chaque mois</li>
+            </ol>
+            </div>
         </div>
       </div>
     </div>
