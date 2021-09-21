@@ -281,7 +281,7 @@ const Menu = () => {
       });
       makeOrder();
     } catch (err) {
-      toast.error("An Error Occurred 1");
+      toast.error("une erreur s'est produite 1");
       console.log(err);
     }
   };
@@ -300,7 +300,7 @@ const Menu = () => {
       handlePaymentModalClose();
       toast.success("Order was successfull!");
     } catch (err) {
-      toast.error("An Error Occurred 2");
+      toast.error("une erreur s'est produite 2");
     }
   };
 

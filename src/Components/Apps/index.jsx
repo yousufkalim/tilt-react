@@ -6,7 +6,7 @@ const index = () => {
   return (
     <div
       className=" app-main text-center "
-      style={{ width: "100%", height: "400px" }}
+      style={{ width: "100%", height: "270px" }}
       id="download"
     >
       <h2 className=" app-heading" style={{ fontSize: "" }}>

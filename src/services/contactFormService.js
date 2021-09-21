@@ -9,6 +9,6 @@ export const postContactForm = async (body) => {
     console.log(data);
   } catch (error) {
     console.log(error);
-    toast.error("An Error Occurred");
+    toast.error("une erreur s'est produite");
   }
 };
