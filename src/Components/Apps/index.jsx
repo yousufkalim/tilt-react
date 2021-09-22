@@ -4,6 +4,7 @@ import googleApp from "../../images/Image 4.png";
 import "./Apps.css";
 const index = () => {
   return (
+    <div style={{position:"relative"}}>
     <div
       className=" app-main text-center "
       style={{ width: "100%", height: "270px" }}
@@ -39,6 +40,7 @@ const index = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

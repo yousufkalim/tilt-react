@@ -45,7 +45,7 @@ const index = () => {
               }}
             >
               <video
-                style={{ height: "49vh", width: "100%" }}
+                style={{  width: "100%"}}
                 autoPlay
                 muted
                 controls

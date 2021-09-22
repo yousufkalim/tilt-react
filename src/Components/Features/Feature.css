@@ -85,8 +85,9 @@ ol li {
     font-size: 24px !important;
   }
   .linkList {
-    margin-left: 0px;
-    padding-left: 32px !important;
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
   .linkList li:last-child {
     float: left;
@@ -143,7 +144,7 @@ ol li {
   }
   .linkList {
     margin-left: 0px;
-    /* padding-left: 18px !important; */
+    padding-left: 18px !important;
   }
   .linkList li:last-child {
     float: left;
@@ -188,7 +189,7 @@ ol li {
 
   .linkList li {
     margin-right: 13px;
-    font-size: 12px;
+    font-size: 14px;
   }
   .row-main {
     margin-top: 23px !important;
@@ -217,7 +218,7 @@ ol li {
 }
 @media only Screen and (max-width: 320px) {
   .main-feature {
-    margin-top: 100px !important;
+    margin-top: 5vh !important;
   }
   .main {
     height: 110vh !important;
@@ -231,7 +232,7 @@ ol li {
   }
   .linkList li {
     margin-right: 10px;
-    font-size: 11px !important;
+    font-size: 13px !important;
   }
   .row-main {
     margin-top: 23px !important;
@@ -270,7 +271,7 @@ ol li {
   }
   .linkList li {
     margin-right: 10px;
-    font-size: 9px !important;
+    font-size: 13px !important;
   }
 
   .feature-tab-heading {
