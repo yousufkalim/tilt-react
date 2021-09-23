@@ -22,7 +22,7 @@ const index = () => {
               href="https://apps.apple.com/us/app/tilt/id1548875909"
               className="d-flex justify-content-end"
             >
-              <img style={{ width: "50%" }} src={appStore} alt="appStore" />
+              <img className="button" src={appStore} alt="appStore" />
             </a>
           </div>
           <div className="col-6 col-lg-6">
@@ -33,6 +33,7 @@ const index = () => {
             >
               <img
                 style={{ width: "50%" }}
+                className="button"
                 src={googleApp}
                 alt="googleAppStore"
               />

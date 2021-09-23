@@ -1,3 +1,7 @@
+.button {
+  width: 50%;
+}
+
 @media only Screen and (max-width: 768px) {
   .app-main {
     height: 40vh !important;
@@ -10,6 +14,9 @@
   }
 }
 @media only Screen and (max-width: 425px) {
+  .button {
+    width: 70% !important;
+  }
   .app-main {
     height: 30vh !important;
   }
@@ -22,6 +29,9 @@
 }
 
 @media only Screen and (max-width: 375px) {
+  .button {
+    width: 75% !important;
+  }
   .app-main {
     height: 20vh !important;
   }
