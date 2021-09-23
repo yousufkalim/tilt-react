@@ -8,13 +8,14 @@ import "./Home.css";
 const indes = () => {
   const { token } = Store();
   return (
-    <div className="" style={{ paddingBottom: "100px" }}>
+    <div className="main-container" style={{ paddingBottom: "100px" }}>
       <div
         className="home text-center"
         style={{ width: "100%", height: "98vh", zIndex: "0" }}
       >
         <div className="main-list">
           <ul className="list mt-2 text-center">
+          <div className="menu1">
             <li className="ml-0 logo-li text-left">
               <a href="http://tilt-entreprise.com/">
                 {" "}
@@ -39,6 +40,35 @@ const indes = () => {
                 )}
               </ul>
             </li>
+          </div>
+          </ul>
+          <ul className="list mt-2 text-center" className="menu2" >
+            <li >
+              <a href="http://tilt-entreprise.com/">
+                {" "}
+                <img className="home-logo img-fluid w-75" src={image} alt="" />
+              </a>
+            </li>
+            <div class="a-header">
+		        <input type="checkbox" name="main-nav" id="main-nav" class="burger-check"/>
+		        <label for="main-nav" class="burger menu"><span></span></label>
+		        <ul>
+				    <li className="">
+                <a href="#operation"> Fonctionnement </a>
+            </li>
+            <li className="">
+                <a href="#features"> Fonctionnalités </a>
+            </li>
+            <li className="">
+              <a href="#download"> Télécharger </a>
+            </li>
+            {!token && (
+              <li className="">
+                <Link to="/signup"> S’inscrire </Link>
+              </li>
+            )}
+		        </ul>
+            </div>
           </ul>
         </div>
         <h1

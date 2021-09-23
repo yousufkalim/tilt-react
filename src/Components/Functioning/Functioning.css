@@ -2,10 +2,10 @@
   width: 100%;
   height: 49vh;
 }
-#operationf {
+/* #operationf {
   margin-top: -30px;
   position: relative;
-}
+} */
 @media only screen and (max-width: 768px) {
   .com-text {
     font-size: 22px;
@@ -52,7 +52,7 @@
 @media only screen and (max-width: 375px) {
   .com-text {
     font-size: 18px;
-    margin-top: -50px;
+    margin-top: -20px;
   }
 
   .heaging-comment {
@@ -73,7 +73,7 @@
 @media only screen and (max-width: 320px) {
   .com-text {
     font-size: 15px;
-    margin-top: -50px;
+    margin-top: -20px;
   }
   .heaging-comment {
     font-size: 23px;

@@ -4,6 +4,7 @@ import googleApp from "../../images/Image 4.png";
 import "./Apps.css";
 const index = () => {
   return (
+    <div style={{position:"relative"}}>
     <div
       className=" app-main text-center "
       style={{ width: "100%", height: "270px" }}
@@ -21,7 +22,7 @@ const index = () => {
               href="https://apps.apple.com/us/app/tilt/id1548875909"
               className="d-flex justify-content-end"
             >
-              <img style={{ width: "50%" }} src={appStore} alt="appStore" />
+              <img className="button" src={appStore} alt="appStore" />
             </a>
           </div>
           <div className="col-6 col-lg-6">
@@ -32,6 +33,7 @@ const index = () => {
             >
               <img
                 style={{ width: "50%" }}
+                className="button"
                 src={googleApp}
                 alt="googleAppStore"
               />
@@ -39,6 +41,7 @@ const index = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -134,6 +134,9 @@ ul {
   }
 }
 @media only Screen and (max-width: 375px) and (max-height: 812px) {
+  .main-container {
+    padding-bottom: 50px !important;
+  }
   .inner-ul li {
     margin-left: 84px !important;
     margin-right: -60px !important;
@@ -186,3 +189,151 @@ ul {
     font-size: 11px;
   }
 }
+
+.menu2 {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .menu1 {
+    margin-left: -10000px;
+  }
+  .menu2 {
+    opacity: 1;
+    display: flex;
+    width: 110%;
+    margin: 0px;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: -50px;
+  }
+
+  .home-logo {
+    margin-left: -50px;
+  }
+  :before,
+  :after {
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+  }
+  .burger-check {
+    display: none;
+  }
+  .burger {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+  }
+
+  .burger:after {
+    position: absolute;
+    bottom: 7px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .burger span,
+  .burger span:before,
+  .burger span:after {
+    position: absolute;
+    right: -20px;
+    top: 22px;
+    width: 40px;
+    height: 4px;
+    background: white;
+    border-radius: 0.2em;
+    transition: all 0.5s;
+  }
+
+  .burger span:before,
+  .burger span:after {
+    content: "";
+    left: 0;
+  }
+
+  .burger span:before {
+    top: -8px;
+  }
+
+  .burger span:after {
+    top: 8px;
+  }
+
+  .burger-check:checked + .burger span {
+    height: 0;
+    width: 0;
+  }
+  .burger-check:checked + .burger span:before,
+  .burger-check:checked + .burger span:after {
+    margin-left: -40px;
+    margin-top: -5px;
+    top: 6px;
+  }
+
+  .burger-check:checked + .burger span:before {
+    -webkit-transform: rotate(225deg);
+    -ms-transform: rotate(225deg);
+    transform: rotate(225deg);
+  }
+
+  .burger-check:checked + .burger span:after {
+    -webkit-transform: rotate(-225deg);
+    -ms-transform: rotate(225deg);
+    transform: rotate(-225deg);
+    margin-left: -40px;
+    margin-top: -5px;
+  }
+
+  /*==============================================================================
+ Simple mobile menu opening and closing (IE9 or higher)
+==============================================================================*/
+  .a-header {
+    float: right;
+    width: 10rem;
+    overflow: hidden;
+  }
+
+  .a-header ul {
+    background: rgba(217, 43, 102, 0.9);
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    position: absolute;
+    float: left;
+    width: 148px;
+    list-style: none;
+    margin-top: -28px;
+    margin-left: -20px;
+    padding: 0;
+  }
+
+  .a-header ul a {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 0;
+    line-height: 50px;
+    padding: 0 15px;
+    text-decoration: none;
+    overflow: hidden;
+    color: white;
+    text-align: left;
+    transition: all 0.5s;
+  }
+
+  .a-header ul a:hover,
+  .a-header ul a:active,
+  .a-header ul a:focus,
+  .a-header ul a:visited {
+    text-decoration: none;
+  }
+
+  /* Animate height of 'a' element in order to reveal the menu on check (IE9 or higher) */
+  #main-nav:checked ~ ul a {
+    height: 50px;
+  }
+}
+
+/* ///// */
