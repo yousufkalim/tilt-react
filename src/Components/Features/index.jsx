@@ -50,7 +50,7 @@ export default function Index() {
             Découvrez nos fonctionnalités
           </h2>
           <div className="d-flex justify-content-center">
-            <ul className=" linkList text-white">
+            <ul className=" linkList text-white" style={{zIndex:50}}>
               <li>
                 <a
                   onClick={ActiveTab3}

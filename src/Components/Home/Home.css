@@ -1,6 +1,7 @@
 .main-list {
   display: flex;
   align-items: center;
+  margin-top: -4.5vh;
 }
 ul {
   list-style: none;
@@ -191,15 +192,18 @@ ul {
 }
 
 .menu2 {
-  opacity: 0;
+  margin-left: -10000px;
 }
 
 @media (max-width: 768px) {
+  .main-list {
+    margin-top: 0vh;
+  }
   .menu1 {
     margin-left: -10000px;
   }
   .menu2 {
-    opacity: 1;
+    margin-left: 10000px;
     display: flex;
     width: 110%;
     margin: 0px;

@@ -4,7 +4,7 @@ import video from "../../images/functioning.mp4";
 
 const index = () => {
   return (
-    <div className="text-center" >
+    <div className="text-center main-funtioning"  >
       <h2 className=" heaging-comment font-weight-bold">Fonctionnement</h2>
       <div
         className="container-fluid functioncontainer"

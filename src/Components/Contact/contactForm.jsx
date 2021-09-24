@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   contactForm: {
     textAlign: "center",
     alignItems: "center",
-    marginBottom: "60px",
+    marginBottom: "7.5%",
   },
   formDiv: {
     marginTop: "20px",

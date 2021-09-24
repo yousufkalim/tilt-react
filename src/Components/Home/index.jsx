@@ -8,7 +8,7 @@ import "./Home.css";
 const indes = () => {
   const { token } = Store();
   return (
-    <div className="main-container" style={{ paddingBottom: "100px" }}>
+    <div className="main-container" style={{ marginBottom: "8.5%" }}>
       <div
         className="home text-center"
         style={{ width: "100%", height: "98vh", zIndex: "0" }}

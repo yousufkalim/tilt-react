@@ -6,7 +6,7 @@ const index = () => {
   return (
     <div
       className="text-center"
-      style={{ width: "100%", height: "80vh" }}
+      style={{ width: "100%", height: "80vh",marginBottom:"-.5%" }}
       id="operation"
     >
       <h2 className=" heaging-comment font-weight-bold mt-5">
