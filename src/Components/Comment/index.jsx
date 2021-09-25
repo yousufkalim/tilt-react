@@ -6,7 +6,11 @@ const index = () => {
   return (
     <div
       className="text-center"
-      style={{ width: "100%", height: "80vh",marginBottom:"-.5%" }}
+      style={{
+        width: "100%",
+        marginBottom: "-100px",
+        marginTop: "-100px",
+      }}
       id="operation"
     >
       <h2 className=" heaging-comment font-weight-bold mt-5">
@@ -14,7 +18,7 @@ const index = () => {
       </h2>
       <div
         className="container-fluid "
-        style={{ width: "80%", marginTop: "100px" }}
+        style={{ width: "80%", marginTop: "50px" }}
       >
         <div className=" row mt-5 mt-sm-0">
           <div
@@ -44,12 +48,7 @@ const index = () => {
                 marginLeft: "100px",
               }}
             >
-              <video
-                style={{  width: "100%"}}
-                autoPlay
-                muted
-                controls
-              >
+              <video style={{ width: "100%" }} autoPlay muted controls>
                 <source src={video} type="video/mp4" />
               </video>
             </div>
