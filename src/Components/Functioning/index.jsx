@@ -6,7 +6,7 @@ const index = () => {
   return (
     <div
       className="text-center main-funtioning"
-      style={{ marginTop: "-100px" }}
+      style={{ marginTop: "-125px" }}
     >
       <h2 className=" heaging-comment font-weight-bold">Fonctionnement</h2>
       <div
