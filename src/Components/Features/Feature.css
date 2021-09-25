@@ -3,7 +3,7 @@
   /* height: 135vh !important; */
   position: relative;
   min-height: 100%;
-  margin-bottom: -1.4%;
+  /* margin-bottom: -1.4%; */
   /* background-image: url("../../images/Shape\ 2new.jpg"); */
   /* background-size: cover; */
   /* background-repeat: no-repeat; */
@@ -51,7 +51,7 @@ ol li {
 
 @media only Screen and (max-width: 768px) {
   .main {
-    height: 150vh !important;
+    height: 900px !important;
   }
 
   .feature-heading {
@@ -79,9 +79,6 @@ ol li {
 @media only Screen and (max-width: 425px) {
   .main-feature {
     margin-top: 100px !important;
-  }
-  .main {
-    height: 110vh !important;
   }
   .feature-heading {
     font-size: 24px !important;
@@ -139,7 +136,7 @@ ol li {
     margin-top: 100px !important;
   }
   .main {
-    height: 130vh !important;
+    height: 900px !important;
   }
   .feature-heading {
     font-size: 24px !important;
@@ -178,7 +175,7 @@ ol li {
 
 @media only Screen and (max-width: 375px) and (max-height: 812px) {
   .main {
-    height: 115vh !important;
+    height: 900px !important;
     position: relative;
   }
   .feature-heading {
@@ -223,7 +220,7 @@ ol li {
     margin-top: 5vh !important;
   }
   .main {
-    height: 110vh !important;
+    height: 900px !important;
   }
   .feature-heading {
     font-size: 19px !important;

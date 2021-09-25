@@ -8,7 +8,7 @@ const index = () => {
       className="text-center"
       style={{
         width: "100%",
-        marginBottom: "-100px",
+        marginBottom: "-50px",
         marginTop: "-100px",
       }}
       id="operation"
