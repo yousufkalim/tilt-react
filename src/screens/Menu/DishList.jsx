@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     justifyContent: "space-around",
     overflow: "hidden",
+    height: "100%",
   },
   gridList: {
     "&::-webkit-scrollbar": {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     maxHeight: "60vh",
     flexGrow: "1",
+    height: "100%",
   },
 }));
 

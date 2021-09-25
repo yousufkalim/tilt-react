@@ -3,12 +3,12 @@ import "./Features/Feature.css";
 import image from "../images/Group 51.png";
 export default function Tab1() {
   return (
-    <div className="row-main" style={{ height: "70vh" }}>
+    <div className="row-main" style={{ height: "70vh",position:"relative" }}>
       <div className="row mt-5 ">
         <div className="col-12 col-sm-12 col-md-6 col-lg-6 ">
           <img
             className="tab-image"
-            style={{ width: "50%", height: "100%", marginLeft: "20px" }}
+            style={{ width: "50%", height: "93%", marginLeft: "20px" }}
             src={image}
             alt=""
           />

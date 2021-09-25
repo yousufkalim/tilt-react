@@ -1,6 +1,7 @@
 @media only screen and (max-width: 768px) {
   .com-text {
     font-size: 22px;
+    margin: -25px 0 0 0 !important;
   }
   .video-box {
     margin-left: 0px !important;
@@ -8,11 +9,16 @@
   .com-para {
     font-size: 17px !important;
   }
+  #operation {
+    margin-top: 0 !important;
+    margin-bottom: -200px !important;
+  }
 }
 
 @media only screen and (max-width: 425px) {
   .com-text {
     font-size: 20px;
+    margin: -25px 0 0 0 !important;
   }
   .heaging-comment {
     font-size: 24px;
@@ -27,11 +33,15 @@
   .com-para {
     font-size: 17px !important;
   }
+  #operation {
+    margin-top: 0 !important;
+    margin-bottom: -200px !important;
+  }
 }
 @media only screen and (max-width: 375px) {
   .com-text {
     font-size: 18px;
-    margin-top: -50px;
+    margin: -25px 0 0 0 !important;
   }
   .heaging-comment {
     font-size: 24px;
@@ -48,11 +58,15 @@
     font-size: 16px !important;
     margin-top: 8px !important;
   }
+  #operation {
+    margin-top: 0 !important;
+    margin-bottom: -200px !important;
+  }
 }
 @media only screen and (max-width: 320px) {
   .com-text {
     font-size: 15px;
-    margin-top: -50px;
+    margin: -25px 0 0 0 !important;
   }
   .heaging-comment {
     font-size: 23px;
@@ -67,5 +81,9 @@
   .com-para {
     font-size: 14px !important;
     margin-top: 8px !important;
+  }
+  #operation {
+    margin-top: 0 !important;
+    margin-bottom: -200px !important;
   }
 }

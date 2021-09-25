@@ -1,22 +1,33 @@
 .main {
   background: #d20249;
-  height: 1000px !important;
+  /* height: 135vh !important; */
   position: relative;
-  margin-bottom: 20px;
-
+  /* margin-bottom: -1.4%; */
   /* background-image: url("../../images/Shape\ 2new.jpg"); */
   /* background-size: cover; */
   /* background-repeat: no-repeat; */
   /* background-position: left; */
+  /* height: 1000px; */
+}
+
+.active_tab3 {
+  height: 1000px;
+}
+
+.active_tab1,
+.active_tab2 {
+  /* height: 1000px; */
+  min-height: 100%;
 }
 
 ol li {
   padding: 3px;
 }
 .svgIcon {
-  position: absolute;
-  bottom: -6px !important;
-  background: #d20249;
+  position: relative;
+  z-index: 1;
+  /* bottom: -6px !important;
+  background: #d20249; */
 }
 .image {
   /* width: 100%; */
@@ -49,8 +60,14 @@ ol li {
 }
 
 @media only Screen and (max-width: 768px) {
-  .main {
-    height: 150vh !important;
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
 
   .feature-heading {
@@ -71,16 +88,13 @@ ol li {
   }
 }
 @media only Screen and (max-width: 1440px) {
-  .svgIcon {
+  /* .svgIcon {
     bottom: -8px !important;
-  }
+  } */
 }
 @media only Screen and (max-width: 425px) {
   .main-feature {
     margin-top: 100px !important;
-  }
-  .main {
-    height: 110vh !important;
   }
   .feature-heading {
     font-size: 24px !important;
@@ -128,17 +142,23 @@ ol li {
   .tab3 {
     margin-top: 6vh !important;
   }
-  .svgIcon {
+  /* .svgIcon {
     bottom: 0px !important;
-  }
+  } */
 }
 
 @media only Screen and (max-width: 425px) and (max-height: 823px) {
   .main-feature {
     margin-top: 100px !important;
   }
-  .main {
-    height: 130vh !important;
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .feature-heading {
     font-size: 24px !important;
@@ -177,8 +197,17 @@ ol li {
 
 @media only Screen and (max-width: 375px) and (max-height: 812px) {
   .main {
-    height: 115vh !important;
+    /* height: 900px !important; */
     position: relative;
+  }
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .feature-heading {
     font-size: 21px !important;
@@ -213,16 +242,22 @@ ol li {
   .app-heading {
     font-size: 18px !important;
   }
-  .svgIcon {
+  /* .svgIcon {
     bottom: -4px !important;
-  }
+  } */
 }
 @media only Screen and (max-width: 320px) {
   .main-feature {
     margin-top: 5vh !important;
   }
-  .main {
-    height: 110vh !important;
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .feature-heading {
     font-size: 19px !important;
@@ -252,19 +287,37 @@ ol li {
     margin-left: 0px !important;
     margin-bottom: 15px;
   }
-  .svgIcon {
+  /* .svgIcon {
     bottom: -6px !important;
-  }
+  } */
 }
 @media only Screen and (max-width: 320px) and (max-height: 546px) {
   .linkList {
     margin-left: 0px;
     padding-left: 12px !important;
   }
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
+  }
 }
 @media only Screen and (max-width: 280px) {
   .feature-heading {
     font-size: 19px !important;
+  }
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .linkList {
     margin-left: 0px;
@@ -289,18 +342,18 @@ ol li {
     margin-left: 0px !important;
     margin-bottom: 15px;
   }
-  .svgIcon {
+  /* .svgIcon {
     bottom: -7px !important;
-  }
+  } */
 }
 
 @media only Screen and (max-width: 360px) {
-  .svgIcon {
+  /* .svgIcon {
     bottom: -5px !important;
-  }
+  } */
 }
 @media only Screen and (max-width: 414px) {
-  .svgIcon {
+  /* .svgIcon {
     bottom: -4px !important;
-  }
+  } */
 }

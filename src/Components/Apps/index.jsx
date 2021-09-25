@@ -7,7 +7,7 @@ const index = () => {
     <div style={{position:"relative"}}>
     <div
       className=" app-main text-center "
-      style={{ width: "100%", height: "270px" }}
+      style={{ width: "100%", height: "270px",marginBottom:"1.2%" }}
       id="download"
     >
       <h2 className=" app-heading" style={{ fontSize: "" }}>
