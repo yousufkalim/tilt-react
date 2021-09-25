@@ -2,12 +2,22 @@
   background: #d20249;
   /* height: 135vh !important; */
   position: relative;
-  min-height: 100%;
   /* margin-bottom: -1.4%; */
   /* background-image: url("../../images/Shape\ 2new.jpg"); */
   /* background-size: cover; */
   /* background-repeat: no-repeat; */
   /* background-position: left; */
+  /* height: 1000px; */
+}
+
+.active_tab3 {
+  height: 1000px;
+}
+
+.active_tab1,
+.active_tab2 {
+  /* height: 1000px; */
+  min-height: 100%;
 }
 
 ol li {
@@ -50,8 +60,14 @@ ol li {
 }
 
 @media only Screen and (max-width: 768px) {
-  .main {
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
     height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
 
   .feature-heading {
@@ -135,8 +151,14 @@ ol li {
   .main-feature {
     margin-top: 100px !important;
   }
-  .main {
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
     height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .feature-heading {
     font-size: 24px !important;
@@ -175,8 +197,17 @@ ol li {
 
 @media only Screen and (max-width: 375px) and (max-height: 812px) {
   .main {
-    height: 900px !important;
+    /* height: 900px !important; */
     position: relative;
+  }
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .feature-heading {
     font-size: 21px !important;
@@ -219,8 +250,14 @@ ol li {
   .main-feature {
     margin-top: 5vh !important;
   }
-  .main {
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
     height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .feature-heading {
     font-size: 19px !important;
@@ -259,10 +296,28 @@ ol li {
     margin-left: 0px;
     padding-left: 12px !important;
   }
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
+  }
 }
 @media only Screen and (max-width: 280px) {
   .feature-heading {
     font-size: 19px !important;
+  }
+  .active_tab3 {
+    height: 675px !important;
+  }
+  .active_tab2 {
+    height: 900px !important;
+  }
+  .active_tab1 {
+    height: 750px !important;
   }
   .linkList {
     margin-left: 0px;

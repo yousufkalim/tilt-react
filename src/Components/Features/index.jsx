@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Feature.css";
 import Tab1 from "../tab1";
 import Tab2 from "../tab2";
@@ -8,6 +8,17 @@ export default function Index() {
   const [tab1, setTab1] = useState(false);
   const [tab2, setTab2] = useState(false);
   const [tab3, setTab3] = useState(true);
+  const [activeTab, setActiveTab] = useState("active_tab3");
+
+  useEffect(() => {
+    if (tab1) {
+      setActiveTab("active_tab1");
+    } else if (tab2) {
+      setActiveTab("active_tab2");
+    } else if (tab3) {
+      setActiveTab("active_tab3");
+    }
+  }, [tab1, tab2, tab3]);
 
   const ActiveTab1 = () => {
     setTab1(true);
@@ -29,7 +40,7 @@ export default function Index() {
       className=" main-feature "
       style={{ overflow: "hidden", position: "relative" }}
     >
-      <div className="main" style={{ position: "relative" }}>
+      <div className={`main ${activeTab}`} style={{ position: "relative" }}>
         <svg
           className="svgIcon1"
           xmlns="http://www.w3.org/2000/svg"
