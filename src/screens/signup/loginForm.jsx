@@ -29,7 +29,7 @@ const LoginForm = ({ handleFormChange, handleFormSubmit, errors, data }) => {
         />
 
         <button type="submit" className="signUpBtn" onClick={handleFormSubmit}>
-          Sign In
+          Se connecter
         </button>
       </form>
     </div>

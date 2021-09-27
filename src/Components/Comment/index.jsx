@@ -8,14 +8,12 @@ const index = () => {
       className="text-center"
       style={{
         width: "100%",
-        marginBottom: "-50px",
-        marginTop: "-100px",
+        // marginBottom: "-50px",
+        // marginTop: "-100px",
       }}
       id="operation"
     >
-      <h2 className=" heaging-comment font-weight-bold mt-5">
-        Comment ça marche ?
-      </h2>
+      <h2 className=" heaging-comment font-weight-bold">Comment ça marche ?</h2>
       <div
         className="container-fluid "
         style={{ width: "80%", marginTop: "50px" }}

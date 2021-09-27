@@ -156,22 +156,22 @@ const ProfileGrid = ({
                       variant="subtitle2"
                       className={classes.subtitle}
                     >
-                      You currently have the {user.user.package.name}
+                      Vous avez actuellement le {user.user.package.name}
                     </Typography>
                     <Typography variant="subtitle2">
                       {user.user.credits} credits left
                     </Typography>
                     <Typography variant="subtitle2">
-                      Each credit = {user.user.package.offPrice}€ discount on
-                      Delivery Fee
+                      Chaque crédit = {user.user.package.offPrice}€ remise sur
+                      les frais de livraison
                     </Typography>
                     <Typography variant="subtitle2">
-                      Expires on :{" "}
+                      Expires le :{" "}
                       {moment(user.user.packageExpiration).format("DD/MM/YYYY")}
                     </Typography>
                   </>
                 ) : (
-                  "No Package"
+                  "Pas de forfait"
                 )}
               </Grid>
             </Grid>

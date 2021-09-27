@@ -298,7 +298,7 @@ const Menu = () => {
         cart: {},
       });
       handlePaymentModalClose();
-      toast.success("Order was successfull!");
+      toast.success("Commande passée avec succès!");
     } catch (err) {
       toast.error("une erreur s'est produite 2");
     }
@@ -380,7 +380,7 @@ const Menu = () => {
                       Invite tes collègues et obtient des réductions !
                     </Typography>
                     <Typography variant="body2" color="initial">
-                      Reçois des réductions après avoir invité tes collègues !
+                      Reçois des réductions après avoir invité tes collègues!
                     </Typography>
                     <Button variant="contained" className={classes.contained}>
                       En savoir plus
@@ -428,12 +428,13 @@ const Menu = () => {
                       {currentUser.user.credits} crédits
                     </Typography>
                     <Typography style={{ fontSize: "10px" }}>
-                      You currently have the {currentUser.user.package.name}
+                      Vous avez actuellement le {currentUser.user.package.name}
                       <br />
-                      Each credit gives you {currentUser.user.package.offPrice}€
-                      discount on Delivery Fee
+                      Chaque crédit vous donne{" "}
+                      {currentUser.user.package.offPrice}€ remise sur les frais
+                      de livraison
                       <br />
-                      Expires on :{" "}
+                      Expire le :{" "}
                       {moment(currentUser.user.packageExpiration).format(
                         "DD/MM/YYYY"
                       )}
@@ -512,11 +513,12 @@ const Menu = () => {
                       color="initial"
                       style={{ paddingLeft: "5px" }}
                     >
-                      Reçois des réductions aprèsVotre panier est vide.
+                      Reçois des réductions après Votre panier est vide.
                       <br />
                       <br />
                       Commencez pas ajouter des plats à partir du menu de
-                      gauche. avoir invité tes collègues !
+                      gauche.
+                      {/* avoir invité tes collègues ! */}
                     </Typography>
                   </div>
                 )}
@@ -529,11 +531,10 @@ const Menu = () => {
                   color="initial"
                   style={{ paddingLeft: "5px" }}
                 >
-                  Reçois des réductions aprèsVotre panier est vide.
+                  Reçois des réductions après Votre panier est vide.
                   <br />
                   <br />
                   Commencez pas ajouter des plats à partir du menu de gauche.
-                  avoir invité tes collègues !
                 </Typography>
               </div>
             )}

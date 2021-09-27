@@ -37,6 +37,6 @@ export const historyData = [
     restaurant: "Bella Ciao",
     statut: "Livré",
     total: "13,90€",
-    credit: "No Package",
+    credit: "Pas de forfait",
   },
 ];

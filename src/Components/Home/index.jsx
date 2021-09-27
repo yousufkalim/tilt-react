@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import image from "../../images/Image 2.png";
 import image2 from "../../images/Group 37.png";
-import { Store } from "../../context/StoreContext";
 import "./Home.css";
+import auth from "../../services/authService";
 
 const indes = () => {
-  const { token } = Store();
+  const token = auth.getJwt();
+
   return (
     <div className="main-container" style={{ marginBottom: "8.5%" }}>
       <div

@@ -35,6 +35,10 @@ const useStyles = makeStyles({
   },
   welcome: {
     fontWeight: 900,
+    marginBottom: 70,
+  },
+  welcome2: {
+    fontWeight: 900,
     marginBottom: 20,
   },
   info: {
@@ -243,10 +247,11 @@ const Signup = () => {
             <div className={classes.signInInfo}>
               <Typography variant="h2" className={classes.welcome}>
                 <Link to="/">
-                  <img src={Logo} alt="" width="240" />
+                  <img src={Logo} alt="" />
                 </Link>
                 <br />
-                <br />
+              </Typography>
+              <Typography variant="h3" className={classes.welcome2}>
                 Bienvenue !
               </Typography>
               <button className="signInBtn" onClick={handleFormType}>
@@ -273,8 +278,8 @@ const Signup = () => {
               </>
             ) : formType === "signin" ? (
               <>
-                <Typography variant="h2" className={classes.formHeading}>
-                  Login
+                <Typography variant="h3" className={classes.formHeading}>
+                  Se connecter
                 </Typography>
                 <LoginForm
                   handleFormChange={handleLoginFormChange}
