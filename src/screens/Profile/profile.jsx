@@ -362,7 +362,7 @@ const Profile = ({ onLogout }) => {
             Mon code affilié : {user.user.affiliateCode}
           </Typography>
           <Button className={classes.deleteBtn} onClick={handleDeleteProfile}>
-            Delete account
+            Supprimer le compte
           </Button>
         </Grid>
       </Grid>

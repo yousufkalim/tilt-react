@@ -704,7 +704,7 @@ const RestaurantProfile = ({ onLogout }) => {
                 onClick={handleDeleteProfile}
                 className={classes.deleteBtn}
               >
-                Delete account
+                Supprimer le compte
               </Button>
             </div>
           </Grid>

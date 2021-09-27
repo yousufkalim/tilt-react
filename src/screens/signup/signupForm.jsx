@@ -122,7 +122,9 @@ const SignupForm = ({
             className={classes.outlined}
           >
             {companies.map((company) => (
-              <MenuItem value={company._id}>{company.name}</MenuItem>
+              <MenuItem key={company._id} value={company._id}>
+                {company.name}
+              </MenuItem>
             ))}
           </Select>
           {errors["companyId"] && (

@@ -120,13 +120,17 @@ const HistoryTable = ({ history, handleOpen }) => {
                     {row.order[0].restaurant.firstName}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {row.status}
+                    {row.status == "In progress"
+                      ? "En cours"
+                      : row.status == "Completed"
+                      ? "Terminé"
+                      : row.status}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     {row.totalPrice}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    No Package
+                    Pas de forfait
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     <Button
@@ -159,7 +163,11 @@ const HistoryTable = ({ history, handleOpen }) => {
                     {row.company.name}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {row.status}
+                    {row.status == "In progress"
+                      ? "En cours"
+                      : row.status == "Completed"
+                      ? "Terminé"
+                      : row.status}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     {row.gain} €

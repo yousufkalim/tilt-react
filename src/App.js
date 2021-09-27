@@ -7,7 +7,9 @@ import {
   useLocation,
   Redirect,
   useHistory,
+  BrowserRouter,
 } from "react-router-dom";
+
 import { ToastContainer } from "react-toastify";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -152,6 +154,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+
   const [open, setOpen] = React.useState(false);
   const { pathname } = useLocation();
   const { token: authToken, role } = Store();
@@ -190,6 +193,7 @@ function App() {
       getDiscounts();
     }
   }, [pathname, authToken]);
+  let TOKEN = auth.getJwt();
 
   return (
     <Elements stripe={stripePromise}>
@@ -206,48 +210,56 @@ function App() {
           )}
         >
           <Box flexGrow={1}>
-            <Switch>
-              <Route
-                path="/signup"
-                render={() =>
-                  !authToken ? (
-                    <Signup />
-                  ) : role === "user" ? (
-                    history.push("/menu")
-                  ) : (
-                    history.push("/order")
-                  )
-                }
-              />
-              {(role === "user" || role === "restaurant") && (
-                <Route path="/history">
-                  <History />
+            {!TOKEN ? (
+              <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route exact path="/signup" component={Signup} />
+                <Redirect from="*" to="/signup" />
+              </Switch>
+            ) : (
+              <Switch>
+                <Route
+                  path="/signup"
+                  render={() =>
+                    !TOKEN ? (
+                      <Signup />
+                    ) : role === "user" ? (
+                      history.push("/menu")
+                    ) : (
+                      history.push("/order")
+                    )
+                  }
+                />
+                {(role === "user" || role === "restaurant") && (
+                  <Route path="/history">
+                    <History />
+                  </Route>
+                )}
+                {role === "user" && (
+                  <Route path="/profile">
+                    <Profile onLogout={handleLogout} />
+                  </Route>
+                )}
+                {role === "user" && (
+                  <Route path="/menu">
+                    <Menu />
+                  </Route>
+                )}
+                {role === "restaurant" && (
+                  <Route path="/order">
+                    <Orders />
+                  </Route>
+                )}
+                {role === "restaurant" && (
+                  <Route path="/profile">
+                    <RestaurantProfile onLogout={handleLogout} />
+                  </Route>
+                )}
+                <Route exact path="/">
+                  <HomePage />
                 </Route>
-              )}
-              {role === "user" && (
-                <Route path="/profile">
-                  <Profile onLogout={handleLogout} />
-                </Route>
-              )}
-              {role === "user" && (
-                <Route path="/menu">
-                  <Menu />
-                </Route>
-              )}
-              {role === "restaurant" && (
-                <Route path="/order">
-                  <Orders />
-                </Route>
-              )}
-              {role === "restaurant" && (
-                <Route path="/profile">
-                  <RestaurantProfile onLogout={handleLogout} />
-                </Route>
-              )}
-              <Route exact path="/">
-                <HomePage />
-              </Route>
-            </Switch>
+              </Switch>
+            )}
           </Box>
           {pathname !== "/" && pathname !== "/signup" && (
             <>
