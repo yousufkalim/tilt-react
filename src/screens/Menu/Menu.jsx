@@ -45,11 +45,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: ".7rem",
     fontWeight:'600',
     textTransform: "capitalize",
-    margin: "10px 80px auto auto",
+    margin: "10px 30px auto auto",
     height: "31px",
     paddingLeft:'60px',
     paddingRight:'60px',
+    ['@media (max-width:1200px)']: { // eslint-disable-line no-useless-computed-key
+      margin: "10px 0px auto auto",
 
+    }
   },
 
   card: {

@@ -20,9 +20,11 @@ const useStyles = makeStyles({
   },
   packages: {
     maxHeight: "400px",
+    marginBottom:'10px',
+    overflowY:'auto',
     marginBottom: "15px",
     "&::-webkit-scrollbar": {
-      width: "10px",
+      width: "7px",
     },
     "&::-webkit-scrollbar-track": {
       background: "rgba(0,0,0,0)",
@@ -35,7 +37,7 @@ const useStyles = makeStyles({
       background: "#D2025a",
     },
   },
-  formControl: { width: "100%", marginTop: "15px" },
+  formControl: { width: "100%", marginTop: "0px" },
   outlined: {
     textAlign: "left",
     "&.Mui-focused fieldset": {
@@ -45,6 +47,7 @@ const useStyles = makeStyles({
   btn: {
     marginTop: "15px",
     backgroundColor: "#D20249",
+    width:'100%',
     color: "white",
     "&:focus": {
       outline: "none",
@@ -64,7 +67,7 @@ const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
   return (
     <div className={classes.main}>
       <Typography variant="h6">
-        <b>Packages</b>
+        <b>Paquets</b>
       </Typography>
 
       <div className={classes.packages}>
@@ -80,15 +83,15 @@ const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
               Crédits offerts: {item.credits}
             </Typography>
             <Typography component="div" variant="caption">
-              Off par crédit: {item.offPrice}€
+              Réduction par crédit: {item.offPrice}€
             </Typography>
             <Typography component="div" variant="caption">
               Expire dans: {item.expiration} journees
             </Typography>
           </div>
         ))}
+        
       </div>
-
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel style={{ color: "#d10248" }}>
           Selectionner une enterprise
@@ -105,7 +108,9 @@ const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
             </MenuItem>
           ))}
         </Select>
-        <Button
+        
+      </FormControl>
+      <Button
           variant="contained"
           className={classes.btn}
           color="secondary"
@@ -113,7 +118,6 @@ const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
         >
           Modifier
         </Button>
-      </FormControl>
     </div>
   );
 };
