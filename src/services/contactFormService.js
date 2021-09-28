@@ -1,12 +1,18 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-const baseUrl = "http://localhost:5001/";
+const baseUrl = process.env.REACT_APP_API_URL;
 
 export const postContactForm = async (body) => {
   try {
-    const { data } = await axios.post(`${baseUrl}contact/contact-form`, body);
-    toast.success("Form Submitted");
-    console.log(data);
+    if (body.prenom && body.nom && body.message) {
+      console.log("before", body);
+      const { data } = await axios.post(
+        `${baseUrl}/contact/contact-form`,
+        body
+      );
+      console.log("after");
+      toast.success("Form Submitted");
+    }
   } catch (error) {
     console.log(error);
     toast.error("une erreur s'est produite");
