@@ -99,7 +99,7 @@ const RestaurantModal = ({
                 color="secondary"
                 style={{ fontSize: "10px" }}
               >
-                Upload Image
+               Télécharger une image
               </Button>
             </label>
 

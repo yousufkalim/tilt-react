@@ -269,7 +269,7 @@ const RestaurantProfile = ({ onLogout }) => {
 
     const bankInfo = { ...bankDetails };
     if (!bankInfo.front || !bankInfo.back) {
-      toast.error("Face Avant and Face Arrière are required");
+      toast.error("Face Avant et Face Arrière sont obligatoires");
     }
 
     try {
@@ -405,18 +405,18 @@ const RestaurantProfile = ({ onLogout }) => {
       const { password, confirmPassword } = restaurantPassword;
       if (password.length === 0 || confirmPassword.length === 0) {
         setPasswordErrors({
-          password: "Both Fields are required",
-          confirmPassword: "Both Fields are required",
+          password: "Les deux champs sont obligatoires",
+          confirmPassword: "Les deux champs sont obligatoires",
         });
       } else if (password.length < 5 || confirmPassword.length < 5) {
         setPasswordErrors({
-          password: "Password cannot be less than 5 characters",
-          confirmPassword: "Password cannot be less than 5 characters",
+          password: "Le mot de passe ne peut pas être inférieur à 5 caractères",
+          confirmPassword: "Le mot de passe ne peut pas être inférieur à 5 caractères",
         });
       } else if (password !== confirmPassword) {
         setPasswordErrors({
-          password: "Password does not match",
-          confirmPassword: "Password does not match",
+          password: "Le mot de passe ne correspond pas",
+          confirmPassword: "Le mot de passe ne correspond pas",
         });
       } else {
         setPasswordErrors({});
@@ -624,7 +624,7 @@ const RestaurantProfile = ({ onLogout }) => {
       await updateDishStatus(body);
       getRestaurantDishes();
     } catch (error) {
-      toast.error("Ann Error Occurred");
+      toast.error("Une erreur s'est produite");
     }
   };
 

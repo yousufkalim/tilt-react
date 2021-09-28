@@ -20,7 +20,7 @@ const index = () => {
           >
             <h3 className=" com-text text-left font-weight-bold">
               Une application simple d’utilisation, vous permettant de commander
-              en quelques cliques.
+              en quelques clics.
             </h3>
             <p
               className=" com-para text-left mt-4"

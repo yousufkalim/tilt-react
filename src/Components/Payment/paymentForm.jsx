@@ -23,7 +23,7 @@ const PaymentForm = ({
 
   return (
     <div>
-      <Typography variant="h5">Payment Form</Typography>
+      <Typography variant="h5">Formulaire de paiement</Typography>
       <form className="Form">
         <fieldset className="FormGroup">
           <CardElement onChange={(e) => handleCompleteCard(e.complete)} />

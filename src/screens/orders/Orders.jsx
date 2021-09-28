@@ -102,7 +102,7 @@ const Orders = () => {
         </Box>
       ) : (
         <Typography style={{ padding: "10px 50px" }} variant="subtitle1">
-          No orders Yet
+          Pas encore de commandes
         </Typography>
       )}
     </Grid>

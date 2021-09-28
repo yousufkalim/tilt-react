@@ -9,7 +9,7 @@ export const postContactForm = async (body) => {
         `${baseUrl}/contact/contact-form`,
         body
       );
-      toast.success("Form Submitted");
+      toast.success("Formulaire soumis");
     }
   } catch (error) {
     console.log(error);
