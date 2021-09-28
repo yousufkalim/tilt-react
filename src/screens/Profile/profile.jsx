@@ -126,7 +126,7 @@ const Profile = ({ onLogout }) => {
       handlePackageListModalClose();
       handlePackagePaymentModalOpen();
     } else {
-      toast.error("Select a Package First");
+      toast.error("Sélectionnez d'abord un forfait");
     }
   };
 
@@ -320,10 +320,10 @@ const Profile = ({ onLogout }) => {
     const { password, confirmPassword } = passwordDetails;
 
     if (password.length < 5 || confirmPassword.length < 5) {
-      toast.error("Password Length cannot be less than 5 characters");
+      toast.error("La longueur du mot de passe ne peut pas être inférieure à 5 caractères");
       return;
     } else if (password !== confirmPassword) {
-      toast.error("Password Does Not Match");
+      toast.error("Le mot de passe ne correspond pas");
       return;
     }
 
