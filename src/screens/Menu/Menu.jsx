@@ -33,6 +33,10 @@ import { Link } from "react-router-dom";
 import PaymentForm from "../../Components/Payment/paymentForm";
 import RestaurantMenuModal from "./restaurantMenuModal";
 
+import Modal from "@material-ui/core/Modal";
+import Fade from "@material-ui/core/Fade";
+
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#FAF9FB",
@@ -97,6 +101,9 @@ const Menu = () => {
   const [openRestaurantMenuModal, setOpenRestaurantMenuModal] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState([]);
   const [cardComplete, setCardComplete] = useState(false);
+
+  const [openmodal, setOpenmodal] = useState(false);
+
 
   const { user: currentUser, cart, discount } = Store();
   const updateStore = UpdateStore();
@@ -343,6 +350,7 @@ const Menu = () => {
 
   return (
     <>
+    {console.log("discount",discount.referralDiscount)}
       <Grid className={classes.root} container spacing={3}>
         <Grid item sm={9}>
           <Box display="flex" flexDirection="column">
@@ -379,12 +387,29 @@ const Menu = () => {
                     <Typography variant="body2" color="initial">
                       Invite tes collègues et obtient des réductions !
                     </Typography>
-                    <Typography variant="body2" color="initial">
-                      Reçois des réductions après avoir invité tes collègues!
-                    </Typography>
-                    <Button variant="contained" className={classes.contained}>
+                    <Button variant="contained" onClick={()=>setOpenmodal(true)} className={classes.contained}>
                       En savoir plus
                     </Button>
+                    <TransitionsModal
+                      open={openmodal}
+                      handleClose={()=>setOpenmodal(false)}
+                      body={
+                        <div style={{width:"34vw"}}>
+                          <Typography variant="h6">
+                            <b>Invite des collègues et gagne des réductions !</b>
+                          </Typography><br/>
+                          <Typography variant="h8" >
+                            Partage ton code de parrainage à tes collègues. Lorsqu’ils l’informent durant leur inscription, tu obtiens gratuitement des réductions pour ta prochaine commande !
+                          </Typography><br/><br/>
+                          <Typography variant="h8" >
+                           Ton code parrainage : {currentUser.user.affiliateCode}
+                          </Typography><br/><br/>
+                          <Typography variant="h8" >
+                           Réduction obtenue par parrainage : {discount.referralDiscount}€
+                          </Typography>
+                        </div>
+                      }
+                    />
                   </Box>
                 </Box>
               </Box>
@@ -455,7 +480,7 @@ const Menu = () => {
                         variant="contained"
                         className={classes.Primarycontained}
                       >
-                        En savoir plus
+                        Acheter
                       </Button>
                     </Link>
                   </>
@@ -516,7 +541,7 @@ const Menu = () => {
                       Reçois des réductions après Votre panier est vide.
                       <br />
                       <br />
-                      Commencez pas ajouter des plats à partir du menu de
+                      Commencez par ajouter des plats à partir du menu de
                       gauche.
                       {/* avoir invité tes collègues ! */}
                     </Typography>
