@@ -19,7 +19,6 @@ const UserHistoryModal = ({ data }) => {
 
   return (
     <div>
-      {console.log("data: ",data)}
       <Typography variant="subtitle2" className={classes.text}>
         <b>Statut: </b> {data.status}
       </Typography>

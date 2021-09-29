@@ -33,8 +33,6 @@ import { Link } from "react-router-dom";
 import PaymentForm from "../../Components/Payment/paymentForm";
 import RestaurantMenuModal from "./restaurantMenuModal";
 
-import Modal from "@material-ui/core/Modal";
-import Fade from "@material-ui/core/Fade";
 
 
 const useStyles = makeStyles((theme) => ({
