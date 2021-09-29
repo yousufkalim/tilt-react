@@ -64,7 +64,7 @@ const UserHistoryModal = ({ data }) => {
                   <Typography variant="subtitle2">x{dish.count}</Typography>
                 </Grid>
                 <Grid item xs={3}>
-                  <Typography variant="subtitle2">{dish.id.price}</Typography>
+                  <Typography variant="subtitle2">{dish.id.price}€</Typography>
                 </Grid>
               </>
             ))}
@@ -77,16 +77,26 @@ const UserHistoryModal = ({ data }) => {
           <Typography variant="subtitle2">Sous-Total</Typography>
         </Grid>
         <Grid item xs={3}>
-          <Typography variant="subtitle2">{data.totalPrice}</Typography>
+          <Typography variant="subtitle2">{data.totalPrice}€</Typography>
         </Grid>
-
+        
+        <Grid item xs={9}>
+          <Typography variant="subtitle2">Frais de livraison </Typography>
+        </Grid>
+        <Grid item xs={3}>
+          <Typography variant="subtitle2">{data.paidPrice-data.totalPrice}€</Typography>
+        </Grid>
+      </Grid>
+      <hr className={classes.divider} />
+      <Grid container spacing={3}>
         <Grid item xs={9}>
           <Typography variant="subtitle2">Payé</Typography>
         </Grid>
         <Grid item xs={3}>
-          <Typography variant="subtitle2">{data.paidPrice}</Typography>
+          <Typography variant="subtitle2">{data.paidPrice}€</Typography>
         </Grid>
       </Grid>
+
     </div>
   );
 };
