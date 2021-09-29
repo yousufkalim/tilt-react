@@ -38,9 +38,13 @@ const indes = () => {
                   <li className="">
                     <a href="#download"> Télécharger </a>
                   </li>
-                  {!token && (
+                  {!token ? (
                     <li className="">
                       <Link to="/signup"> S’inscrire </Link>
+                    </li>
+                  ) : (
+                    <li className="">
+                      <Link to="/menu">tableau de bord </Link>
                     </li>
                   )}
                 </ul>
@@ -74,11 +78,15 @@ const indes = () => {
                 <li className="">
                   <a href="#download"> Télécharger </a>
                 </li>
-                {!token && (
-                  <li className="">
-                    <Link to="/signup"> S’inscrire </Link>
-                  </li>
-                )}
+                {!token ? (
+                    <li className="">
+                      <Link to="/signup"> S’inscrire </Link>
+                    </li>
+                  ) : (
+                    <li className="">
+                      <Link to="/menu">tableau de bord </Link>
+                    </li>
+                  )}
               </ul>
             </div>
           </ul>

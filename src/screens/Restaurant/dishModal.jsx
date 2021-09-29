@@ -242,7 +242,7 @@ const DishModal = ({
           style={{ fontSize: "12px" }}
           onClick={handleSubmit}
         >
-          Submit
+          Soumettre
         </Button>
       </div>
     </div>

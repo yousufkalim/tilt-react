@@ -57,7 +57,7 @@ const ReviewsModal = ({ data }) => {
                 <b>{item.user.firstName + " " + item.user.lastName}</b>
               </Typography>
               <Typography variant="body1">
-                {item.comment && `Review: ${item.comment}`}
+                {item.comment && `Revoir: ${item.comment}`}
               </Typography>
               <Typography variant="caption">
                 Date: {moment(item.createdAt).format("DD/MM/YYYY")}

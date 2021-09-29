@@ -126,7 +126,7 @@ const ProfileGrid = ({
                       variant="subtitle2"
                       className={classes.subtitle}
                     >
-                      No Card
+                     Pas de carte
                     </Typography>
                   )}
                 </Typography>
@@ -181,7 +181,7 @@ const ProfileGrid = ({
                   className={classes.editBtn}
                   onClick={handlePackageListModal}
                 >
-                  Buy Package
+                  Acheter un forfait
                 </Button>
               </div>
             )}

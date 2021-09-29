@@ -80,19 +80,151 @@ const Signup = () => {
   };
 
   const registerSchema = {
-    firstName: Joi.string().min(4).required().label("First Name"),
-    lastName: Joi.string().min(4).required().label("Last Name"),
-    email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().min(5).label("Password"),
-    confirmPassword: Joi.string().required().min(5).label("Password"),
-    companyId: Joi.string().required().label("Company"),
+    firstName: Joi.string().min(4).required().label("Prénom").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    lastName: Joi.string().min(4).required().label("Nom").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "any.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    email: Joi.string().email().required().label("Email").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "any.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.email":
+            err.message = `${err.context.label} doit être un email valide`;
+            break;
+         
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    password: Joi.string().required().min(5).label("Password").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "any.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    confirmPassword: Joi.string().required().min(5).label("Password").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "any.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    companyId: Joi.string().required().label("Company").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "any.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
     affiliate: Joi.string().allow("").label("Code affilie"),
     terms: Joi.required(),
   };
 
   const loginSchema = {
-    email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().min(4).label("Password"),
+    email: Joi.string().email().required().label("Email").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.email":
+            err.message = `${err.context.label} doit être un email valide`;
+            break;
+         
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    password: Joi.string().required().min(4).label("Password").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
   };
 
   const validateProperty = (name, value) => {
@@ -183,13 +315,13 @@ const Signup = () => {
       setRegisterErrors(errors || {});
       if (!errors && registerData.password !== registerData.confirmPassword) {
         errors = {
-          password: "Password does not match",
-          confirmPassword: "Password does not match",
+          password: "Le mot de passe ne correspond pas",
+          confirmPassword: "Le mot de passe ne correspond pas",
         };
         setRegisterErrors(errors);
       } else if (!errors && !registerData.terms) {
         errors = {
-          terms: "Terms need to be checked",
+          terms: "Les termes doivent être vérifiés",
         };
         setRegisterErrors(errors);
       }
@@ -216,7 +348,9 @@ const Signup = () => {
       });
       handleFormType();
     } catch (error) {
+      if(error.response){
       toast.error(error.response.data.message);
+      }
     }
   };
 
@@ -235,7 +369,9 @@ const Signup = () => {
       }
     } catch (error) {
       // console.log(error.message);
-      toast.error(error.message);
+      if(error.response){
+      toast.error(error.response.data.message);
+      }
     }
   };
 
