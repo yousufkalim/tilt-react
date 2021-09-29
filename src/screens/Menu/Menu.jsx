@@ -350,7 +350,6 @@ const Menu = () => {
 
   return (
     <>
-    {console.log("discount",discount.referralDiscount)}
       <Grid className={classes.root} container spacing={3}>
         <Grid item sm={9}>
           <Box display="flex" flexDirection="column">

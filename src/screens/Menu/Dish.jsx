@@ -3,6 +3,7 @@ import React from "react";
 import DishImg from "../../images/Dish.png";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 import { BsFillPlusCircleFill } from "react-icons/bs";
+import fire from "../../images/icons/fire.png"
 
 const cardStyle = {
   backgroundColor: "#fff",
@@ -17,6 +18,9 @@ const useStyles = makeStyles({
       outline: "none",
     },
   },
+  backgroundColor:{
+    backgroundColor:"#FFE4E6 !important"
+  }
 });
 
 const Dish = ({ dish, handleSelect }) => {
@@ -31,6 +35,7 @@ const Dish = ({ dish, handleSelect }) => {
         justifyContent="space-between"
         alignItems="center"
         style={cardStyle}
+        className={dish.isPromoted&&classes.backgroundColor}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
@@ -49,7 +54,9 @@ const Dish = ({ dish, handleSelect }) => {
             </Typography>
           </Box>
         </Box>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+        {dish.isPromoted?<Box display="flex" justifyContent="space-between" alignItems="center" style={{width:"16%"}}>
+            <img src={fire} style={{width:30,marginRight:20}} />
+
           <Typography
             variant="body1"
             color="initial"
@@ -66,7 +73,25 @@ const Dish = ({ dish, handleSelect }) => {
               style={{ color: "#C72E54", fontSize: "35px" }}
             />
           </IconButton>
-        </Box>
+        </Box>:<Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography
+            variant="body1"
+            color="initial"
+            style={{ marginRight: "30px" }}
+          >
+            <b>{dish.price}€</b>
+          </Typography>
+
+          <IconButton
+            onClick={() => handleSelect(dish._id)}
+            className={classes.iconBtn}
+          >
+            <BsFillPlusCircleFill
+              style={{ color: "#C72E54", fontSize: "35px" }}
+            />
+          </IconButton>
+        </Box>}
+        
       </Box>
     </>
   );
