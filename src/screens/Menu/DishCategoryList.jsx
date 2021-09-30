@@ -29,22 +29,62 @@ const dishList = [
   {
     title: "All",
     key: "all",
-    icon: <Dish2 style={{ height: "40px" }} />,
+    icon: (
+      <Dish2
+        style={{
+          width: "90%",
+          minWidth: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    ),
   },
   {
     title: "Entrée",
     key: "Starter",
-    icon: <Dish1 style={{ height: "40px" }} />,
+    icon: (
+      <Dish1
+        style={{
+          width: "90%",
+          minWidth: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    ),
   },
   {
     title: "Plats",
     key: "Dish",
-    icon: <Dish2 style={{ height: "40px" }} />,
+    icon: (
+      <Dish2
+        style={{
+          width: "90%",
+          minWidth: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    ),
   },
   {
     title: "Dessert",
     key: "Dessert",
-    icon: <Dish3 style={{ height: "40px" }} />,
+    icon: (
+      <Dish3
+        style={{
+          width: "90%",
+          minWidth: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    ),
   },
 ];
 const DishCategoryList = ({ handleChange, filter }) => {
@@ -52,7 +92,7 @@ const DishCategoryList = ({ handleChange, filter }) => {
 
   return (
     <div className={classes.root}>
-      <GridList cols={4} spacing={60} className={classes.gridList}>
+      <GridList cols={4} spacing={40} className={classes.gridList}>
         {dishList.map((dish) => (
           <GridListTile style={{ height: "160px" }} key={dish.key}>
             <DishCategory

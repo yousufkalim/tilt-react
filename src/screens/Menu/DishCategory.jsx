@@ -4,14 +4,16 @@ import React, { useState } from "react";
 const cardStyle = {
   backgroundColor: "#fff",
   borderRadius: "20px",
-  padding: "10px 20px",
+  padding: "10px 2%",
+  width: "100%",
 };
 
 const activeStyle = {
   backgroundColor: "#D20249",
   color: "#fff",
   borderRadius: "20px",
-  padding: "10px 20px",
+  padding: "10px 2%",
+  width: "100%",
 };
 
 const DishCategory = ({ children, title, isActive, onClick }) => {
@@ -22,7 +24,6 @@ const DishCategory = ({ children, title, isActive, onClick }) => {
         justifyContent="space-between"
         alignItems="center"
         style={isActive ? activeStyle : cardStyle}
-        width="100%"
         button
         onClick={onClick}
       >
