@@ -33,8 +33,6 @@ import { Link } from "react-router-dom";
 import PaymentForm from "../../Components/Payment/paymentForm";
 import RestaurantMenuModal from "./restaurantMenuModal";
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#FAF9FB",
@@ -108,7 +106,6 @@ const Menu = () => {
   const [cardComplete, setCardComplete] = useState(false);
 
   const [openmodal, setOpenmodal] = useState(false);
-
 
   const { user: currentUser, cart, discount } = Store();
   const updateStore = UpdateStore();
@@ -372,7 +369,7 @@ const Menu = () => {
                   display="flex"
                   justifyContent="left"
                   alignItems="center"
-                  padding="5px"
+                  padding="10px"
                 >
                   <Box marginLeft="6%" marginRight="6%">
                     <img
@@ -391,25 +388,41 @@ const Menu = () => {
                     <Typography variant="body2" color="initial">
                       Invite tes collègues et obtient des réductions !
                     </Typography>
-                    <Button variant="contained" onClick={()=>setOpenmodal(true)} className={classes.contained}>
+                    <Button
+                      variant="contained"
+                      onClick={() => setOpenmodal(true)}
+                      className={classes.contained}
+                    >
                       En savoir plus
                     </Button>
                     <TransitionsModal
                       open={openmodal}
-                      handleClose={()=>setOpenmodal(false)}
+                      handleClose={() => setOpenmodal(false)}
                       body={
-                        <div style={{width:"34vw"}}>
+                        <div style={{ width: "34vw" }}>
                           <Typography variant="h6">
-                            <b>Invite des collègues et gagne des réductions !</b>
-                          </Typography><br/>
-                          <Typography variant="h8" >
-                            Partage ton code de parrainage à tes collègues. Lorsqu’ils l’informent durant leur inscription, tu obtiens gratuitement des réductions pour ta prochaine commande !
-                          </Typography><br/><br/>
-                          <Typography variant="h8" >
-                           Ton code parrainage : {currentUser.user.affiliateCode}
-                          </Typography><br/><br/>
-                          <Typography variant="h8" >
-                           Réduction obtenue par parrainage : {discount.referralDiscount}€
+                            <b>
+                              Invite des collègues et gagne des réductions !
+                            </b>
+                          </Typography>
+                          <br />
+                          <Typography variant="h8">
+                            Partage ton code de parrainage à tes collègues.
+                            Lorsqu’ils l’informent durant leur inscription, tu
+                            obtiens gratuitement des réductions pour ta
+                            prochaine commande !
+                          </Typography>
+                          <br />
+                          <br />
+                          <Typography variant="h8">
+                            Ton code parrainage :{" "}
+                            {currentUser.user.affiliateCode}
+                          </Typography>
+                          <br />
+                          <br />
+                          <Typography variant="h8">
+                            Réduction obtenue par parrainage :{" "}
+                            {discount.referralDiscount}€
                           </Typography>
                         </div>
                       }
