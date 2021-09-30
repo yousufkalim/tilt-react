@@ -43,16 +43,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#D20249",
     color: "#fff",
     fontSize: ".7rem",
-    fontWeight:'600',
+    fontWeight: "600",
     textTransform: "capitalize",
     margin: "10px 30px auto auto",
     height: "31px",
-    paddingLeft:'60px',
-    paddingRight:'60px',
-    ['@media (max-width:1200px)']: { // eslint-disable-line no-useless-computed-key
+    paddingLeft: "60px",
+    paddingRight: "60px",
+    ["@media (max-width:1200px)"]: {
+      // eslint-disable-line no-useless-computed-key
       margin: "10px 0px auto auto",
-
-    }
+    },
   },
 
   card: {
@@ -365,11 +365,11 @@ const Menu = () => {
               <Box alignSelf="center" marginX="auto" className={classes.card}>
                 <Box
                   display="flex"
-                  justifyContent="space-around"
+                  justifyContent="left"
                   alignItems="center"
                   padding="5px"
                 >
-                  <Box>
+                  <Box marginLeft="6%" marginRight="6%">
                     <img
                       src={familyImage}
                       style={{
@@ -485,7 +485,11 @@ const Menu = () => {
                   item.dishes.length > 0 ? (
                     item.dishes.map((dish) => (
                       <>
-                        <Basket item={dish} onDelete={handleDeleteDish} />
+                        <Basket
+                          item={dish}
+                          restaurant={item.restaurant}
+                          onDelete={handleDeleteDish}
+                        />
                       </>
                     ))
                   ) : (
