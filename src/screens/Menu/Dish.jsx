@@ -54,13 +54,12 @@ const Dish = ({ dish, handleSelect }) => {
             </Typography>
           </Box>
         </Box>
-        {dish.isPromoted?<Box display="flex" justifyContent="space-between" alignItems="center" style={{width:"16%"}}>
-            <img src={fire} style={{width:30,marginRight:20}} />
-
+       <Box display="flex" justifyContent="space-between" alignItems="center" style={{width:dish.isPromoted&&"150px"}} >
+         {dish.isPromoted&&<img src={fire} style={{ width:30 }} />}
           <Typography
             variant="body1"
             color="initial"
-            style={{ marginRight: "30px" }}
+            style={{marginRight:!dish.isPromoted&&"18px"}}
           >
             <b>{dish.price}€</b>
           </Typography>
@@ -73,24 +72,7 @@ const Dish = ({ dish, handleSelect }) => {
               style={{ color: "#C72E54", fontSize: "35px" }}
             />
           </IconButton>
-        </Box>:<Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography
-            variant="body1"
-            color="initial"
-            style={{ marginRight: "30px" }}
-          >
-            <b>{dish.price}€</b>
-          </Typography>
-
-          <IconButton
-            onClick={() => handleSelect(dish._id)}
-            className={classes.iconBtn}
-          >
-            <BsFillPlusCircleFill
-              style={{ color: "#C72E54", fontSize: "35px" }}
-            />
-          </IconButton>
-        </Box>}
+        </Box>
         
       </Box>
     </>
