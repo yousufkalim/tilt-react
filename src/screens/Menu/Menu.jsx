@@ -33,8 +33,6 @@ import { Link } from "react-router-dom";
 import PaymentForm from "../../Components/Payment/paymentForm";
 import RestaurantMenuModal from "./restaurantMenuModal";
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#FAF9FB",
@@ -45,16 +43,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#D20249",
     color: "#fff",
     fontSize: ".7rem",
-    fontWeight:'600',
+    fontWeight: "600",
     textTransform: "capitalize",
     margin: "10px 30px auto auto",
     height: "31px",
-    paddingLeft:'60px',
-    paddingRight:'60px',
-    ['@media (max-width:1200px)']: { // eslint-disable-line no-useless-computed-key
+    paddingLeft: "60px",
+    paddingRight: "60px",
+    ["@media (max-width:1200px)"]: {
+      // eslint-disable-line no-useless-computed-key
       margin: "10px 0px auto auto",
-
-    }
+    },
   },
 
   card: {
@@ -108,7 +106,6 @@ const Menu = () => {
   const [cardComplete, setCardComplete] = useState(false);
 
   const [openmodal, setOpenmodal] = useState(false);
-
 
   const { user: currentUser, cart, discount } = Store();
   const updateStore = UpdateStore();
@@ -370,11 +367,11 @@ const Menu = () => {
               <Box alignSelf="center" marginX="auto" className={classes.card}>
                 <Box
                   display="flex"
-                  justifyContent="space-around"
+                  justifyContent="left"
                   alignItems="center"
-                  padding="5px"
+                  padding="10px"
                 >
-                  <Box>
+                  <Box marginLeft="6%" marginRight="6%">
                     <img
                       src={familyImage}
                       style={{
@@ -391,25 +388,41 @@ const Menu = () => {
                     <Typography variant="body2" color="initial">
                       Invite tes collègues et obtient des réductions !
                     </Typography>
-                    <Button variant="contained" onClick={()=>setOpenmodal(true)} className={classes.contained}>
+                    <Button
+                      variant="contained"
+                      onClick={() => setOpenmodal(true)}
+                      className={classes.contained}
+                    >
                       En savoir plus
                     </Button>
                     <TransitionsModal
                       open={openmodal}
-                      handleClose={()=>setOpenmodal(false)}
+                      handleClose={() => setOpenmodal(false)}
                       body={
-                        <div style={{width:"34vw"}}>
+                        <div style={{ width: "34vw" }}>
                           <Typography variant="h6">
-                            <b>Invite des collègues et gagne des réductions !</b>
-                          </Typography><br/>
-                          <Typography variant="h8" >
-                            Partage ton code de parrainage à tes collègues. Lorsqu’ils l’informent durant leur inscription, tu obtiens gratuitement des réductions pour ta prochaine commande !
-                          </Typography><br/><br/>
-                          <Typography variant="h8" >
-                           Ton code parrainage : {currentUser.user.affiliateCode}
-                          </Typography><br/><br/>
-                          <Typography variant="h8" >
-                           Réduction obtenue par parrainage : {discount.referralDiscount}€
+                            <b>
+                              Invite des collègues et gagne des réductions !
+                            </b>
+                          </Typography>
+                          <br />
+                          <Typography variant="h8">
+                            Partage ton code de parrainage à tes collègues.
+                            Lorsqu’ils l’informent durant leur inscription, tu
+                            obtiens gratuitement des réductions pour ta
+                            prochaine commande !
+                          </Typography>
+                          <br />
+                          <br />
+                          <Typography variant="h8">
+                            Ton code parrainage :{" "}
+                            {currentUser.user.affiliateCode}
+                          </Typography>
+                          <br />
+                          <br />
+                          <Typography variant="h8">
+                            Réduction obtenue par parrainage :{" "}
+                            {discount.referralDiscount}€
                           </Typography>
                         </div>
                       }
@@ -507,7 +520,11 @@ const Menu = () => {
                   item.dishes.length > 0 ? (
                     item.dishes.map((dish) => (
                       <>
-                        <Basket item={dish} onDelete={handleDeleteDish} />
+                        <Basket
+                          item={dish}
+                          restaurant={item.restaurant}
+                          onDelete={handleDeleteDish}
+                        />
                       </>
                     ))
                   ) : (

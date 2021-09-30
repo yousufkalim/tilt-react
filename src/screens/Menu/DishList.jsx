@@ -40,7 +40,9 @@ const DishList = ({ dishes, handleSelect }) => {
     <div className={classes.container}>
       <GridList className={classes.gridList} cols={1}>
         {dishes.map((dish) => (
-          <GridListTile style={{ height: "85px" }}>
+          <GridListTile
+            style={{ height: "85px", margin: "0px", padding: "0px" }}
+          >
             <Dish dish={dish} handleSelect={handleSelect} />
           </GridListTile>
         ))}

@@ -3,12 +3,19 @@ import React from "react";
 import DishImg from "../../images/Dish.png";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 import { BsFillPlusCircleFill } from "react-icons/bs";
-import fire from "../../images/icons/fire.png"
+import fire from "../../images/icons/fire.png";
 
 const cardStyle = {
   backgroundColor: "#fff",
   borderRadius: "20px",
-  padding: "5px 10px",
+  padding: "10px 11%",
+  margin: "auto",
+  marginTop: "10px",
+};
+const cardStyle2 = {
+  backgroundColor: "#fff",
+  borderRadius: "0px",
+  padding: "14px 11%",
   margin: "auto",
 };
 
@@ -18,9 +25,9 @@ const useStyles = makeStyles({
       outline: "none",
     },
   },
-  backgroundColor:{
-    backgroundColor:"#FFE4E6 !important"
-  }
+  backgroundColor: {
+    backgroundColor: "#FFE4E6 !important",
+  },
 });
 
 const Dish = ({ dish, handleSelect }) => {
@@ -31,11 +38,11 @@ const Dish = ({ dish, handleSelect }) => {
     <>
       <Box
         display="flex"
-        width="80%"
+        width="90%"
         justifyContent="space-between"
         alignItems="center"
-        style={cardStyle}
-        className={dish.isPromoted&&classes.backgroundColor}
+        style={dish.isPromoted ? cardStyle2 : cardStyle}
+        className={dish.isPromoted && classes.backgroundColor}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
@@ -54,12 +61,17 @@ const Dish = ({ dish, handleSelect }) => {
             </Typography>
           </Box>
         </Box>
-       <Box display="flex" justifyContent="space-between" alignItems="center" style={{width:dish.isPromoted&&"150px"}} >
-         {dish.isPromoted&&<img src={fire} style={{ width:30 }} />}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          style={{ width: dish.isPromoted && "150px" }}
+        >
+          {dish.isPromoted && <img src={fire} style={{ width: 30 }} />}
           <Typography
             variant="body1"
             color="initial"
-            style={{marginRight:!dish.isPromoted&&"18px"}}
+            style={{ marginRight: !dish.isPromoted && "18px" }}
           >
             <b>{dish.price}€</b>
           </Typography>
@@ -73,7 +85,6 @@ const Dish = ({ dish, handleSelect }) => {
             />
           </IconButton>
         </Box>
-        
       </Box>
     </>
   );
