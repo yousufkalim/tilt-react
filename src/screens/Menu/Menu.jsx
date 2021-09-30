@@ -45,9 +45,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#D20249",
     color: "#fff",
     fontSize: ".7rem",
+    fontWeight:'600',
     textTransform: "capitalize",
-    margin: "10px 0 auto auto",
+    margin: "10px 30px auto auto",
     height: "31px",
+    paddingLeft:'60px',
+    paddingRight:'60px',
+    ['@media (max-width:1200px)']: { // eslint-disable-line no-useless-computed-key
+      margin: "10px 0px auto auto",
+
+    }
   },
 
   card: {
@@ -264,7 +271,7 @@ const Menu = () => {
       }
     });
     if (!isComplete1) {
-      toast.error("Starter/Drink cannot be ordered alone.");
+      toast.error("Entrée/Boisson ne peut pas être commandé seul.");
     } else {
       const cardElement = elements.getElement(CardElement);
       const cardObjectWithToken = await stripe.createToken(cardElement);
@@ -535,7 +542,7 @@ const Menu = () => {
                       color="initial"
                       style={{ paddingLeft: "5px" }}
                     >
-                      Reçois des réductions après Votre panier est vide.
+                      Votre panier est vide.
                       <br />
                       <br />
                       Commencez par ajouter des plats à partir du menu de
@@ -553,7 +560,7 @@ const Menu = () => {
                   color="initial"
                   style={{ paddingLeft: "5px" }}
                 >
-                  Reçois des réductions après Votre panier est vide.
+                  Votre panier est vide.
                   <br />
                   <br />
                   Commencez pas ajouter des plats à partir du menu de gauche.

@@ -60,9 +60,9 @@ export default function VerticalTabs() {
         onChange={handleChange}
         className={classes.tabs}
       >
-        <Tab label="Home" {...a11yProps(0)} />
-        <Tab label="Orders" {...a11yProps(1)} />
-        <Tab label="About us" {...a11yProps(2)} />
+        <Tab label="Accueil" {...a11yProps(0)} />
+        <Tab label="Ordres" {...a11yProps(1)} />
+        <Tab label="À propos de nous" {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={value} index={0}>
         Home
@@ -71,7 +71,7 @@ export default function VerticalTabs() {
         Orders
       </TabPanel>
       <TabPanel value={value} index={2}>
-        About us
+      À propos de nous
       </TabPanel>
     </div>
   );

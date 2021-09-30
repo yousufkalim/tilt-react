@@ -269,7 +269,7 @@ const RestaurantProfile = ({ onLogout }) => {
 
     const bankInfo = { ...bankDetails };
     if (!bankInfo.front || !bankInfo.back) {
-      toast.error("Face Avant and Face Arrière are required");
+      toast.error("Face Avant et Face Arrière sont obligatoires");
     }
 
     try {
@@ -298,23 +298,237 @@ const RestaurantProfile = ({ onLogout }) => {
   const handleReviewsModalClose = () => setOpenReviewsModal(false);
 
   const bankSchema = {
-    phone: Joi.string().required().label("Phone Number"),
-    dateOfBirth: Joi.date().required().label("Date de Naissance"),
-    bankName: Joi.string().required().label("Nom de banque"),
-    iban: Joi.string().min(27).required().label("Iban"),
-    front: Joi.required().label("Face Avant"),
-    back: Joi.required().label("Face Arrière"),
+    phone: Joi.string().required().label("Téléphone").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    dateOfBirth: Joi.date().required().label("Date de Naissance").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "date.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+         
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    bankName: Joi.string().required().label("Nom de banque").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    iban: Joi.string().min(27).required().label("Iban").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    front: Joi.required().label("Face Avant").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    back: Joi.required().label("Face Arrière").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
   };
 
   const restaurantSchema = {
-    name: Joi.string().min(3).required().label("Nom"),
-    email: Joi.string().email().required().label("Address e-mail"),
-    street: Joi.string().required().label("Rue"),
-    city: Joi.string().min(2).required().label("Ville"),
-    postalCode: Joi.string().min(3).required().label("Code Postal"),
-    pickupPlace: Joi.string().min(3).required().label("Pickup Place"),
+    name: Joi.string().min(3).required().label("Nom").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    email: Joi.string().email().required().label("Address e-mail").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.email":
+            err.message = `${err.context.label} doit être un email valide`;
+            break;
+         
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    street: Joi.string().required().label("Rue").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    city: Joi.string().min(2).required().label("Ville").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    postalCode: Joi.string().min(3).required().label("Code Postal").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
+    pickupPlace: Joi.string().min(3).required().label("Pickup Place").error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
     image: Joi.allow(""),
-    googleLink: Joi.string().min(3).required(),
+    googleLink: Joi.string().min(3).required().error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "string.empty":
+            err.message = `${err.context.label} ne doit pas être vide!`;
+            break;
+          case "string.min":
+            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+            break;
+          case "string.max":
+            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+            break;
+          default:
+            break;
+        }
+      });
+      return errors;
+    }),
   };
 
   const handleFormTypeChange = () => {
@@ -405,18 +619,18 @@ const RestaurantProfile = ({ onLogout }) => {
       const { password, confirmPassword } = restaurantPassword;
       if (password.length === 0 || confirmPassword.length === 0) {
         setPasswordErrors({
-          password: "Both Fields are required",
-          confirmPassword: "Both Fields are required",
+          password: "Les deux champs sont obligatoires",
+          confirmPassword: "Les deux champs sont obligatoires",
         });
       } else if (password.length < 5 || confirmPassword.length < 5) {
         setPasswordErrors({
-          password: "Password cannot be less than 5 characters",
-          confirmPassword: "Password cannot be less than 5 characters",
+          password: "Le mot de passe ne peut pas être inférieur à 5 caractères",
+          confirmPassword: "Le mot de passe ne peut pas être inférieur à 5 caractères",
         });
       } else if (password !== confirmPassword) {
         setPasswordErrors({
-          password: "Password does not match",
-          confirmPassword: "Password does not match",
+          password: "Le mot de passe ne correspond pas",
+          confirmPassword: "Le mot de passe ne correspond pas",
         });
       } else {
         setPasswordErrors({});
@@ -624,7 +838,7 @@ const RestaurantProfile = ({ onLogout }) => {
       await updateDishStatus(body);
       getRestaurantDishes();
     } catch (error) {
-      toast.error("Ann Error Occurred");
+      toast.error("Une erreur s'est produite");
     }
   };
 

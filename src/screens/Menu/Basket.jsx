@@ -46,7 +46,10 @@ const Basket = ({ item, onDelete }) => {
           justifyContent="flex-end"
         >
           <Box>
-            <Typography variant="body2" color="initial">
+            <Typography 
+      style={{ fontWeight: "600" }}
+            
+            variant="body2" color="initial">
               {item.id.price}€
             </Typography>
           </Box>

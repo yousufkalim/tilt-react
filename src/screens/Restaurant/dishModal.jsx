@@ -79,7 +79,7 @@ const DishModal = ({
             color="secondary"
             style={{ fontSize: "10px" }}
           >
-            Upload Image
+           Télécharger une image
           </Button>
         </label>
         {errors["image"] && (
@@ -242,7 +242,7 @@ const DishModal = ({
           style={{ fontSize: "12px" }}
           onClick={handleSubmit}
         >
-          Submit
+          Soumettre
         </Button>
       </div>
     </div>
