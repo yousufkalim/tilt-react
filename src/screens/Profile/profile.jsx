@@ -110,9 +110,9 @@ const Profile = ({ onLogout }) => {
   const handlePackageListModalOpen = () => setOpenPackageListModal(true);
   const handlePackageListModalClose = () => setOpenPackageListModal(false);
 
-  const handlePackageChange = ({ target }) => {
-    setSelectedPackage(target.value);
-  };
+  function handlePackageChange(e) {
+    setSelectedPackage(e);
+  }
   const handleCompleteCardStatus = (status) => setCardComplete(status);
 
   const handlePackagePaymentModalOpen = () => setOpenPackagePaymentModal(true);
@@ -210,96 +210,120 @@ const Profile = ({ onLogout }) => {
   };
 
   const paymentSchema = {
-    name: Joi.string().min(3).required().label("Nom").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    number: Joi.string().min(16).max(16).required().label("Numéro de carte").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit}  caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit}  caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    expiryMonth: Joi.string().min(2).min(2).required().label("Mois d'expiration").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit}  caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit}  caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    expiryYear: Joi.string().min(2).min(2).required().label("Année d'expiration").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit}  caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit}  caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    cvc: Joi.string().min(3).max(3).required().label("CVC").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
+    name: Joi.string()
+      .min(3)
+      .required()
+      .label("Nom")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    number: Joi.string()
+      .min(16)
+      .max(16)
+      .required()
+      .label("Numéro de carte")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit}  caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit}  caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    expiryMonth: Joi.string()
+      .min(2)
+      .min(2)
+      .required()
+      .label("Mois d'expiration")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit}  caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit}  caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    expiryYear: Joi.string()
+      .min(2)
+      .min(2)
+      .required()
+      .label("Année d'expiration")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit}  caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit}  caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    cvc: Joi.string()
+      .min(3)
+      .max(3)
+      .required()
+      .label("CVC")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
   };
 
   const handlePaymentFormChange = ({ target }) => {
@@ -343,58 +367,70 @@ const Profile = ({ onLogout }) => {
   };
 
   const profileSchema = {
-    firstName: Joi.string().min(3).required().label("Prénom").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    lastName: Joi.string().min(3).required().label("Nom").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    email: Joi.string().email().required().label("Email").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.email":
-            err.message = `${err.context.label} doit être un email valide`;
-            break;
-         
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
+    firstName: Joi.string()
+      .min(3)
+      .required()
+      .label("Prénom")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    lastName: Joi.string()
+      .min(3)
+      .required()
+      .label("Nom")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    email: Joi.string()
+      .email()
+      .required()
+      .label("Email")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.email":
+              err.message = `${err.context.label} doit être un email valide`;
+              break;
+
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
   };
 
   const handleProfileForm = ({ target }) => {
@@ -454,7 +490,9 @@ const Profile = ({ onLogout }) => {
     const { password, confirmPassword } = passwordDetails;
 
     if (password.length < 5 || confirmPassword.length < 5) {
-      toast.error("La longueur du mot de passe ne peut pas être inférieure à 5 caractères");
+      toast.error(
+        "La longueur du mot de passe ne peut pas être inférieure à 5 caractères"
+      );
       return;
     } else if (password !== confirmPassword) {
       toast.error("Le mot de passe ne correspond pas");
@@ -560,7 +598,7 @@ const Profile = ({ onLogout }) => {
           <PackageListModal
             packages={packages}
             handleSubmit={handlePackageSelectionSubmit}
-            handleChange={handlePackageChange}
+            handleChange={(e) => handlePackageChange(e)}
           />
         }
       />
