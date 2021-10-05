@@ -59,7 +59,10 @@ const useStyles = makeStyles({
       color: "white",
     },
   },
-  test: {
+  selectBox: {
+    "&:hover": {
+      cursor: "pointer",
+    },
     "&:focus": {
       color: "#D20249",
       border: "2px solid #D20249",
@@ -67,9 +70,6 @@ const useStyles = makeStyles({
     },
   },
 });
-const fnc = () => {
-  console.log("HELLOOOO");
-};
 
 const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
   const classes = useStyles();
@@ -84,7 +84,7 @@ const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
         {packages.map((item) => (
           <div className={classes.singlePackage}>
             <div
-              className={classes.test}
+              className={classes.selectBox}
               tabindex="0"
               onClick={() => handleChange(item)}
             >

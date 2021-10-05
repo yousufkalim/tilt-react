@@ -82,13 +82,7 @@ const ProfileGrid = ({
                   <b>Mon Enterprise</b>
                 </Typography>
                 <Typography variant="subtitle2" className={classes.subtitle}>
-                  {user.user.company.name}
-                </Typography>
-                <Typography variant="subtitle2">
-                  {user.user.company.street}
-                </Typography>
-                <Typography variant="subtitle2">
-                  {user.user.company.city}
+                  {user.userCode}
                 </Typography>
               </Grid>
             </Grid>
@@ -126,7 +120,7 @@ const ProfileGrid = ({
                       variant="subtitle2"
                       className={classes.subtitle}
                     >
-                     Pas de carte
+                      Pas de carte
                     </Typography>
                   )}
                 </Typography>
