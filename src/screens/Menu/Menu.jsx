@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "20px",
     alignItems: "center",
   },
+  divider: { backgroundColor: "black", broder: "2px solid black" },
 }));
 
 const Menu = () => {
@@ -532,25 +533,76 @@ const Menu = () => {
                   )
                 )}
                 {cart.userCarts.some((item) => item.dishes.length > 0) ? (
-                  <Button
-                    variant="contained"
-                    className={classes.ButtonStyle}
-                    onClick={() => {
-                      if (
-                        +currentUser.user.cart.totalPrice <
-                        +discount.leastCartValue
-                      ) {
-                        alert(
-                          `La valeur de votre panier doit être d'au moins ${discount.leastCartValue}€`
-                        );
-                      } else {
-                        // verifyOrder();
-                        handlePaymentModalOpen();
-                      }
-                    }}
-                  >
-                    Payer
-                  </Button>
+                  <>
+                    <Box>
+                      <hr className={classes.divider} />
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="subtitle2">Sous-Total</Typography>
+                      <Typography variant="subtitle2">
+                        {currentUser.user.cart.totalPrice}€
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{
+                        marginTop: "10px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="subtitle2">
+                        Frais de livraison
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        {totalPrice() - currentUser.user.cart.totalPrice}€
+                      </Typography>
+                    </Box>
+
+                    <Box>
+                      <hr className={classes.divider} />
+                    </Box>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="subtitle2">Payé</Typography>
+                      <Typography variant="subtitle2">
+                        {totalPrice()}€
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <hr className={classes.divider} />
+                    </Box>
+                    <Button
+                      variant="contained"
+                      className={classes.ButtonStyle}
+                      onClick={() => {
+                        if (
+                          +currentUser.user.cart.totalPrice <
+                          +discount.leastCartValue
+                        ) {
+                          alert(
+                            `La valeur de votre panier doit être d'au moins ${discount.leastCartValue}€`
+                          );
+                        } else {
+                          // verifyOrder();
+                          handlePaymentModalOpen();
+                        }
+                      }}
+                    >
+                      Payer
+                    </Button>
+                  </>
                 ) : (
                   <div className={classes.emptyCart}>
                     <img src={EmptyCart} alt="emptyCart" width="130px" />
