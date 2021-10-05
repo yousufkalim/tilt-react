@@ -20,8 +20,8 @@ const useStyles = makeStyles({
   },
   packages: {
     maxHeight: "400px",
-    marginBottom:'10px',
-    overflowY:'auto',
+    marginBottom: "10px",
+    overflowY: "auto",
     marginBottom: "15px",
     "&::-webkit-scrollbar": {
       width: "7px",
@@ -47,7 +47,7 @@ const useStyles = makeStyles({
   btn: {
     marginTop: "15px",
     backgroundColor: "#D20249",
-    width:'100%',
+    width: "100%",
     color: "white",
     "&:focus": {
       outline: "none",
@@ -59,6 +59,16 @@ const useStyles = makeStyles({
       color: "white",
     },
   },
+  selectBox: {
+    "&:hover": {
+      cursor: "pointer",
+    },
+    "&:focus": {
+      color: "#D20249",
+      border: "2px solid #D20249",
+      padding: "10px",
+    },
+  },
 });
 
 const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
@@ -67,57 +77,44 @@ const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
   return (
     <div className={classes.main}>
       <Typography variant="h6">
-        <b>Paquets</b>
+        <b>Sélectionnez un Forfait</b>
       </Typography>
 
       <div className={classes.packages}>
         {packages.map((item) => (
           <div className={classes.singlePackage}>
-            <Typography component="div" variant="body1">
-              <b>{item.name}</b>
-            </Typography>
-            <Typography component="div" variant="caption">
-              Prix: {item.price}€
-            </Typography>
-            <Typography component="div" variant="caption">
-              Crédits offerts: {item.credits}
-            </Typography>
-            <Typography component="div" variant="caption">
-              Réduction par crédit: {item.offPrice}€
-            </Typography>
-            <Typography component="div" variant="caption">
-              Expire dans: {item.expiration} journees
-            </Typography>
+            <div
+              className={classes.selectBox}
+              tabindex="0"
+              onClick={() => handleChange(item)}
+            >
+              <Typography component="div" variant="body1">
+                <b>{item.name}</b>
+              </Typography>
+              <Typography component="div" variant="caption">
+                Prix: {item.price}€
+              </Typography>
+              <Typography component="div" variant="caption">
+                Crédits offerts: {item.credits}
+              </Typography>
+              <Typography component="div" variant="caption">
+                Réduction par crédit: {item.offPrice}€
+              </Typography>
+              <Typography component="div" variant="caption">
+                Expire dans: {item.expiration} journees
+              </Typography>
+            </div>
           </div>
         ))}
-        
       </div>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel style={{ color: "#d10248" }}>
-          Selectionner une enterprise
-        </InputLabel>
-        <Select
-          name="packageId"
-          onChange={handleChange}
-          label="Selectionner une enterprise"
-          className={classes.outlined}
-        >
-          {packages.map((item) => (
-            <MenuItem value={item} key={item._id}>
-              {item.name}
-            </MenuItem>
-          ))}
-        </Select>
-        
-      </FormControl>
       <Button
-          variant="contained"
-          className={classes.btn}
-          color="secondary"
-          onClick={handleSubmit}
-        >
-          Modifier
-        </Button>
+        variant="contained"
+        className={classes.btn}
+        color="secondary"
+        onClick={handleSubmit}
+      >
+        Modifier
+      </Button>
     </div>
   );
 };
