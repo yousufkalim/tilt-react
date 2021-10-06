@@ -99,7 +99,7 @@ const RestaurantModal = ({
                 color="secondary"
                 style={{ fontSize: "10px" }}
               >
-               Télécharger une image
+                Télécharger une image
               </Button>
             </label>
 
@@ -179,7 +179,6 @@ const RestaurantModal = ({
             <InputWithLabel
               value={data["googleLink"]}
               label="Google Link"
-              required={true}
               name="googleLink"
               type="text"
               handleChange={handleChange}
