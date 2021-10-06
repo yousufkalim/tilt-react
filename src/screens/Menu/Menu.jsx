@@ -544,7 +544,9 @@ const Menu = () => {
                         alignItems: "center",
                       }}
                     >
-                      <Typography variant="subtitle2">Sous-Total</Typography>
+                      <Typography variant="body" style={{ fontSize: "0.9rem" }}>
+                        Sous-Total
+                      </Typography>
                       <Typography variant="subtitle2">
                         {currentUser.user.cart.totalPrice}€
                       </Typography>
@@ -557,7 +559,7 @@ const Menu = () => {
                         alignItems: "center",
                       }}
                     >
-                      <Typography variant="subtitle2">
+                      <Typography variant="body" style={{ fontSize: "0.9rem" }}>
                         Frais de livraison
                       </Typography>
                       <Typography variant="subtitle2">
@@ -575,7 +577,9 @@ const Menu = () => {
                         alignItems: "center",
                       }}
                     >
-                      <Typography variant="subtitle2">Payé</Typography>
+                      <Typography variant="body" style={{ fontSize: "0.9rem" }}>
+                        Payé
+                      </Typography>
                       <Typography variant="subtitle2">
                         {totalPrice()}€
                       </Typography>
