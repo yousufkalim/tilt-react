@@ -160,7 +160,7 @@ const HistoryTable = ({ history, handleOpen }) => {
                     ))}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {row.company.name}
+                    {row.company ? row.company.name : "N/A"}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     {row.status == "In progress"
