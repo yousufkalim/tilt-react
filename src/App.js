@@ -40,6 +40,7 @@ import { Logout } from "./images/images";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import RestaurantProfile from "./screens/Restaurant/restaurantProfile";
+import Cgu from "../src/Components/Footer/cgu";
 
 const stripePromise = loadStripe(process.env.REACT_APP_Stripe_PK);
 
@@ -214,6 +215,7 @@ function App() {
               <Switch>
                 <Route exact path="/" component={HomePage} />
                 <Route exact path="/signup" component={Signup} />
+                <Route path="/cgu" component={Cgu} />
                 <Redirect from="*" to="/signup" />
               </Switch>
             ) : (
@@ -261,7 +263,7 @@ function App() {
               </Switch>
             )}
           </Box>
-          {pathname !== "/" && pathname !== "/signup" && (
+          {pathname !== "/" && pathname !== "/signup" && pathname !== "/cgu" && (
             <>
               <Box>
                 <Drawer
