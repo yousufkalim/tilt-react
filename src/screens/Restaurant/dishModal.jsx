@@ -79,7 +79,7 @@ const DishModal = ({
             color="secondary"
             style={{ fontSize: "10px" }}
           >
-           Télécharger une image
+            Télécharger une image
           </Button>
         </label>
         {errors["image"] && (
@@ -103,7 +103,7 @@ const DishModal = ({
         )}
       </div>
       <div className={classes.form}>
-        {user.restaurant?.isPremium && update && (
+        {user.restaurant?.isPremium && (
           <FormControlLabel
             style={{ width: "100%", justifyContent: "center" }}
             control={
