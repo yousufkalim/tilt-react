@@ -52,7 +52,7 @@ const Orders = () => {
         (item) =>
           item.company && item.company.block && item.company.block.pickUpTime
       );
-      setPickupTime(filtered[0].company.block.pickUpTime);
+      setPickupTime(filtered[0]?.company.block.pickUpTime);
     } else {
       setCarts([]);
       setPickupTime("");

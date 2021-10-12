@@ -150,17 +150,17 @@ const HistoryTable = ({ history, handleOpen }) => {
               {history.map((row) => (
                 <TableRow classes={{ root: classes.row }} key={row._id}>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {moment(row.completedAt).format("DD/MM/YYYY")}
+                    {moment(row?.completedAt).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     {row.carts.map((cart) => (
                       <span key={cart._id}>
-                        {cart.id.userCode} <br />
+                        {cart.id ? cart?.id?.userCode : "N/A"} <br />
                       </span>
                     ))}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
-                    {row.company ? row.company.name : "N/A"}
+                    {row?.company ? row?.company?.name : "N/A"}
                   </TableCell>
                   <TableCell classes={{ root: classes.cell }} align="center">
                     {row.status == "In progress"
