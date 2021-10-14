@@ -10,7 +10,7 @@ import {
   BrowserRouter,
 } from "react-router-dom";
 
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -199,7 +199,7 @@ function App() {
   return (
     <Elements stripe={stripePromise}>
       <>
-        <ToastContainer />
+        <ToastContainer limit={1} />
         <div
           className={clsx(
             pathname === "/" || pathname === "/signup"
