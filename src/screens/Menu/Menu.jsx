@@ -164,7 +164,16 @@ const Menu = () => {
           dishPrice: drink.price,
           dishCount: drink.quantity,
         });
-        updateStore({ cart });
+        updateStore({
+          cart,
+          user: {
+            ...currentUser,
+            user: {
+              ...currentUser.user,
+              cart: cart,
+            },
+          },
+        });
       }
     });
     handleDrinkModalClose();
