@@ -4,6 +4,9 @@ import Joi from "joi-browser";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 // import SignupForm from "./../components/auth/signupForm";
 import LoginForm from "./loginForm";
 import SignupForm from "./signupForm";
@@ -14,6 +17,7 @@ import { toast } from "react-toastify";
 import { UpdateStore, Store } from "../../context/StoreContext";
 import "../../styles/signup.css";
 import { getAllCompanies } from "../../services/companyService";
+import InputWithLabel from "../../Components/common/inputWithLabel";
 
 const useStyles = makeStyles({
   root: {
@@ -47,6 +51,23 @@ const useStyles = makeStyles({
     marginBottom: "30px",
   },
   formHeading: { color: "#d10248" },
+
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: "white",
+    border: "none",
+    borderRadius: "10px",
+    minWidth: "400px",
+    padding: "20px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 const Signup = () => {
@@ -65,14 +86,25 @@ const Signup = () => {
   const [registerErrors, setRegisterErrors] = useState({});
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [loginErrors, setLoginErrors] = useState({});
+  const [suggestedBy, setSuggestedBy] = useState();
+  const [suggestedCompanyName, setSuggestedCompanyName] = useState("");
+  const [suggestErrors, setSuggestErrors] = useState({});
+  const [openSuggest, setOpenSuggest] = useState(false);
   const [formType, setFormType] = useState("signup");
+  const [disable, setDisable] = useState(false);
   const history = useHistory();
   const updateStore = UpdateStore();
   const { user: currentUser } = Store();
 
+  const handleClose = () => setOpenSuggest(false);
+
   useEffect(() => {
     getCompanies();
   }, []);
+
+  useEffect(() => {
+    setSuggestedBy(registerData.email ? registerData.email : "");
+  }, [registerData.email]);
 
   const getCompanies = async () => {
     const data = await getAllCompanies();
@@ -80,151 +112,205 @@ const Signup = () => {
   };
 
   const registerSchema = {
-    firstName: Joi.string().min(4).required().label("Prénom").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    lastName: Joi.string().min(4).required().label("Nom").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    email: Joi.string().email().required().label("Email").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.email":
-            err.message = `${err.context.label} doit être un email valide`;
-            break;
-         
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    password: Joi.string().required().min(5).label("Password").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    confirmPassword: Joi.string().required().min(5).label("Password").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    companyId: Joi.string().required().label("Company").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "any.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
+    firstName: Joi.string()
+      .min(4)
+      .required()
+      .label("Prénom")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    lastName: Joi.string()
+      .min(4)
+      .required()
+      .label("Nom")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    email: Joi.string()
+      .email()
+      .required()
+      .label("Email")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.email":
+              err.message = `${err.context.label} doit être un email valide`;
+              break;
+
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    password: Joi.string()
+      .required()
+      .min(5)
+      .label("Password")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    confirmPassword: Joi.string()
+      .required()
+      .min(5)
+      .label("Password")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    companyId: Joi.string()
+      .required()
+      .label("Company")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
     affiliate: Joi.string().allow("").label("Code affilie"),
     terms: Joi.required(),
   };
 
   const loginSchema = {
-    email: Joi.string().email().required().label("Email").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.email":
-            err.message = `${err.context.label} doit être un email valide`;
-            break;
-         
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
-    password: Joi.string().required().min(4).label("Password").error(errors => {
-      errors.forEach(err => {
-        switch (err.type) {
-          case "string.empty":
-            err.message = `${err.context.label} ne doit pas être vide!`;
-            break;
-          case "string.min":
-            err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-            break;
-          case "string.max":
-            err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-            break;
-          default:
-            break;
-        }
-      });
-      return errors;
-    }),
+    email: Joi.string()
+      .email()
+      .required()
+      .label("Email")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.email":
+              err.message = `${err.context.label} doit être un email valide`;
+              break;
+
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    password: Joi.string()
+      .required()
+      .min(4)
+      .label("Password")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+  };
+
+  const suggestSchema = {
+    email: Joi.string()
+      .email()
+      .required()
+      .label("Email")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.email":
+              err.message = `${err.context.label} doit être un email valide`;
+              break;
+
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
   };
 
   const validateProperty = (name, value) => {
@@ -236,21 +322,34 @@ const Signup = () => {
     return error ? error.details[0].message : null;
   };
 
+  const validateSuggest = (name, value) => {
+    const obj = { [name]: value };
+    const schema = {
+      [name]: suggestSchema[name],
+    };
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
+  };
+
   const handleRegisterFormChange = ({ target }) => {
     const { name, value, checked } = target;
-    const allErrors = { ...registerErrors };
-    const errorMessage = validateProperty(name, value);
-    if (errorMessage) allErrors[name] = errorMessage;
-    else delete allErrors[name];
-    setRegisterErrors(allErrors);
-
-    const formData = { ...registerData };
-    if (name === "terms") {
-      formData[name] = checked;
+    if (value === "suggest") {
+      setOpenSuggest(true);
     } else {
-      formData[name] = value;
+      const allErrors = { ...registerErrors };
+      const errorMessage = validateProperty(name, value);
+      if (errorMessage) allErrors[name] = errorMessage;
+      else delete allErrors[name];
+      setRegisterErrors(allErrors);
+
+      const formData = { ...registerData };
+      if (name === "terms") {
+        formData[name] = checked;
+      } else {
+        formData[name] = value;
+      }
+      setRegisterData(formData);
     }
-    setRegisterData(formData);
   };
 
   const handleLoginFormChange = ({ target }) => {
@@ -264,6 +363,16 @@ const Signup = () => {
     const formData = { ...loginData };
     formData[name] = value;
     setLoginData(formData);
+  };
+
+  const handleSuggestFormChange = ({ target }) => {
+    const { name, value, checked } = target;
+    const allErrors = { ...suggestErrors };
+    const errorMessage = validateProperty(name, value);
+    if (errorMessage) allErrors[name] = errorMessage;
+    else delete allErrors[name];
+    setSuggestErrors(allErrors);
+    setSuggestedBy(value);
   };
 
   const handleFormType = () => {
@@ -334,6 +443,18 @@ const Signup = () => {
     else loginUser();
   };
 
+  const handleSuggestSubmit = (e) => {
+    e.preventDefault();
+    setDisable(true);
+    console.log("suggestedCompanyName", suggestedCompanyName);
+    if (suggestErrors.email || suggestedCompanyName === "") {
+      setDisable(false);
+      return;
+    } else {
+      submitSuggestion();
+    }
+  };
+
   const registerUser = async () => {
     try {
       const { firstName, lastName, email, password, companyId, affiliate } =
@@ -348,8 +469,8 @@ const Signup = () => {
       });
       handleFormType();
     } catch (error) {
-      if(error.response){
-      toast.error(error.response.data.message);
+      if (error.response) {
+        toast.error(error.response.data.message);
       }
     }
   };
@@ -369,10 +490,27 @@ const Signup = () => {
       }
     } catch (error) {
       // console.log(error.message);
-      if(error.response){
-      toast.error(error.response.data.message);
+      if (error.response) {
+        toast.error(error.response.data.message);
       }
     }
+  };
+
+  const submitSuggestion = async () => {
+    try {
+      const data = await auth.suggestCompany(suggestedBy, suggestedCompanyName);
+      setOpenSuggest(false);
+      setSuggestedBy("");
+      setSuggestedCompanyName("");
+      toast.success(data.message);
+    } catch (error) {
+      console.log(error.message);
+      if (error.response) {
+        toast.error(error.response.data.message);
+      }
+    }
+
+    setDisable(false);
   };
 
   return (
@@ -430,6 +568,56 @@ const Signup = () => {
           </div>
         </Grid>
       </Grid>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openSuggest}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openSuggest}>
+          <div className={classes.paper}>
+            <Typography
+              variant="h5"
+              style={{ color: "#d10248" }}
+              className={classes.welcome2}
+            >
+              Suggérer une entreprise
+            </Typography>
+            <InputWithLabel
+              label="Adresse e-mail"
+              value={suggestedBy}
+              required={true}
+              name="email"
+              type="email"
+              handleChange={handleSuggestFormChange}
+              error={suggestErrors["email"] ? true : false}
+              errorMessage={suggestErrors["email"]}
+            />
+            <InputWithLabel
+              value={suggestedCompanyName}
+              label="Entrez le nom de votre entreprise"
+              required={true}
+              name="companyName"
+              type="text"
+              handleChange={(e) => setSuggestedCompanyName(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="signUpBtn"
+              onClick={handleSuggestSubmit}
+              disabled={disable}
+            >
+              Submit
+            </button>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 };
