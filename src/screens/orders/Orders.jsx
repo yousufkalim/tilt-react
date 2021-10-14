@@ -93,7 +93,7 @@ const Orders = () => {
           Entreprise Carlier
         </Typography>
         <Typography style={{ padding: "10px 50px" }} variant="subtitle1">
-          A préparer pour {pickupTime ? pickupTime : "11h30"}
+          A préparer pour {pickupTime ? pickupTime : "--h--m"}
         </Typography>
       </Box>
       {carts.length > 0 ? (
