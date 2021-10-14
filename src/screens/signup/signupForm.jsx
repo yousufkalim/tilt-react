@@ -126,6 +126,9 @@ const SignupForm = ({
                 {company.name}
               </MenuItem>
             ))}
+            <MenuItem style={{ color: "#d10248" }} value={"suggest"}>
+              Suggérer une entreprise
+            </MenuItem>
           </Select>
           {errors["companyId"] && (
             <FormHelperText style={{ color: "#d10248" }}>
