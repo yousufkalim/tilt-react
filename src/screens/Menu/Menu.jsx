@@ -92,6 +92,14 @@ const useStyles = makeStyles((theme) => ({
   divider: { backgroundColor: "black", broder: "2px solid black" },
 }));
 
+const options = {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+};
+
 const Menu = () => {
   const classes = useStyles();
   const [dishes, setDishes] = useState([]);
@@ -149,7 +157,21 @@ const Menu = () => {
     // setCardComplete(false);
   };
 
-  const handlePaymentModalOpen = () => setOpenPaymentModal(true);
+  const handlePaymentModalOpen = () => {
+    let timeForOrder = moment()
+      .hour(currentUser.user.company.block.timeForOrder.split("h")[0])
+      .minute(
+        currentUser.user.company.block.timeForOrder.split("h")[1].split("m")[0]
+      );
+    if (moment().isBefore(timeForOrder)) {
+      setOpenPaymentModal(true);
+    } else {
+      toast.info(
+        "Les restaurants ne prennent plus de commandes aujourd'hui. Merci de revenir demain.",
+        options
+      );
+    }
+  };
   const handlePaymentModalClose = () => {
     setOpenPaymentModal(false);
     setCardComplete(false);
@@ -164,7 +186,16 @@ const Menu = () => {
           dishPrice: drink.price,
           dishCount: drink.quantity,
         });
-        updateStore({ cart });
+        updateStore({
+          cart,
+          user: {
+            ...currentUser,
+            user: {
+              ...currentUser.user,
+              cart: cart,
+            },
+          },
+        });
       }
     });
     handleDrinkModalClose();
@@ -192,11 +223,23 @@ const Menu = () => {
   };
 
   const handleDishSelect = (_id) => {
-    handleRestaurantModalClose();
-    setQuantity(1);
-    const index = dishes.findIndex((d) => d._id === _id);
-    setSelectedDish(dishes[index]);
-    setOpenDishModal(true);
+    let timeForOrder = moment()
+      .hour(currentUser.user.company.block.timeForOrder.split("h")[0])
+      .minute(
+        currentUser.user.company.block.timeForOrder.split("h")[1].split("m")[0]
+      );
+    if (moment().isBefore(timeForOrder)) {
+      handleRestaurantModalClose();
+      setQuantity(1);
+      const index = dishes.findIndex((d) => d._id === _id);
+      setSelectedDish(dishes[index]);
+      setOpenDishModal(true);
+    } else {
+      toast.info(
+        "Les restaurants ne prennent plus de commandes aujourd'hui. Merci de revenir demain.",
+        options
+      );
+    }
   };
 
   const handleDishModalClose = () => {
@@ -242,39 +285,52 @@ const Menu = () => {
   };
 
   const verifyOrder = async () => {
-    let isComplete1 = true;
-    let totalrest = [];
-    currentUser.user.cart.userCarts.map(async (restaurantCart) => {
-      let isComplete = false;
-      let ammount = 0;
-      await Promise.all(
-        restaurantCart.dishes.map((restaurantItem) => {
-          if (
-            restaurantItem.id.dishType === "Dish" ||
-            restaurantItem.id.dishType === "Dessert"
-          ) {
-            isComplete = true;
-          }
-          ammount +=
-            parseInt(restaurantItem.count) * parseInt(restaurantItem.id.price);
-        })
+    let timeForOrder = moment()
+      .hour(currentUser.user.company.block.timeForOrder.split("h")[0])
+      .minute(
+        currentUser.user.company.block.timeForOrder.split("h")[1].split("m")[0]
       );
-      totalrest.push({
-        restaurant: restaurantCart.restaurant,
-        value: ammount,
+    if (moment().isBefore(timeForOrder)) {
+      let isComplete1 = true;
+      let totalrest = [];
+      currentUser.user.cart.userCarts.map(async (restaurantCart) => {
+        let isComplete = false;
+        let ammount = 0;
+        await Promise.all(
+          restaurantCart.dishes.map((restaurantItem) => {
+            if (
+              restaurantItem.id.dishType === "Dish" ||
+              restaurantItem.id.dishType === "Dessert"
+            ) {
+              isComplete = true;
+            }
+            ammount +=
+              parseInt(restaurantItem.count) *
+              parseInt(restaurantItem.id.price);
+          })
+        );
+        totalrest.push({
+          restaurant: restaurantCart.restaurant,
+          value: ammount,
+        });
+        if (!isComplete) {
+          isComplete1 = false;
+          return;
+        }
       });
-      if (!isComplete) {
-        isComplete1 = false;
-        return;
-      }
-    });
-    if (!isComplete1) {
-      toast.error("Entrée/Boisson ne peut pas être commandé seul.");
-    } else {
-      const cardElement = elements.getElement(CardElement);
-      const cardObjectWithToken = await stripe.createToken(cardElement);
+      if (!isComplete1) {
+        toast.error("Entrée/Boisson ne peut pas être commandé seul.");
+      } else {
+        const cardElement = elements.getElement(CardElement);
+        const cardObjectWithToken = await stripe.createToken(cardElement);
 
-      onPayment(totalrest, { tokenId: cardObjectWithToken.token.id });
+        onPayment(totalrest, { tokenId: cardObjectWithToken.token.id });
+      }
+    } else {
+      toast.info(
+        "Les restaurants ne prennent plus de commandes aujourd'hui. Merci de revenir demain.",
+        options
+      );
     }
   };
 

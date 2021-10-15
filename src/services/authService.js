@@ -15,6 +15,14 @@ export async function login(email, password) {
   return data;
 }
 
+export async function suggestCompany(email, name) {
+  const { data } = await http.post(`${apiEndPoint}/suggestCompany`, {
+    email,
+    name,
+  });
+  return data;
+}
+
 export function getJwt() {
   return localStorage.getItem(token);
 }
@@ -32,4 +40,4 @@ export function logout() {
   return localStorage.removeItem(token);
 }
 
-export default { login, getJwt, getUserFromJwt, logout };
+export default { login, getJwt, getUserFromJwt, logout, suggestCompany };

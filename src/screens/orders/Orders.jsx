@@ -52,7 +52,7 @@ const Orders = () => {
         (item) =>
           item.company && item.company.block && item.company.block.pickUpTime
       );
-      setPickupTime(filtered[0].company.block.pickUpTime);
+      setPickupTime(filtered[0]?.company.block.pickUpTime);
     } else {
       setCarts([]);
       setPickupTime("");
@@ -93,7 +93,7 @@ const Orders = () => {
           Entreprise Carlier
         </Typography>
         <Typography style={{ padding: "10px 50px" }} variant="subtitle1">
-          A préparer pour {pickupTime ? pickupTime : "11h30"}
+          A préparer pour {pickupTime ? pickupTime : "--h--m"}
         </Typography>
       </Box>
       {carts.length > 0 ? (
