@@ -78,6 +78,7 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
     companyId: "",
     affiliate: "",
     terms: false,
@@ -220,6 +221,32 @@ const Signup = () => {
         });
         return errors;
       }),
+    phone: Joi.string()
+      .required()
+      .length(10)
+      .regex(/^((\+)33|0)[1-9](\d{2}){4}$/)
+      .label("Numéro de Téléphone")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+
+            case "string.length":
+              err.message = `${err.context.label} doit comporter 10 caractères!`;
+              break;
+
+            case "string.regex.base":
+              err.message = `${err.context.label} doit commencer par zéro!`;
+              break;
+
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
     companyId: Joi.string()
       .required()
       .label("Company")
@@ -333,22 +360,37 @@ const Signup = () => {
 
   const handleRegisterFormChange = ({ target }) => {
     const { name, value, checked } = target;
+
     if (value === "suggest") {
       setOpenSuggest(true);
     } else {
-      const allErrors = { ...registerErrors };
-      const errorMessage = validateProperty(name, value);
-      if (errorMessage) allErrors[name] = errorMessage;
-      else delete allErrors[name];
-      setRegisterErrors(allErrors);
+      if (name === "phone") {
+        if (value.length <= 10) {
+          const allErrors = { ...registerErrors };
+          const errorMessage = validateProperty(name, value);
+          if (errorMessage) allErrors[name] = errorMessage;
+          else delete allErrors[name];
+          setRegisterErrors(allErrors);
 
-      const formData = { ...registerData };
-      if (name === "terms") {
-        formData[name] = checked;
+          const formData = { ...registerData };
+          formData[name] = value;
+          setRegisterData(formData);
+        }
       } else {
-        formData[name] = value;
+        const allErrors = { ...registerErrors };
+        const errorMessage = validateProperty(name, value);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setRegisterErrors(allErrors);
+
+        const formData = { ...registerData };
+        if (name === "terms") {
+          formData[name] = checked;
+        } else {
+          formData[name] = value;
+        }
+        setRegisterData(formData);
       }
-      setRegisterData(formData);
     }
   };
 
@@ -384,6 +426,7 @@ const Signup = () => {
         email: "",
         password: "",
         confirmPassword: "",
+        phone: "",
         companyId: "",
         affiliate: "",
         terms: false,
@@ -446,7 +489,6 @@ const Signup = () => {
   const handleSuggestSubmit = (e) => {
     e.preventDefault();
     setDisable(true);
-    console.log("suggestedCompanyName", suggestedCompanyName);
     if (suggestErrors.email || suggestedCompanyName === "") {
       setDisable(false);
       return;
@@ -457,13 +499,21 @@ const Signup = () => {
 
   const registerUser = async () => {
     try {
-      const { firstName, lastName, email, password, companyId, affiliate } =
-        registerData;
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        companyId,
+        affiliate,
+      } = registerData;
       await register({
         firstName,
         lastName,
         email,
         password,
+        phone,
         companyId,
         affiliate,
       });

@@ -102,6 +102,16 @@ const SignupForm = ({
           </Grid>
         </Grid>
         <InputWithLabel
+          value={data["phone"]}
+          label="Phone"
+          required={true}
+          name="phone"
+          type="number"
+          handleChange={handleFormChange}
+          error={errors["phone"] ? true : false}
+          errorMessage={errors["phone"]}
+        />
+        <InputWithLabel
           label="Code affilié"
           value={data["affiliate"]}
           name="affiliate"
