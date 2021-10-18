@@ -91,6 +91,17 @@ const ProfileModal = ({
               error={errors["email"] ? true : false}
               errorMessage={errors["email"]}
             />
+
+            <InputWithLabel
+              value={profileDetails.phone}
+              label="Phone"
+              required={true}
+              name="phone"
+              type="number"
+              handleChange={handleProfileFormChange}
+              error={errors["phone"] ? true : false}
+              errorMessage={errors["phone"]}
+            />
             <Button
               className={classes.submitBtn}
               color="secondary"

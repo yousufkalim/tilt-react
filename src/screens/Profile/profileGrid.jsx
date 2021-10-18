@@ -61,6 +61,9 @@ const ProfileGrid = ({
                   {user.firstName + " " + user.lastName}
                 </Typography>
                 <Typography variant="subtitle2">{user.email}</Typography>
+                <Typography variant="subtitle2">
+                  {user.phone ? user.phone : "N/A"}
+                </Typography>
               </Grid>
             </Grid>
             <div className={classes.buttonDiv}>
