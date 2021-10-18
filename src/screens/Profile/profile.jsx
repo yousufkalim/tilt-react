@@ -79,6 +79,7 @@ const Profile = ({ onLogout }) => {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
   });
   const [cardDetails, setCardDetails] = useState({
     name: "",
@@ -100,6 +101,7 @@ const Profile = ({ onLogout }) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      phone: user.phone,
     });
     setselectedCompany(user.user.company._id);
   }, []);
@@ -165,14 +167,17 @@ const Profile = ({ onLogout }) => {
     });
   };
 
-  const handleProfileModalOpen = () => setOpenProfileModal(true);
-  const handleProfileModalClose = () => {
-    setOpenProfileModal(false);
+  const handleProfileModalOpen = () => {
     setProfileDetails({
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      phone: user.phone,
     });
+    setOpenProfileModal(true);
+  };
+  const handleProfileModalClose = () => {
+    setOpenProfileModal(false);
     setPasswordDetails({ password: "", confirmPassword: "" });
     setProfileErrors({});
     setProfileFormType("profile");
@@ -431,19 +436,61 @@ const Profile = ({ onLogout }) => {
         });
         return errors;
       }),
+    phone: Joi.string()
+      .required()
+      .length(10)
+      .regex(/^((\+)33|0)[1-9](\d{2}){4}$/)
+      .label("Numéro de Téléphone")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+
+            case "string.length":
+              err.message = `${err.context.label} doit comporter 10 caractères!`;
+              break;
+
+            case "string.regex.base":
+              err.message = `${err.context.label} doit commencer par zéro!`;
+              break;
+
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
   };
 
   const handleProfileForm = ({ target }) => {
     const { name, value } = target;
-    const allErrors = { ...profileErrors };
-    const errorMessage = validateProfileProperty(name, value);
-    if (errorMessage) allErrors[name] = errorMessage;
-    else delete allErrors[name];
-    setProfileErrors(allErrors);
+    if (name === "phone") {
+      if (value.length <= 10) {
+        const allErrors = { ...profileErrors };
+        const errorMessage = validateProfileProperty(name, value);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setProfileErrors(allErrors);
 
-    const formData = { ...profileDetails };
-    formData[name] = value;
-    setProfileDetails(formData);
+        const formData = { ...profileDetails };
+        formData[name] = value;
+        formData[name] = value;
+        setProfileDetails(formData);
+      }
+    } else {
+      const allErrors = { ...profileErrors };
+      const errorMessage = validateProfileProperty(name, value);
+      if (errorMessage) allErrors[name] = errorMessage;
+      else delete allErrors[name];
+      setProfileErrors(allErrors);
+
+      const formData = { ...profileDetails };
+      formData[name] = value;
+      formData[name] = value;
+      setProfileDetails(formData);
+    }
   };
 
   const validateProfileProperty = (name, value) => {
