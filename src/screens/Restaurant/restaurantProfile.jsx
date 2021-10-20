@@ -110,7 +110,7 @@ const RestaurantProfile = ({ onLogout }) => {
     image: "",
     description: "",
     specials: [],
-    isPromoted: "",
+    isPromoted: false,
   });
   const [unchangedDishData, setUnchangedDishData] = useState({});
   const [dishImageBlob, setDishImageBlob] = useState("");
@@ -198,7 +198,7 @@ const RestaurantProfile = ({ onLogout }) => {
       image: "",
       description: "",
       specials: [],
-      isPromoted: "",
+      isPromoted: false,
     });
     setDishErrors({});
     setDishImageBlob("");
