@@ -4,6 +4,7 @@ import DishImg from "../../images/Dish.png";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import fire from "../../images/icons/fire.png";
+import { baseUrl } from "../../config";
 
 const cardStyle = {
   backgroundColor: "#fff",
@@ -32,8 +33,6 @@ const useStyles = makeStyles({
 
 const Dish = ({ dish, handleSelect }) => {
   const classes = useStyles();
-  const baseUrl = process.env.REACT_APP_API_URL;
-
   return (
     <>
       <Box
