@@ -3,6 +3,7 @@ import { makeStyles, Box, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { EditIcon } from "../../images/images";
 import Switch from "@material-ui/core/Switch";
+import { baseUrl } from "../../config";
 
 const cardStyle = {
   backgroundColor: "#fff",
@@ -27,7 +28,6 @@ const useStyles = makeStyles({
 
 const Dish = ({ dish, handleEdit, handleDelete, handleDishStatus }) => {
   const classes = useStyles();
-  const baseUrl = process.env.REACT_APP_API_URL;
 
   return (
     <>

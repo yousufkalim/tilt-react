@@ -30,6 +30,7 @@ import { EditIcon } from "../../images/images";
 import RestaurantModal from "./restaurantModal";
 import BankDetailsModal from "./bankDetailsModal";
 import ReviewsModal from "./reviewsModal";
+import { baseUrl } from "../../config";
 
 const useStyles = makeStyles({
   main: {
@@ -89,7 +90,6 @@ const useStyles = makeStyles({
 
 const RestaurantProfile = ({ onLogout }) => {
   const classes = useStyles();
-  const baseUrl = process.env.REACT_APP_API_URL;
 
   const { user } = Store();
   const updateStore = UpdateStore();

@@ -2,6 +2,7 @@ import { Box, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import Button from "@material-ui/core/Button";
 import OneOrder from "./OneOrder";
+import { baseUrl } from "../../config";
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -31,7 +32,6 @@ const useStyles = makeStyles(() => ({
 
 const OrderCard = ({ order, onCompleteOrder }) => {
   const classes = useStyles();
-  const baseUrl = process.env.REACT_APP_API_URL;
 
   return (
     <Box className={classes.card}>
