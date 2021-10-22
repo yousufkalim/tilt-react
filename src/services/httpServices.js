@@ -1,10 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-
-axios.defaults.baseURL =
-  window.location.host === "tilt-entreprise.com"
-    ? "https://api.tilt-entreprise.com"
-    : process.env.REACT_APP_API_URL;
+import { baseUrl } from "../config";
+axios.defaults.baseURL = baseUrl;
 
 axios.interceptors.response.use(null, (error) => {
   const expected =

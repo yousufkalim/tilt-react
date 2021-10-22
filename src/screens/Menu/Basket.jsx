@@ -3,10 +3,9 @@ import { Typography, Box, IconButton } from "@material-ui/core";
 import { ReactComponent as RestaurantIcon } from "../../images/basket.svg";
 import ClearIcon from "@material-ui/icons/Clear";
 import { BsFillPlusCircleFill } from "react-icons/bs";
+import { baseUrl } from "../../config";
 
 const Basket = ({ item, restaurant, onDelete }) => {
-  const baseUrl = process.env.REACT_APP_API_URL;
-
   return (
     <Box
       display="flex"
