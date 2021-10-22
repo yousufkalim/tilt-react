@@ -41,8 +41,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import RestaurantProfile from "./screens/Restaurant/restaurantProfile";
 import Cgu from "../src/Components/Footer/cgu";
+import { stripePK } from "../src/config";
 
-const stripePromise = loadStripe(process.env.REACT_APP_Stripe_PK);
+const stripePromise = loadStripe(stripePK);
 
 const useStyles = makeStyles((theme) => ({
   root: {

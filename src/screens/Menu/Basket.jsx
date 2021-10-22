@@ -6,8 +6,6 @@ import { BsFillPlusCircleFill } from "react-icons/bs";
 import { baseUrl } from "../../config";
 
 const Basket = ({ item, restaurant, onDelete }) => {
-  const baseUrl = baseUrl;
-
   return (
     <Box
       display="flex"
