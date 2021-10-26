@@ -922,6 +922,14 @@ const RestaurantProfile = ({ onLogout }) => {
                 variant="contained"
                 size="small"
                 className={classes.dishBtn}
+                onClick={() => (window.location = "/addbank")}
+              >
+                ADD BANK
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                className={classes.dishBtn}
                 onClick={handleBankInfoOpen}
               >
                 Informations bancaires
