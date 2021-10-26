@@ -91,6 +91,7 @@ const BankDetailsModal = () => {
   const [personErrors, setPersonErrors] = useState({});
   const [companyErrors, setCompanyErrors] = useState({});
   const [bankErrors, setBankErrors] = useState({});
+  const [disable, setDisable] = useState(false);
 
   const handleNext = () => {
     if (activeStep === 0) {
@@ -186,15 +187,19 @@ const BankDetailsModal = () => {
   };
   const handleSubmit = async () => {
     try {
+      setDisable(true);
       let errors = validate(bankDetails, bankSchema);
       setBankErrors(errors || {});
       if (errors != null) return;
       await getToken();
       const data = await addRestaurantBank(appendBankInforToFormData());
       updateStore({ user: data.restaurant });
+      setDisable(false);
       console.log("success", data);
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     } catch (error) {
+      setDisable(false);
+      console.log(error.message);
       toast.error(error);
     }
   };
@@ -1163,6 +1168,7 @@ const BankDetailsModal = () => {
                     disabled={activeStep === 0}
                     onClick={handleBack}
                     sx={{ mr: 1 }}
+                    disabled={disable}
                   >
                     Back
                   </Button>
@@ -1172,6 +1178,7 @@ const BankDetailsModal = () => {
                         ? handleSubmit
                         : handleNext
                     }
+                    disabled={disable}
                   >
                     {activeStep === steps.length - 1 ? "Finish" : "Next"}
                   </Button>
