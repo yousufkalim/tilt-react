@@ -40,6 +40,7 @@ import { Logout } from "./images/images";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import RestaurantProfile from "./screens/Restaurant/restaurantProfile";
+import AddBank from "./screens/Restaurant/addBank";
 import Cgu from "../src/Components/Footer/cgu";
 import { stripePK } from "../src/config";
 
@@ -256,6 +257,11 @@ function App() {
                 {role === "restaurant" && (
                   <Route path="/profile">
                     <RestaurantProfile onLogout={handleLogout} />
+                  </Route>
+                )}{" "}
+                {role === "restaurant" && (
+                  <Route path="/addbank">
+                    <AddBank onLogout={handleLogout} />
                   </Route>
                 )}
                 <Route exact path="/">
