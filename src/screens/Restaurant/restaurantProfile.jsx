@@ -110,7 +110,7 @@ const RestaurantProfile = ({ onLogout }) => {
     image: "",
     description: "",
     specials: [],
-    isPromoted: "",
+    isPromoted: false,
   });
   const [unchangedDishData, setUnchangedDishData] = useState({});
   const [dishImageBlob, setDishImageBlob] = useState("");
@@ -198,7 +198,7 @@ const RestaurantProfile = ({ onLogout }) => {
       image: "",
       description: "",
       specials: [],
-      isPromoted: "",
+      isPromoted: false,
     });
     setDishErrors({});
     setDishImageBlob("");
@@ -918,6 +918,14 @@ const RestaurantProfile = ({ onLogout }) => {
               />
               <Typography variant="body2">{user.address.street}</Typography>
               <Typography variant="body2">{user.address.city}</Typography>
+              <Button
+                variant="contained"
+                size="small"
+                className={classes.dishBtn}
+                onClick={() => (window.location = "/addbank")}
+              >
+                ADD BANK
+              </Button>
               <Button
                 variant="contained"
                 size="small"

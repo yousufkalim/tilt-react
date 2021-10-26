@@ -42,6 +42,11 @@ const editRestaurant = async (body) => {
   return data;
 };
 
+const addRestaurantBank = async (body) => {
+  const { data } = await http.put(`${apiEndPoint}/add-bank`, body);
+  return data;
+};
+
 const editRestaurantBank = async (body) => {
   const { data } = await http.put(`${apiEndPoint}/edit-bank`, body);
   return data;
@@ -74,6 +79,7 @@ export {
   createDish,
   getDishById,
   updateDish,
+  addRestaurantBank,
   editRestaurant,
   editRestaurantBank,
   getRestaurantCart,
