@@ -109,20 +109,30 @@ const BankDetailsModal = () => {
         allErrors["dob"] = "Age should be above 13";
       }
       setPersonErrors(allErrors || {});
-      if (errors != null) {
-      }
+
       if (front === "") {
         setFrontError(true);
+      } else {
+        setFrontError(false);
       }
       if (back === "") {
         setBackError(true);
+      } else {
+        setBackError(false);
+      }
+      if (errors != null || front === "" || back === "") {
+        return;
+      } else {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
       }
     } else if (activeStep === 1) {
       let errors = validate(companyDetails, companySchema);
       setCompanyErrors(errors || {});
       if (errors != null) return;
+      else {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      }
     }
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
