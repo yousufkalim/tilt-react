@@ -160,7 +160,7 @@ function App() {
 
   const [open, setOpen] = React.useState(false);
   const { pathname } = useLocation();
-  const { token: authToken, role } = Store();
+  const { token: authToken, role, user } = Store();
   const updateStore = UpdateStore();
   const history = useHistory();
   const handleDrawerClose = () => {
@@ -258,10 +258,14 @@ function App() {
                   <Route path="/profile">
                     <RestaurantProfile onLogout={handleLogout} />
                   </Route>
-                )}{" "}
+                )}
                 {role === "restaurant" && (
                   <Route path="/addbank">
-                    <AddBank onLogout={handleLogout} />
+                    {user.restaurant.bank ? (
+                      <RestaurantProfile onLogout={handleLogout} />
+                    ) : (
+                      <AddBank onLogout={handleLogout} />
+                    )}
                   </Route>
                 )}
                 <Route exact path="/">
