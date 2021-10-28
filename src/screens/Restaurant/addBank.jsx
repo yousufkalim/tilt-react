@@ -45,6 +45,9 @@ const useStyles = makeStyles({
   },
 });
 
+let token = "";
+let personToken = "";
+
 const BankDetailsModal = () => {
   const classes = useStyles();
 
@@ -59,14 +62,14 @@ const BankDetailsModal = () => {
     postalCode: "",
     city: "",
     title: "",
-    director: false,
-    executive: false,
-    owner: false,
-    representative: false,
+    director: true,
+    executive: true,
+    owner: true,
+    representative: true,
   });
   const stripe = useStripe();
-  const [token, setToken] = useState("");
-  const [personToken, setPersonToken] = useState("");
+  // const [token, setToken] = useState("");
+  // const [personToken, setPersonToken] = useState("");
 
   const { user } = Store();
   const updateStore = UpdateStore();
@@ -265,8 +268,29 @@ const BankDetailsModal = () => {
       setDisable(true);
       let errors = validate(bankDetails, bankSchema);
       setBankErrors(errors || {});
-      if (errors != null) return;
-      await getToken();
+      if (errors != null) {
+        setDisable(false);
+        return;
+      }
+      let err = await getToken();
+      if (err && err.length != 0) {
+        toast.error(err[0]);
+        setDisable(false);
+        return;
+      }
+      let data = await addRes();
+    } catch (error) {
+      setDisable(false);
+      if ({ ...error }) {
+        toast.error({ ...error }.response.data.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  const addRes = async () => {
+    try {
       const data = await addRestaurantBank(appendBankInforToFormData());
       updateStore({ user: data.restaurant });
       setDisable(false);
@@ -293,7 +317,6 @@ const BankDetailsModal = () => {
     fd.append("back", back);
     fd.append("token", token.token.id);
     fd.append("personToken", personToken.token.id);
-
     return fd;
   };
 
@@ -321,41 +344,20 @@ const BankDetailsModal = () => {
     const frontfileData = await frontfileResult.json();
     const backfileData = await backfileResult.json();
 
-    try {
-      //Creating account token//
-      const accountResult = await stripe.createToken("account", {
-        business_type: "company",
-        company: {
-          name: companyDetails["name"],
-          address: {
-            line1: companyDetails["address"],
-            postal_code: companyDetails["postalCode"],
-            city: companyDetails["city"],
-          },
-          phone: companyDetails["phone"],
-          tax_id: companyDetails["taxId"],
-          directors_provided: personDetails["director"],
-          executives_provided: personDetails["executive"],
-          owners_provided: personDetails["owner"],
-          verification: {
-            document: {
-              front: frontfileData.id,
-              back: backfileData.id,
-            },
-          },
-        },
-        tos_shown_and_accepted: true,
-      });
+    let pError = await getPersonToken(frontfileData, backfileData);
+    let aError = await getAccountToken(frontfileData, backfileData);
 
-      if (accountResult.error) {
-        toast.error(accountResult.error.message);
-        return;
-      } else {
-        setToken(accountResult);
-      }
-    } catch (error) {
-      toast.error(error);
+    let errors = [];
+    if (pError) {
+      errors.push(pError);
     }
+    if (aError) {
+      errors.push(aError);
+    }
+    return errors;
+  };
+
+  const getPersonToken = async (frontfileData, backfileData) => {
     try {
       // Creating person token//
       let day = moment(personDetails["dob"]).format("D");
@@ -399,10 +401,45 @@ const BankDetailsModal = () => {
       };
       const personResult = await stripe.createToken("person", data);
       if (personResult.error) {
-        toast.error(personResult.error.message);
-        return;
+        return personResult.error.message;
       } else {
-        setPersonToken(personResult);
+        personToken = personResult;
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const getAccountToken = async (frontfileData, backfileData) => {
+    try {
+      //Creating account token//
+      const accountResult = await stripe.createToken("account", {
+        business_type: "company",
+        company: {
+          name: companyDetails["name"],
+          address: {
+            line1: companyDetails["address"],
+            postal_code: companyDetails["postalCode"],
+            city: companyDetails["city"],
+          },
+          phone: companyDetails["phone"],
+          tax_id: companyDetails["taxId"],
+          directors_provided: personDetails["director"],
+          executives_provided: personDetails["executive"],
+          owners_provided: personDetails["owner"],
+          verification: {
+            document: {
+              front: frontfileData.id,
+              back: backfileData.id,
+            },
+          },
+        },
+        tos_shown_and_accepted: true,
+      });
+      if (accountResult.error) {
+        return accountResult.error.message;
+      } else {
+        token = accountResult;
       }
     } catch (error) {
       toast.error(error);
@@ -974,13 +1011,13 @@ const BankDetailsModal = () => {
                     errorMessage={personErrors["title"]}
                   />
 
-                  <FormLabel
+                  {/* <FormLabel
                     component="legend"
                     style={{ color: "#d10248", marginBottom: "20px" }}
                   >
                     Role (select your role(s) in the company)
                   </FormLabel>
-                  <div
+                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -1034,7 +1071,7 @@ const BankDetailsModal = () => {
                       }
                       label="Representative"
                     />
-                  </div>
+                  </div> */}
 
                   <Typography
                     component="div"
