@@ -45,6 +45,7 @@ import Cgu from "../src/Components/Footer/cgu";
 import { stripePK } from "../src/config";
 
 const stripePromise = loadStripe(stripePK);
+let path = window.location.pathname.slice(0, 9);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -159,6 +160,7 @@ function App() {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
+  const [inNative, setInNative] = React.useState(false);
   const { pathname } = useLocation();
   const { token: authToken, role, user } = Store();
   const updateStore = UpdateStore();
@@ -189,7 +191,12 @@ function App() {
   };
 
   useEffect(() => {
-    const token = auth.getJwt();
+    let token = auth.getJwt();
+    if (path === "/addbank/") {
+      setInNative(true);
+      token = "Bearer " + window.location.pathname.slice(9);
+    }
+
     if (token) {
       getLoggedUser(token);
       handleGetUserCart();
@@ -274,218 +281,229 @@ function App() {
               </Switch>
             )}
           </Box>
-          {pathname !== "/" && pathname !== "/signup" && pathname !== "/cgu" && (
-            <>
-              <Box>
-                <Drawer
-                  variant="permanent"
-                  className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                  })}
-                  classes={{
-                    paper: clsx({
+          {pathname !== "/" &&
+            pathname !== "/signup" &&
+            pathname !== "/cgu" &&
+            inNative && (
+              <>
+                <Box>
+                  <Drawer
+                    variant="permanent"
+                    className={clsx(classes.drawer, {
                       [classes.drawerOpen]: open,
                       [classes.drawerClose]: !open,
-                    }),
-                  }}
-                >
-                  <div className={classes.toolbar}>
-                    <div
-                      style={{
-                        marginTop: "20px",
-                        textAlign: "center",
-                        width: "100%",
-                      }}
-                      onClick={handleDrawerClose}
-                    >
-                      <img src={logo} alt="Home Icon" />
-                    </div>
-                  </div>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="space-around"
-                    style={{ height: "100%" }}
+                    })}
+                    classes={{
+                      paper: clsx({
+                        [classes.drawerOpen]: open,
+                        [classes.drawerClose]: !open,
+                      }),
+                    }}
                   >
-                    <List>
-                      {role === "user" && (
-                        <>
-                          {" "}
-                          <ListItem
-                            to="/menu"
-                            component={NavLink}
-                            activeClassName={
-                              open ? classes.active : classes.activeOpen
-                            }
-                            className={classes.Link}
-                          >
-                            <ListItemIcon
+                    <div className={classes.toolbar}>
+                      <div
+                        style={{
+                          marginTop: "20px",
+                          textAlign: "center",
+                          width: "100%",
+                        }}
+                        onClick={handleDrawerClose}
+                      >
+                        <img src={logo} alt="Home Icon" />
+                      </div>
+                    </div>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="space-around"
+                      style={{ height: "100%" }}
+                    >
+                      <List>
+                        {role === "user" && (
+                          <>
+                            {" "}
+                            <ListItem
                               to="/menu"
                               component={NavLink}
-                              className={
-                                pathname === "/menu"
-                                  ? classes.activeListIcon
-                                  : classes.listIcon
+                              activeClassName={
+                                open ? classes.active : classes.activeOpen
                               }
+                              className={classes.Link}
                             >
-                              <HomeIcon
-                                stroke={
-                                  pathname === "/menu" ? "white" : "#6f7070"
+                              <ListItemIcon
+                                to="/menu"
+                                component={NavLink}
+                                className={
+                                  pathname === "/menu"
+                                    ? classes.activeListIcon
+                                    : classes.listIcon
                                 }
+                              >
+                                <HomeIcon
+                                  stroke={
+                                    pathname === "/menu" ? "white" : "#6f7070"
+                                  }
+                                />
+                              </ListItemIcon>
+                              <ListItemText
+                                activeClassName={classes.active}
+                                primary="Accueil"
                               />
-                            </ListItemIcon>
-                            <ListItemText
+                            </ListItem>
+                            <ListItem
+                              button
+                              to="/history"
+                              component={NavLink}
                               activeClassName={classes.active}
-                              primary="Accueil"
-                            />
-                          </ListItem>
-                          <ListItem
-                            button
-                            to="/history"
-                            component={NavLink}
-                            activeClassName={classes.active}
-                            className={classes.Link}
-                          >
-                            <ListItemIcon
-                              className={
-                                pathname === "/history"
-                                  ? classes.activeListIcon
-                                  : classes.listIcon
-                              }
+                              className={classes.Link}
                             >
-                              <HistoricIcon
-                                stroke={
-                                  pathname === "/history" ? "white" : "#6f7070"
+                              <ListItemIcon
+                                className={
+                                  pathname === "/history"
+                                    ? classes.activeListIcon
+                                    : classes.listIcon
                                 }
-                              />
-                            </ListItemIcon>
-                            <ListItemText primary="Historique" />
-                          </ListItem>
-                          <ListItem
-                            button
-                            to="/profile"
-                            component={NavLink}
-                            className={classes.Link}
-                            exact
-                            activeClassName={classes.active}
-                          >
-                            <ListItemIcon
-                              className={
-                                pathname === "/profile"
-                                  ? classes.activeListIcon
-                                  : classes.listIcon
-                              }
-                            >
-                              <UserIcon
-                                fill="rgba(0,0,0,0)"
-                                stroke={
-                                  pathname === "/profile" ? "white" : "#6f7070"
-                                }
-                              />
-                            </ListItemIcon>
-                            <ListItemText primary="Mon compte" />
-                          </ListItem>
-                        </>
-                      )}
-                      {role === "restaurant" && (
-                        <>
-                          <ListItem
-                            to="/order"
-                            component={NavLink}
-                            activeClassName={
-                              open ? classes.active : classes.activeOpen
-                            }
-                            className={classes.Link}
-                          >
-                            <ListItemIcon
-                              className={
-                                pathname === "/order"
-                                  ? classes.activeListIcon
-                                  : classes.listIcon
-                              }
-                            >
-                              <HomeIcon
-                                stroke={
-                                  pathname === "/order" ? "white" : "#6f7070"
-                                }
-                              />
-                            </ListItemIcon>
-                            <ListItemText
+                              >
+                                <HistoricIcon
+                                  stroke={
+                                    pathname === "/history"
+                                      ? "white"
+                                      : "#6f7070"
+                                  }
+                                />
+                              </ListItemIcon>
+                              <ListItemText primary="Historique" />
+                            </ListItem>
+                            <ListItem
+                              button
+                              to="/profile"
+                              component={NavLink}
+                              className={classes.Link}
+                              exact
                               activeClassName={classes.active}
-                              primary="Accueil"
-                            />
-                          </ListItem>
-                          <ListItem
-                            button
-                            to="/history"
-                            component={NavLink}
-                            activeClassName={
-                              open ? classes.active : classes.activeOpen
-                            }
-                            className={classes.Link}
-                          >
-                            <ListItemIcon
-                              className={
-                                pathname === "/history"
-                                  ? classes.activeListIcon
-                                  : classes.listIcon
-                              }
                             >
-                              <HistoricIcon
-                                stroke={
-                                  pathname === "/history" ? "white" : "#6f7070"
+                              <ListItemIcon
+                                className={
+                                  pathname === "/profile"
+                                    ? classes.activeListIcon
+                                    : classes.listIcon
                                 }
-                              />
-                            </ListItemIcon>
-                            <ListItemText primary="Historique" />
-                          </ListItem>
-                          <ListItem
-                            button
-                            to="/profile"
-                            component={NavLink}
-                            className={classes.Link}
-                            exact
-                            activeClassName={classes.active}
-                          >
-                            <ListItemIcon
-                              className={
-                                pathname === "/profile"
-                                  ? classes.activeListIcon
-                                  : classes.listIcon
+                              >
+                                <UserIcon
+                                  fill="rgba(0,0,0,0)"
+                                  stroke={
+                                    pathname === "/profile"
+                                      ? "white"
+                                      : "#6f7070"
+                                  }
+                                />
+                              </ListItemIcon>
+                              <ListItemText primary="Mon compte" />
+                            </ListItem>
+                          </>
+                        )}
+                        {role === "restaurant" && (
+                          <>
+                            <ListItem
+                              to="/order"
+                              component={NavLink}
+                              activeClassName={
+                                open ? classes.active : classes.activeOpen
                               }
+                              className={classes.Link}
                             >
-                              <UserIcon
-                                fill="rgba(0,0,0,0)"
-                                stroke={
-                                  pathname === "/profile" ? "white" : "#6f7070"
+                              <ListItemIcon
+                                className={
+                                  pathname === "/order"
+                                    ? classes.activeListIcon
+                                    : classes.listIcon
                                 }
+                              >
+                                <HomeIcon
+                                  stroke={
+                                    pathname === "/order" ? "white" : "#6f7070"
+                                  }
+                                />
+                              </ListItemIcon>
+                              <ListItemText
+                                activeClassName={classes.active}
+                                primary="Accueil"
                               />
-                            </ListItemIcon>
-                            <ListItemText primary="Mon compte" />
-                          </ListItem>
-                        </>
-                      )}
-                    </List>
-                  </Box>
+                            </ListItem>
+                            <ListItem
+                              button
+                              to="/history"
+                              component={NavLink}
+                              activeClassName={
+                                open ? classes.active : classes.activeOpen
+                              }
+                              className={classes.Link}
+                            >
+                              <ListItemIcon
+                                className={
+                                  pathname === "/history"
+                                    ? classes.activeListIcon
+                                    : classes.listIcon
+                                }
+                              >
+                                <HistoricIcon
+                                  stroke={
+                                    pathname === "/history"
+                                      ? "white"
+                                      : "#6f7070"
+                                  }
+                                />
+                              </ListItemIcon>
+                              <ListItemText primary="Historique" />
+                            </ListItem>
+                            <ListItem
+                              button
+                              to="/profile"
+                              component={NavLink}
+                              className={classes.Link}
+                              exact
+                              activeClassName={classes.active}
+                            >
+                              <ListItemIcon
+                                className={
+                                  pathname === "/profile"
+                                    ? classes.activeListIcon
+                                    : classes.listIcon
+                                }
+                              >
+                                <UserIcon
+                                  fill="rgba(0,0,0,0)"
+                                  stroke={
+                                    pathname === "/profile"
+                                      ? "white"
+                                      : "#6f7070"
+                                  }
+                                />
+                              </ListItemIcon>
+                              <ListItemText primary="Mon compte" />
+                            </ListItem>
+                          </>
+                        )}
+                      </List>
+                    </Box>
 
-                  <List>
-                    <ListItem
-                      component="nav"
-                      button
-                      className={classes.Link}
-                      onClick={handleLogout}
-                    >
-                      <ListItemIcon className={classes.listIcon}>
-                        <img src={Logout} alt="logout" />
-                      </ListItemIcon>
-                      <ListItemText primary="Déconnexion" />
-                    </ListItem>
-                  </List>
-                </Drawer>
-              </Box>
-            </>
-          )}
+                    <List>
+                      <ListItem
+                        component="nav"
+                        button
+                        className={classes.Link}
+                        onClick={handleLogout}
+                      >
+                        <ListItemIcon className={classes.listIcon}>
+                          <img src={Logout} alt="logout" />
+                        </ListItemIcon>
+                        <ListItemText primary="Déconnexion" />
+                      </ListItem>
+                    </List>
+                  </Drawer>
+                </Box>
+              </>
+            )}
         </div>
       </>
     </Elements>
