@@ -45,6 +45,9 @@ const useStyles = makeStyles({
   },
 });
 
+let token = "";
+let personToken = "";
+
 const BankDetailsModal = () => {
   const classes = useStyles();
 
@@ -53,26 +56,29 @@ const BankDetailsModal = () => {
   const [personDetails, setpersonDetails] = useState({
     firstName: "",
     lastName: "",
-    dob: "",
+    dob: "2000-01-01",
     phone: "",
     address: "",
     postalCode: "",
     city: "",
     title: "",
-    director: false,
-    executive: false,
-    owner: false,
-    representative: false,
+    director: true,
+    executive: true,
+    owner: true,
+    representative: true,
   });
   const stripe = useStripe();
-  const [token, setToken] = useState("");
-  const [personToken, setPersonToken] = useState("");
+  // const [token, setToken] = useState("");
+  // const [personToken, setPersonToken] = useState("");
 
   const { user } = Store();
   const updateStore = UpdateStore();
 
   const [front, setFront] = useState("");
   const [back, setBack] = useState("");
+
+  const [frontError, setFrontError] = useState(false);
+  const [backError, setBackError] = useState(false);
 
   const [companyDetails, setCompanyDetails] = useState({
     name: "",
@@ -96,12 +102,20 @@ const BankDetailsModal = () => {
   const handleNext = () => {
     if (activeStep === 0) {
       let errors = validate(personDetails, personSchema);
-      setPersonErrors(errors || {});
-      if (errors != null) {
-        return;
+      let allErrors = { ...errors };
+
+      let diff = moment().diff(personDetails["dob"], "years", false);
+      if (diff < 13) {
+        allErrors["dob"] = "Age should be above 13";
       }
-      if (front === "" || back === "") {
-        return;
+      setPersonErrors(allErrors || {});
+      if (errors != null) {
+      }
+      if (front === "") {
+        setFrontError(true);
+      }
+      if (back === "") {
+        setBackError(true);
       }
     } else if (activeStep === 1) {
       let errors = validate(companyDetails, companySchema);
@@ -125,6 +139,37 @@ const BankDetailsModal = () => {
       name === "representative"
     ) {
       setpersonDetails((prev) => ({ ...prev, [name]: checked }));
+    } else if (name === "dob") {
+      let diff = moment().diff(value, "years", false);
+      if (diff >= 13) {
+        setpersonDetails((prev) => ({ ...prev, [name]: value }));
+        const allErrors = { ...personErrors };
+        delete allErrors[name];
+        setPersonErrors(allErrors);
+      } else {
+        setpersonDetails((prev) => ({ ...prev, [name]: value }));
+        const allErrors = { ...personErrors };
+        allErrors[name] = "Age should be above 13";
+        setPersonErrors(allErrors);
+      }
+    } else if (name === "phone") {
+      if (value.length <= 10) {
+        const allErrors = { ...personErrors };
+        const errorMessage = validateProperty(name, value, personSchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setPersonErrors(allErrors);
+        setpersonDetails((prev) => ({ ...prev, [name]: value }));
+      }
+    } else if (name === "postalCode") {
+      if (value.length <= 5) {
+        const allErrors = { ...personErrors };
+        const errorMessage = validateProperty(name, value, personSchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setPersonErrors(allErrors);
+        setpersonDetails((prev) => ({ ...prev, [name]: value }));
+      }
     } else if (name === "front") {
       setFront(files[0]);
     } else if (name === "back") {
@@ -135,32 +180,65 @@ const BankDetailsModal = () => {
       if (errorMessage) allErrors[name] = errorMessage;
       else delete allErrors[name];
       setPersonErrors(allErrors);
-
       setpersonDetails((prev) => ({ ...prev, [name]: value }));
     }
   };
   const handleCompanyDataChange = (e) => {
     const { name, value } = e.target;
-    {
+    if (name === "phone") {
+      if (value.length <= 10) {
+        const allErrors = { ...companyErrors };
+        const errorMessage = validateProperty(name, value, companySchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setCompanyErrors(allErrors);
+        setCompanyDetails((prev) => ({ ...prev, [name]: value }));
+      }
+    } else if (name === "taxId") {
+      if (value.length <= 10) {
+        const allErrors = { ...companyErrors };
+        const errorMessage = validateProperty(name, value, companySchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setCompanyErrors(allErrors);
+        setCompanyDetails((prev) => ({ ...prev, [name]: value }));
+      }
+    } else if (name === "postalCode") {
+      if (value.length <= 5) {
+        const allErrors = { ...personErrors };
+        const errorMessage = validateProperty(name, value, companySchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setCompanyErrors(allErrors);
+        setCompanyDetails((prev) => ({ ...prev, [name]: value }));
+      }
+    } else {
       const allErrors = { ...companyErrors };
       const errorMessage = validateProperty(name, value, companySchema);
       if (errorMessage) allErrors[name] = errorMessage;
       else delete allErrors[name];
       setCompanyErrors(allErrors);
-
       setCompanyDetails((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   const handleBankDataChange = (e) => {
     const { name, value } = e.target;
-    {
+    if (name === "iban") {
+      if (value.length <= 27) {
+        const allErrors = { ...bankErrors };
+        const errorMessage = validateProperty(name, value, bankSchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setBankErrors(allErrors);
+        setBankDetails((prev) => ({ ...prev, [name]: value }));
+      }
+    } else {
       const allErrors = { ...bankErrors };
       const errorMessage = validateProperty(name, value, bankSchema);
       if (errorMessage) allErrors[name] = errorMessage;
       else delete allErrors[name];
       setBankErrors(allErrors);
-
       setBankDetails((prev) => ({ ...prev, [name]: value }));
     }
   };
@@ -190,17 +268,41 @@ const BankDetailsModal = () => {
       setDisable(true);
       let errors = validate(bankDetails, bankSchema);
       setBankErrors(errors || {});
-      if (errors != null) return;
-      await getToken();
+      if (errors != null) {
+        setDisable(false);
+        return;
+      }
+      let err = await getToken();
+      if (err && err.length != 0) {
+        toast.error(err[0]);
+        setDisable(false);
+        return;
+      }
+      let data = await addRes();
+    } catch (error) {
+      setDisable(false);
+      if ({ ...error }) {
+        toast.error({ ...error }.response.data.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  const addRes = async () => {
+    try {
       const data = await addRestaurantBank(appendBankInforToFormData());
       updateStore({ user: data.restaurant });
       setDisable(false);
-      console.log("success", data);
+      toast.success("Success");
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     } catch (error) {
       setDisable(false);
-      console.log(error.message);
-      toast.error(error);
+      if ({ ...error }) {
+        toast.error({ ...error }.response.data.message);
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -215,72 +317,54 @@ const BankDetailsModal = () => {
     fd.append("back", back);
     fd.append("token", token.token.id);
     fd.append("personToken", personToken.token.id);
-
     return fd;
   };
 
   const getToken = async () => {
+    //Retrieving front and back documentation ids//
+    const frontData = new FormData();
+    frontData.append("file", front);
+    frontData.append("purpose", "identity_document");
+    const frontfileResult = await fetch("https://uploads.stripe.com/v1/files", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${stripePK}` },
+      body: frontData,
+    });
+    const backData = new FormData();
+
+    backData.append("file", back);
+    backData.append("purpose", "identity_document");
+
+    const backfileResult = await fetch("https://uploads.stripe.com/v1/files", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${stripePK}` },
+      body: frontData,
+    });
+
+    const frontfileData = await frontfileResult.json();
+    const backfileData = await backfileResult.json();
+
+    let pError = await getPersonToken(frontfileData, backfileData);
+    let aError = await getAccountToken(frontfileData, backfileData);
+
+    let errors = [];
+    if (pError) {
+      errors.push(pError);
+    }
+    if (aError) {
+      errors.push(aError);
+    }
+    return errors;
+  };
+
+  const getPersonToken = async (frontfileData, backfileData) => {
     try {
-      //Retrieving front and back documentation ids//
-      const frontData = new FormData();
-      frontData.append("file", front);
-      frontData.append("purpose", "identity_document");
-      const frontfileResult = await fetch(
-        "https://uploads.stripe.com/v1/files",
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${stripePK}` },
-          body: frontData,
-        }
-      );
-      const backData = new FormData();
-
-      backData.append("file", back);
-      backData.append("purpose", "identity_document");
-
-      const backfileResult = await fetch(
-        "https://uploads.stripe.com/v1/files",
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${stripePK}` },
-          body: frontData,
-        }
-      );
-
-      const frontfileData = await frontfileResult.json();
-      const backfileData = await backfileResult.json();
-
-      //Creating account token//
-      const accountResult = await stripe.createToken("account", {
-        business_type: "company",
-        company: {
-          name: companyDetails["name"],
-          address: {
-            line1: companyDetails["address"],
-            postal_code: companyDetails["postalCode"],
-            city: companyDetails["city"],
-          },
-          phone: companyDetails["phone"],
-          tax_id: companyDetails["taxId"],
-          directors_provided: personDetails["director"],
-          executives_provided: personDetails["executive"],
-          owners_provided: personDetails["owner"],
-          verification: {
-            document: {
-              front: frontfileData.id,
-              back: backfileData.id,
-            },
-          },
-        },
-        tos_shown_and_accepted: true,
-      });
-
       // Creating person token//
       let day = moment(personDetails["dob"]).format("D");
       let month = moment(personDetails["dob"]).format("M");
       let year = moment(personDetails["dob"]).format("Y");
 
-      const personResult = await stripe.createToken("person", {
+      let data = {
         person: {
           first_name: personDetails["firstName"],
           last_name: personDetails["lastName"],
@@ -314,45 +398,52 @@ const BankDetailsModal = () => {
             },
           },
         },
-      });
-
-      setPersonToken(personResult);
-      setToken(accountResult);
+      };
+      const personResult = await stripe.createToken("person", data);
+      if (personResult.error) {
+        return personResult.error.message;
+      } else {
+        personToken = personResult;
+      }
     } catch (error) {
-      console.log("token error", error);
+      toast.error(error);
     }
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-    setpersonDetails({
-      firstName: "",
-      lastName: "",
-      dob: "",
-      phone: "",
-      address: "",
-      postalCode: "",
-      city: "",
-      title: "",
-      director: false,
-      executive: false,
-      owner: false,
-      representative: false,
-      front: "",
-      back: "",
-    });
-    setCompanyDetails({
-      name: "",
-      phone: "",
-      address: "",
-      postalCode: "",
-      city: "",
-      taxId: "",
-    });
-    setBankDetails({
-      bankName: "",
-      iban: "",
-    });
+  const getAccountToken = async (frontfileData, backfileData) => {
+    try {
+      //Creating account token//
+      const accountResult = await stripe.createToken("account", {
+        business_type: "company",
+        company: {
+          name: companyDetails["name"],
+          address: {
+            line1: companyDetails["address"],
+            postal_code: companyDetails["postalCode"],
+            city: companyDetails["city"],
+          },
+          phone: companyDetails["phone"],
+          tax_id: companyDetails["taxId"],
+          directors_provided: personDetails["director"],
+          executives_provided: personDetails["executive"],
+          owners_provided: personDetails["owner"],
+          verification: {
+            document: {
+              front: frontfileData.id,
+              back: backfileData.id,
+            },
+          },
+        },
+        tos_shown_and_accepted: true,
+      });
+      if (accountResult.error) {
+        return accountResult.error.message;
+      } else {
+        token = accountResult;
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const personSchema = {
@@ -402,6 +493,7 @@ const BankDetailsModal = () => {
       }),
 
     dob: Joi.date()
+      .label("Date of birth")
       .required()
       .error((errors) => {
         errors.forEach((err) => {
@@ -419,6 +511,8 @@ const BankDetailsModal = () => {
     phone: Joi.string()
       .required()
       .label("Téléphone")
+      .min(10)
+      .max(10)
       .error((errors) => {
         errors.forEach((err) => {
           switch (err.type) {
@@ -459,7 +553,7 @@ const BankDetailsModal = () => {
         return errors;
       }),
     city: Joi.string()
-      .min(2)
+      .min(3)
       .required()
       .label("Ville")
       .error((errors) => {
@@ -481,7 +575,8 @@ const BankDetailsModal = () => {
         return errors;
       }),
     postalCode: Joi.string()
-      .min(3)
+      .min(5)
+      .max(5)
       .required()
       .label("Code Postal")
       .error((errors) => {
@@ -597,7 +692,7 @@ const BankDetailsModal = () => {
         return errors;
       }),
     city: Joi.string()
-      .min(2)
+      .min(3)
       .required()
       .label("Ville")
       .error((errors) => {
@@ -619,7 +714,8 @@ const BankDetailsModal = () => {
         return errors;
       }),
     postalCode: Joi.string()
-      .min(3)
+      .min(5)
+      .max(5)
       .required()
       .label("Code Postal")
       .error((errors) => {
@@ -641,7 +737,8 @@ const BankDetailsModal = () => {
         return errors;
       }),
     taxId: Joi.string()
-      .min(3)
+      .min(10)
+      .max(10)
       .required()
       .label("Tax ID")
       .error((errors) => {
@@ -688,6 +785,7 @@ const BankDetailsModal = () => {
       }),
     iban: Joi.string()
       .min(27)
+      .max(27)
       .required()
       .label("Iban")
       .error((errors) => {
@@ -756,12 +854,8 @@ const BankDetailsModal = () => {
                 sx={{ mt: 2, mb: 1 }}
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                All steps completed - you&apos;re finished
+                Your account has been connected.
               </Typography>
-              {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                <Box sx={{ flex: "1 1 auto" }} />
-                <Button onClick={handleReset}>Reset</Button>
-              </Box> */}
             </React.Fragment>
           ) : (
             <React.Fragment>
@@ -809,7 +903,11 @@ const BankDetailsModal = () => {
                   >
                     <div style={{ width: "48%", height: "50%" }}>
                       <TextField
-                        value={personDetails["dob"]}
+                        value={
+                          personDetails["dob"]
+                            ? personDetails["dob"]
+                            : "2000-01-01"
+                        }
                         name="dob"
                         id="dob"
                         label="Date of Birth"
@@ -834,7 +932,7 @@ const BankDetailsModal = () => {
                           variant="caption"
                           style={{ color: "red" }}
                         >
-                          Date de Naissance is required and must be a valid Date
+                          {personErrors["dob"]}
                         </Typography>
                       )}
                     </div>
@@ -882,7 +980,7 @@ const BankDetailsModal = () => {
                         name="postalCode"
                         label="Postal Code"
                         required={true}
-                        type="text"
+                        type="number"
                         handleChange={(e) => handlePersonDataChange(e)}
                         error={personErrors["postalCode"] ? true : false}
                         errorMessage={personErrors["postalCode"]}
@@ -913,13 +1011,13 @@ const BankDetailsModal = () => {
                     errorMessage={personErrors["title"]}
                   />
 
-                  <FormLabel
+                  {/* <FormLabel
                     component="legend"
                     style={{ color: "#d10248", marginBottom: "20px" }}
                   >
                     Role (select your role(s) in the company)
                   </FormLabel>
-                  <div
+                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -973,7 +1071,7 @@ const BankDetailsModal = () => {
                       }
                       label="Representative"
                     />
-                  </div>
+                  </div> */}
 
                   <Typography
                     component="div"
@@ -985,7 +1083,15 @@ const BankDetailsModal = () => {
 
                   <div className={classes.imgDiv}>
                     <div>
-                      <label htmlFor="front">
+                      <label
+                        htmlFor="front"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "flex-start",
+                        }}
+                      >
                         <input
                           style={{ display: "none" }}
                           id="front"
@@ -1003,12 +1109,31 @@ const BankDetailsModal = () => {
                           Face Avant
                         </Button>
                         <br />
-                        {front ? front.name : ""}
+                        <div
+                          style={{
+                            color: frontError ? "#f44336" : "",
+                            fontSize: frontError ? "12px" : "16px",
+                          }}
+                        >
+                          {front
+                            ? front.name
+                            : frontError
+                            ? "Document Front cannot be empty"
+                            : ""}
+                        </div>
                       </label>
                     </div>
 
                     <div>
-                      <label htmlFor="back">
+                      <label
+                        htmlFor="back"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "flex-end",
+                        }}
+                      >
                         <input
                           style={{ display: "none" }}
                           id="back"
@@ -1027,7 +1152,18 @@ const BankDetailsModal = () => {
                           Face Arrière
                         </Button>
                         <br />
-                        {back ? back.name : ""}
+                        <div
+                          style={{
+                            color: backError ? "#f44336" : "",
+                            fontSize: backError ? "12px" : "16px",
+                          }}
+                        >
+                          {back
+                            ? back.name
+                            : backError
+                            ? "Document Back cannot be empty"
+                            : ""}
+                        </div>
                       </label>
                     </div>
                   </div>
@@ -1047,10 +1183,10 @@ const BankDetailsModal = () => {
 
                   <InputWithLabel
                     value={companyDetails["phone"]}
-                    label="Phone Number"
+                    label="Company Phone Number"
                     required={true}
                     name="phone"
-                    type="text"
+                    type="number"
                     handleChange={(e) => handleCompanyDataChange(e)}
                     error={companyErrors["phone"] ? true : false}
                     errorMessage={companyErrors["phone"]}
@@ -1083,7 +1219,7 @@ const BankDetailsModal = () => {
                         value={companyDetails["postalCode"]}
                         label="Postal Code"
                         required={true}
-                        type="text"
+                        type="number"
                         name="postalCode"
                         handleChange={(e) => handleCompanyDataChange(e)}
                         error={companyErrors["postalCode"] ? true : false}
@@ -1108,7 +1244,7 @@ const BankDetailsModal = () => {
                     label="Tax ID"
                     required={true}
                     name="taxId"
-                    type="text"
+                    type="number"
                     handleChange={(e) => handleCompanyDataChange(e)}
                     error={companyErrors["taxId"] ? true : false}
                     errorMessage={companyErrors["taxId"]}
@@ -1165,10 +1301,9 @@ const BankDetailsModal = () => {
                 >
                   <Button
                     color="inherit"
-                    disabled={activeStep === 0}
+                    disabled={activeStep === 0 || disable}
                     onClick={handleBack}
                     sx={{ mr: 1 }}
-                    disabled={disable}
                   >
                     Back
                   </Button>

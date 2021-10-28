@@ -31,6 +31,7 @@ import RestaurantModal from "./restaurantModal";
 import BankDetailsModal from "./bankDetailsModal";
 import ReviewsModal from "./reviewsModal";
 import { baseUrl } from "../../config";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   main: {
@@ -112,7 +113,9 @@ const RestaurantProfile = ({ onLogout }) => {
     specials: [],
     isPromoted: false,
   });
-  const [unchangedDishData, setUnchangedDishData] = useState({});
+  const [unchangedDishData, setUnchangedDishData] = useState({
+    isPromoted: false,
+  });
   const [dishImageBlob, setDishImageBlob] = useState("");
   const [dishUpdate, setDishUpdate] = useState(false);
   const [promoteStatusChanged, setPromoteStatusChanged] = useState(false);
@@ -173,7 +176,13 @@ const RestaurantProfile = ({ onLogout }) => {
     getReviews();
   }, []);
 
-  const handleDishModalOpen = () => setOpenDishModal(true);
+  const handleDishModalOpen = () => {
+    if (user.restaurant.bank === undefined) {
+      toast.warning("Add a bank account first");
+    } else {
+      setOpenDishModal(true);
+    }
+  };
   const handleRestaurantModalOpen = () => {
     setRestaurantData({
       name: user.firstName,
@@ -918,14 +927,27 @@ const RestaurantProfile = ({ onLogout }) => {
               />
               <Typography variant="body2">{user.address.street}</Typography>
               <Typography variant="body2">{user.address.city}</Typography>
-              <Button
-                variant="contained"
-                size="small"
-                className={classes.dishBtn}
-                onClick={() => (window.location = "/addbank")}
-              >
-                ADD BANK
-              </Button>
+              {user.restaurant.bank ? (
+                <Button
+                  variant="contained"
+                  size="small"
+                  className={classes.dishBtn}
+                  disabled={true}
+                >
+                  BANK ADDED
+                </Button>
+              ) : (
+                <Link to="/addbank">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className={classes.dishBtn}
+                  >
+                    ADD BANK
+                  </Button>
+                </Link>
+              )}
+
               <Button
                 variant="contained"
                 size="small"
