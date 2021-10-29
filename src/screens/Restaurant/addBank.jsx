@@ -235,7 +235,7 @@ const BankDetailsModal = () => {
   const handleBankDataChange = (e) => {
     const { name, value } = e.target;
     if (name === "iban") {
-      if (value.length <= 27) {
+      if (value.length < 20) {
         const allErrors = { ...bankErrors };
         const errorMessage = validateProperty(name, value, bankSchema);
         if (errorMessage) allErrors[name] = errorMessage;
