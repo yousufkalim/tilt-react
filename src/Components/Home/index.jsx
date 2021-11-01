@@ -4,9 +4,11 @@ import image from "../../images/Image 2.png";
 import image2 from "../../images/Group 37.png";
 import "./Home.css";
 import auth from "../../services/authService";
+import { Store } from "../../context/StoreContext";
 
 const indes = () => {
   const token = auth.getJwt();
+  const { user } = Store();
 
   return (
     <div className="main-container" style={{ marginBottom: "8.5%" }}>
@@ -44,7 +46,11 @@ const indes = () => {
                     </li>
                   ) : (
                     <li className="">
-                      <Link to="/menu">tableau de bord </Link>
+                      {user.role === "restaurant" ? (
+                        <Link to="/order">tableau de bord </Link>
+                      ) : (
+                        <Link to="/menu">tableau de bord </Link>
+                      )}
                     </li>
                   )}
                 </ul>
@@ -79,14 +85,18 @@ const indes = () => {
                   <a href="#download"> Télécharger </a>
                 </li>
                 {!token ? (
-                    <li className="">
-                      <Link to="/signup"> S’inscrire </Link>
-                    </li>
-                  ) : (
-                    <li className="">
+                  <li className="">
+                    <Link to="/signup"> S’inscrire </Link>
+                  </li>
+                ) : (
+                  <li className="">
+                    {user.role === "restaurant" ? (
+                      <Link to="/order">tableau de bord </Link>
+                    ) : (
                       <Link to="/menu">tableau de bord </Link>
-                    </li>
-                  )}
+                    )}
+                  </li>
+                )}
               </ul>
             </div>
           </ul>
