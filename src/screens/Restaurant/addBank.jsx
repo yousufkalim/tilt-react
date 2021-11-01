@@ -48,7 +48,7 @@ const useStyles = makeStyles({
 let token = "";
 let personToken = "";
 
-const BankDetailsModal = () => {
+const AddBank = () => {
   const classes = useStyles();
 
   const [activeStep, setActiveStep] = useState(0);
@@ -1337,4 +1337,4 @@ const BankDetailsModal = () => {
   );
 };
 
-export default BankDetailsModal;
+export default AddBank;
