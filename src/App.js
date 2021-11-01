@@ -41,11 +41,16 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import RestaurantProfile from "./screens/Restaurant/restaurantProfile";
 import AddBank from "./screens/Restaurant/addBank";
+import AddBankNative from "./screens/Restaurant/addBankNative";
 import Cgu from "../src/Components/Footer/cgu";
-import { stripePK } from "../src/config";
+import { stripePK, baseUrl } from "../src/config";
+import axios from "axios";
+import { FlashAutoRounded } from "@material-ui/icons";
 
 const stripePromise = loadStripe(stripePK);
-let path = window.location.pathname.slice(0, 9);
+let path = window.location.pathname.slice(0, 15);
+let nativeToken = window.location.pathname.slice(15);
+let TOKEN = auth.getJwt();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -160,11 +165,14 @@ function App() {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
-  const [inNative, setInNative] = React.useState(false);
   const { pathname } = useLocation();
   const { token: authToken, role, user } = Store();
   const updateStore = UpdateStore();
   const history = useHistory();
+  const [inNative, setInNative] = React.useState(false);
+  const [userFound, setUserFound] = React.useState(false);
+  const [nativeUser, setNativeUser] = React.useState();
+
   const handleDrawerClose = () => {
     setOpen(!open);
   };
@@ -190,20 +198,35 @@ function App() {
     window.location = "/signup";
   };
 
-  useEffect(() => {
-    let token = auth.getJwt();
-    if (path === "/addbank/") {
-      setInNative(true);
-      token = "Bearer " + window.location.pathname.slice(9);
+  useEffect(async () => {
+    TOKEN = auth.getJwt();
+    let token = TOKEN;
+    if (path === "/addbanknative/") {
+      if (nativeToken.length > 0) {
+        await axios
+          .get(`${baseUrl}/user/get`, {
+            headers: {
+              Authorization: "Bearer " + nativeToken,
+            },
+          })
+          .then((res) => {
+            setNativeUser(res.data.user);
+            setInNative(true);
+            setUserFound(true);
+          })
+          .catch((err) => {
+            setUserFound(false);
+            setInNative(true);
+            console.log(err);
+          });
+      }
     }
-
     if (token) {
       getLoggedUser(token);
       handleGetUserCart();
       getDiscounts();
     }
-  }, [pathname, authToken]);
-  let TOKEN = auth.getJwt();
+  }, [pathname, authToken, inNative]);
 
   return (
     <Elements stripe={stripePromise}>
@@ -225,7 +248,22 @@ function App() {
                 <Route exact path="/" component={HomePage} />
                 <Route exact path="/signup" component={Signup} />
                 <Route path="/cgu" component={Cgu} />
-                <Redirect from="*" to="/signup" />
+                {path === "/addbanknative/" ? (
+                  nativeToken.length > 0 ? (
+                    <Route path="/addbanknative">
+                      <AddBankNative
+                        nativeUser={nativeUser}
+                        inNative={userFound}
+                        nativeToken={nativeToken}
+                        onLogout={handleLogout}
+                      />
+                    </Route>
+                  ) : (
+                    <Redirect from="*" to="/signup" />
+                  )
+                ) : (
+                  <Redirect from="*" to="/signup" />
+                )}
               </Switch>
             ) : (
               <Switch>
@@ -284,7 +322,7 @@ function App() {
           {pathname !== "/" &&
             pathname !== "/signup" &&
             pathname !== "/cgu" &&
-            inNative && (
+            !inNative && (
               <>
                 <Box>
                   <Drawer
