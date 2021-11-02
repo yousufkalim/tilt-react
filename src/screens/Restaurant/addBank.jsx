@@ -235,7 +235,7 @@ const AddBank = () => {
   const handleBankDataChange = (e) => {
     const { name, value } = e.target;
     if (name === "iban") {
-      if (value.length < 20) {
+      if (value.length <= 20) {
         const allErrors = { ...bankErrors };
         const errorMessage = validateProperty(name, value, bankSchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -794,8 +794,8 @@ const AddBank = () => {
         return errors;
       }),
     iban: Joi.string()
-      .min(27)
-      .max(27)
+      .min(20)
+      .max(20)
       .required()
       .label("Iban")
       .error((errors) => {
