@@ -845,7 +845,17 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
             }}
           >
             <Typography variant="h6">
-              <b>Connect Your Bank Account</b>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <b>Connect Your Bank Account</b>
+                <b style={{ color: "#f50057" }}>{nativeUser.firstName}</b>
+              </div>
             </Typography>
 
             <Box sx={{ width: "100%" }}>
