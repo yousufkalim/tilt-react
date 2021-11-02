@@ -233,7 +233,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
   const handleBankDataChange = (e) => {
     const { name, value } = e.target;
     if (name === "iban") {
-      if (value.length <= 20) {
+      if (value.length <= 27) {
         const allErrors = { ...bankErrors };
         const errorMessage = validateProperty(name, value, bankSchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -799,8 +799,8 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
         return errors;
       }),
     iban: Joi.string()
-      .min(20)
-      .max(20)
+      .min(27)
+      .max(27)
       .required()
       .label("Iban")
       .error((errors) => {
