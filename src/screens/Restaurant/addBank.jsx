@@ -794,8 +794,8 @@ const AddBank = () => {
         return errors;
       }),
     iban: Joi.string()
-      .min(37)
-      .max(37)
+      .min(27)
+      .max(27)
       .required()
       .label("Iban")
       .error((errors) => {
