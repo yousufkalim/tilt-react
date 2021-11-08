@@ -8,6 +8,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -20,7 +21,7 @@ import { Store, UpdateStore } from "../../context/StoreContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const steps = ["Person Details", "Company Details", "Bank Details"];
+const steps = ["Person Details", "Restaurant Details", "Bank Details"];
 
 const useStyles = makeStyles({
   form: {
@@ -203,7 +204,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
         setCompanyDetails((prev) => ({ ...prev, [name]: value }));
       }
     } else if (name === "taxId") {
-      if (value.length <= 10) {
+      if (value.length <= 13) {
         const allErrors = { ...companyErrors };
         const errorMessage = validateProperty(name, value, companySchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -752,9 +753,12 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
         return errors;
       }),
     taxId: Joi.string()
-      .min(10)
-      .max(10)
+      .min(13)
+      .max(13)
       .required()
+      .regex(/\bFR|\bfr/)
+      .regex(/^[A-Za-z]{4}/)
+      .regex(/[0-9]{9}\b/)
       .label("Tax ID")
       .error((errors) => {
         errors.forEach((err) => {
@@ -767,6 +771,9 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
               break;
             case "string.max":
               err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.regex.base":
+              err.message = `${err.context.label} doit être de la forme 'FRXX000000000' `;
               break;
             default:
               break;
@@ -1202,7 +1209,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                     <div className={classes.form}>
                       <InputWithLabel
                         value={companyDetails["name"]}
-                        label="Company Name"
+                        label="Restaurant Name"
                         required={true}
                         name="name"
                         type="text"
@@ -1213,7 +1220,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
 
                       <InputWithLabel
                         value={companyDetails["phone"]}
-                        label="Company Phone Number"
+                        label="Restaurant Phone Number"
                         required={true}
                         name="phone"
                         type="number"
@@ -1271,10 +1278,10 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                       </div>
                       <InputWithLabel
                         value={companyDetails["taxId"]}
-                        label="Tax ID"
+                        label="VAT number/Tax ID (n° TVA)"
                         required={true}
                         name="taxId"
-                        type="number"
+                        type="text"
                         handleChange={(e) => handleCompanyDataChange(e)}
                         error={companyErrors["taxId"] ? true : false}
                         errorMessage={companyErrors["taxId"]}
@@ -1355,7 +1362,16 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
           </div>
         </div>
       ) : (
-        <div>User not found</div>
+        <div
+          style={{
+            height: "90vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress size={80} color="secondary" />
+        </div>
       )}
     </>
   );
