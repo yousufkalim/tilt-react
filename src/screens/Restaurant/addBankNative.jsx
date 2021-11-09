@@ -43,6 +43,11 @@ const useStyles = makeStyles({
     marginBottom: "20px",
     color: "red",
   },
+  phoneStyle: {
+    "& .MuiInputBase-input": {
+      marginLeft: "27px",
+    },
+  },
 });
 
 let token = "";
@@ -162,7 +167,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
         setPersonErrors(allErrors);
       }
     } else if (name === "phone") {
-      if (value.length <= 10) {
+      if (value.length <= 9) {
         const allErrors = { ...personErrors };
         const errorMessage = validateProperty(name, value, personSchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -195,7 +200,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
   const handleCompanyDataChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
-      if (value.length <= 10) {
+      if (value.length <= 9) {
         const allErrors = { ...companyErrors };
         const errorMessage = validateProperty(name, value, companySchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -401,7 +406,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
             month: month,
             year: year,
           },
-          phone: personDetails["phone"],
+          phone: "+33" + personDetails["phone"],
           email: nativeUser.email,
           verification: {
             document: {
@@ -438,7 +443,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
             postal_code: companyDetails["postalCode"],
             city: companyDetails["city"],
           },
-          phone: companyDetails["phone"],
+          phone: "+33" + companyDetails["phone"],
           tax_id: companyDetails["taxId"],
           directors_provided: personDetails["director"],
           executives_provided: personDetails["executive"],
@@ -527,8 +532,8 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
     phone: Joi.string()
       .required()
       .label("Téléphone")
-      .min(10)
-      .max(10)
+      .min(9)
+      .max(9)
       .error((errors) => {
         errors.forEach((err) => {
           switch (err.type) {
@@ -668,6 +673,8 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
     phone: Joi.string()
       .required()
       .label("Téléphone")
+      .min(9)
+      .max(9)
       .error((errors) => {
         errors.forEach((err) => {
           switch (err.type) {
@@ -899,7 +906,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
-                          alignItems: "center",
+                          height: "120px",
                         }}
                       >
                         <div style={{ width: "48%" }}>
@@ -932,7 +939,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
-                          alignItems: "center",
+                          height: "80px",
                         }}
                       >
                         <div style={{ width: "48%", height: "50%" }}>
@@ -973,8 +980,24 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                             </Typography>
                           )}
                         </div>
-                        <div style={{ width: "48%" }}>
+                        <div
+                          style={{
+                            width: "48%",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "absolute",
+                              marginTop: "14px",
+                              marginLeft: "11px",
+                            }}
+                          >
+                            +33
+                          </div>
                           <InputWithLabel
+                            className={classes.phoneStyle}
                             value={personDetails["phone"]}
                             name="phone"
                             label="Phone Number"
@@ -1008,7 +1031,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
-                          alignItems: "center",
+                          height: "120px",
                         }}
                       >
                         <div style={{ width: "48%" }}>
@@ -1217,17 +1240,27 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                         error={companyErrors["name"] ? true : false}
                         errorMessage={companyErrors["name"]}
                       />
-
-                      <InputWithLabel
-                        value={companyDetails["phone"]}
-                        label="Restaurant Phone Number"
-                        required={true}
-                        name="phone"
-                        type="number"
-                        handleChange={(e) => handleCompanyDataChange(e)}
-                        error={companyErrors["phone"] ? true : false}
-                        errorMessage={companyErrors["phone"]}
-                      />
+                      <div style={{ height: "80px" }}>
+                        <div
+                          style={{
+                            position: "absolute",
+                            marginTop: "14px",
+                            marginLeft: "11px",
+                          }}
+                        >
+                          +33
+                        </div>
+                        <InputWithLabel
+                          value={companyDetails["phone"]}
+                          label="Restaurant Phone Number"
+                          required={true}
+                          name="phone"
+                          type="number"
+                          handleChange={(e) => handleCompanyDataChange(e)}
+                          error={companyErrors["phone"] ? true : false}
+                          errorMessage={companyErrors["phone"]}
+                        />
+                      </div>
                       <FormLabel
                         component="legend"
                         style={{ color: "#d10248", marginBottom: "20px" }}
@@ -1248,7 +1281,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                         style={{
                           display: "flex",
                           justifyContent: "space-between",
-                          alignItems: "center",
+                          height: "120px",
                         }}
                       >
                         <div style={{ width: "48%" }}>
