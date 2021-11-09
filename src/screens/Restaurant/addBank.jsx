@@ -43,6 +43,11 @@ const useStyles = makeStyles({
     marginBottom: "20px",
     color: "red",
   },
+  phoneStyle: {
+    "& .MuiInputBase-input": {
+      marginLeft: "27px",
+    },
+  },
 });
 
 let token = "";
@@ -163,7 +168,7 @@ const AddBank = () => {
         setPersonErrors(allErrors);
       }
     } else if (name === "phone") {
-      if (value.length <= 10) {
+      if (value.length <= 9) {
         const allErrors = { ...personErrors };
         const errorMessage = validateProperty(name, value, personSchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -196,7 +201,7 @@ const AddBank = () => {
   const handleCompanyDataChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
-      if (value.length <= 10) {
+      if (value.length <= 9) {
         const allErrors = { ...companyErrors };
         const errorMessage = validateProperty(name, value, companySchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -205,7 +210,7 @@ const AddBank = () => {
         setCompanyDetails((prev) => ({ ...prev, [name]: value }));
       }
     } else if (name === "taxId") {
-      if (value.length <= 10) {
+      if (value.length <= 13) {
         const allErrors = { ...companyErrors };
         const errorMessage = validateProperty(name, value, companySchema);
         if (errorMessage) allErrors[name] = errorMessage;
@@ -395,7 +400,7 @@ const AddBank = () => {
             month: month,
             year: year,
           },
-          phone: personDetails["phone"],
+          phone: "+33" + personDetails["phone"],
           email: user.email,
           verification: {
             document: {
@@ -432,7 +437,7 @@ const AddBank = () => {
             postal_code: companyDetails["postalCode"],
             city: companyDetails["city"],
           },
-          phone: companyDetails["phone"],
+          phone: "+33" + companyDetails["phone"],
           tax_id: companyDetails["taxId"],
           directors_provided: personDetails["director"],
           executives_provided: personDetails["executive"],
@@ -521,8 +526,8 @@ const AddBank = () => {
     phone: Joi.string()
       .required()
       .label("Téléphone")
-      .min(10)
-      .max(10)
+      .min(9)
+      .max(9)
       .error((errors) => {
         errors.forEach((err) => {
           switch (err.type) {
@@ -661,6 +666,8 @@ const AddBank = () => {
 
     phone: Joi.string()
       .required()
+      .min(9)
+      .max(9)
       .label("Téléphone")
       .error((errors) => {
         errors.forEach((err) => {
@@ -747,9 +754,12 @@ const AddBank = () => {
         return errors;
       }),
     taxId: Joi.string()
-      .min(10)
-      .max(10)
+      .min(13)
+      .max(13)
       .required()
+      .regex(/\bFR|\bfr/)
+      .regex(/^[A-Za-z]{4}/)
+      .regex(/[0-9]{9}\b/)
       .label("Tax ID")
       .error((errors) => {
         errors.forEach((err) => {
@@ -762,6 +772,9 @@ const AddBank = () => {
               break;
             case "string.max":
               err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.regex.base":
+              err.message = `${err.context.label} doit être de la forme 'FRXX000000000' `;
               break;
             default:
               break;
@@ -873,9 +886,9 @@ const AddBank = () => {
                 <div className={classes.form}>
                   <div
                     style={{
+                      height: "120px",
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center",
                     }}
                   >
                     <div style={{ width: "48%" }}>
@@ -908,7 +921,7 @@ const AddBank = () => {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center",
+                      height: "80px",
                     }}
                   >
                     <div style={{ width: "48%", height: "50%" }}>
@@ -946,8 +959,24 @@ const AddBank = () => {
                         </Typography>
                       )}
                     </div>
-                    <div style={{ width: "48%" }}>
+                    <div
+                      style={{
+                        width: "48%",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "absolute",
+                          marginTop: "14px",
+                          marginLeft: "11px",
+                        }}
+                      >
+                        +33
+                      </div>
                       <InputWithLabel
+                        className={classes.phoneStyle}
                         value={personDetails["phone"]}
                         name="phone"
                         label="Phone Number"
@@ -979,9 +1008,9 @@ const AddBank = () => {
                   />
                   <div
                     style={{
+                      height: "120px",
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center",
                     }}
                   >
                     <div style={{ width: "48%" }}>
@@ -1190,17 +1219,29 @@ const AddBank = () => {
                     error={companyErrors["name"] ? true : false}
                     errorMessage={companyErrors["name"]}
                   />
+                  <div style={{ height: "80px" }}>
+                    <div
+                      style={{
+                        position: "absolute",
+                        marginTop: "14px",
+                        marginLeft: "11px",
+                      }}
+                    >
+                      +33
+                    </div>
 
-                  <InputWithLabel
-                    value={companyDetails["phone"]}
-                    label="Company Phone Number"
-                    required={true}
-                    name="phone"
-                    type="number"
-                    handleChange={(e) => handleCompanyDataChange(e)}
-                    error={companyErrors["phone"] ? true : false}
-                    errorMessage={companyErrors["phone"]}
-                  />
+                    <InputWithLabel
+                      className={classes.phoneStyle}
+                      value={companyDetails["phone"]}
+                      label="Company Phone Number"
+                      required={true}
+                      name="phone"
+                      type="number"
+                      handleChange={(e) => handleCompanyDataChange(e)}
+                      error={companyErrors["phone"] ? true : false}
+                      errorMessage={companyErrors["phone"]}
+                    />
+                  </div>
                   <FormLabel
                     component="legend"
                     style={{ color: "#d10248", marginBottom: "20px" }}
@@ -1221,7 +1262,7 @@ const AddBank = () => {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      alignItems: "center",
+                      height: "120px",
                     }}
                   >
                     <div style={{ width: "48%" }}>
@@ -1251,10 +1292,10 @@ const AddBank = () => {
                   </div>
                   <InputWithLabel
                     value={companyDetails["taxId"]}
-                    label="Tax ID"
+                    label="VAT number/Tax ID (n° TVA)"
                     required={true}
                     name="taxId"
-                    type="number"
+                    type="text"
                     handleChange={(e) => handleCompanyDataChange(e)}
                     error={companyErrors["taxId"] ? true : false}
                     errorMessage={companyErrors["taxId"]}
