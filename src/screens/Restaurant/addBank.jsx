@@ -1273,7 +1273,7 @@ const AddBank = () => {
                     label="VAT number/Tax ID (n° TVA)"
                     required={true}
                     name="taxId"
-                    type="number"
+                    type="text"
                     handleChange={(e) => handleCompanyDataChange(e)}
                     error={companyErrors["taxId"] ? true : false}
                     errorMessage={companyErrors["taxId"]}
