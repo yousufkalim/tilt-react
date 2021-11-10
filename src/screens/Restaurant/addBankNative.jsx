@@ -208,15 +208,6 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
         setCompanyErrors(allErrors);
         setCompanyDetails((prev) => ({ ...prev, [name]: value }));
       }
-    } else if (name === "taxId") {
-      if (value.length <= 13) {
-        const allErrors = { ...companyErrors };
-        const errorMessage = validateProperty(name, value, companySchema);
-        if (errorMessage) allErrors[name] = errorMessage;
-        else delete allErrors[name];
-        setCompanyErrors(allErrors);
-        setCompanyDetails((prev) => ({ ...prev, [name]: value }));
-      }
     } else if (name === "postalCode") {
       if (value.length <= 5) {
         const allErrors = { ...personErrors };
@@ -760,27 +751,13 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
         return errors;
       }),
     taxId: Joi.string()
-      .min(13)
-      .max(13)
       .required()
-      .regex(/\bFR|\bfr/)
-      .regex(/^[A-Za-z]{4}/)
-      .regex(/[0-9]{9}\b/)
       .label("Tax ID")
       .error((errors) => {
         errors.forEach((err) => {
           switch (err.type) {
             case "string.empty":
               err.message = `${err.context.label} ne doit pas être vide!`;
-              break;
-            case "string.min":
-              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
-              break;
-            case "string.max":
-              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
-              break;
-            case "string.regex.base":
-              err.message = `${err.context.label} doit être de la forme 'FRXX000000000' `;
               break;
             default:
               break;
@@ -1251,6 +1228,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                           +33
                         </div>
                         <InputWithLabel
+                          className={classes.phoneStyle}
                           value={companyDetails["phone"]}
                           label="Restaurant Phone Number"
                           required={true}
@@ -1314,7 +1292,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                         label="VAT number/Tax ID (n° TVA)"
                         required={true}
                         name="taxId"
-                        type="text"
+                        type="number"
                         handleChange={(e) => handleCompanyDataChange(e)}
                         error={companyErrors["taxId"] ? true : false}
                         errorMessage={companyErrors["taxId"]}
