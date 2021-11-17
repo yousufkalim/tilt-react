@@ -209,9 +209,21 @@ const Menu = () => {
           name: restaurantCart.restaurant.firstName,
           stripeId: restaurantCart.restaurant.restaurant.bank.stripeID,
           totalAmmount: total,
+          cartId: currentUser.user.cart._id,
+          userId: currentUser.user.cart.user,
         });
       });
-
+      line_items.push({
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: "Frais de livraison",
+          },
+          unit_amount:
+            parseInt(currentUser.user.company.block.deliveryCost) * 100,
+        },
+        quantity: 1,
+      });
       getSessionUrl(line_items, restaurantTransferData);
     } catch (error) {
       console.log(error);
@@ -225,7 +237,6 @@ const Menu = () => {
         restaurantTransferData: Tdata,
       })
       .then((data) => {
-        setDisableCheck(false);
         window.location = data.data.url;
       })
       .catch((err) => {
