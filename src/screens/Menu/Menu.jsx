@@ -105,6 +105,7 @@ const Menu = () => {
   const [dishes, setDishes] = useState([]);
   const [filter, setFilter] = useState("all");
   const [selectedDish, setSelectedDish] = useState({});
+  const [addOns, setAddOns] = useState([]);
   const [restaurantDrinks, setRestaurantDrinks] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [openDishModal, setOpenDishModal] = useState(false);
@@ -264,24 +265,97 @@ const Menu = () => {
     setQuantity(--decrement);
   };
 
-  const handleAddToCart = async () => {
-    const cart = await addToCart({
-      dishId: selectedDish._id,
-      dishPrice: selectedDish.price,
-      dishCount: quantity,
-    });
-    updateStore({
-      cart,
-      user: {
-        ...currentUser,
-        user: {
-          ...currentUser.user,
-          cart: cart,
-        },
-      },
-    });
-    getDrinksOfRestaurant();
-    handleDishModalClose();
+  const handleAddToCart = async (addOns) => {
+    try {
+      let addonsToSend = [];
+      let selectedChoices = [];
+      let error = false;
+      toast.clearWaitingQueue();
+      addOns.map((addOn) => {
+        if (
+          selectedDish.addOns[addOn.aIndex].min > 0 &&
+          selectedDish.addOns[addOn.aIndex].min <
+            selectedDish.addOns[addOn.aIndex].max
+        ) {
+          if (
+            addOn.cIndex.length < selectedDish.addOns[addOn.aIndex].min ||
+            addOn.cIndex.length > selectedDish.addOns[addOn.aIndex].max
+          ) {
+            error = true;
+            return toast.info(
+              "seulement " +
+                selectedDish.addOns[addOn.aIndex].min +
+                " à " +
+                selectedDish.addOns[addOn.aIndex].max +
+                " choix possibles pour " +
+                selectedDish.addOns[addOn.aIndex].name,
+              options
+            );
+          }
+        } else if (
+          selectedDish.addOns[addOn.aIndex].min ===
+          selectedDish.addOns[addOn.aIndex].max
+        ) {
+          if (
+            addOn.cIndex.length != selectedDish.addOns[addOn.aIndex].min ||
+            addOn.cIndex.length != selectedDish.addOns[addOn.aIndex].max
+          ) {
+            error = true;
+            return toast.info(
+              "Sélectionnez " +
+                selectedDish.addOns[addOn.aIndex].max +
+                " choix en " +
+                selectedDish.addOns[addOn.aIndex].name,
+              options
+            );
+          }
+        } else if (selectedDish.addOns[addOn.aIndex].min === 0) {
+          if (addOn.cIndex.length < selectedDish.addOns[addOn.aIndex].max) {
+            error = true;
+            return toast.info(
+              "Sélectionnez jusqu'à " +
+                selectedDish.addOns[addOn.aIndex].max +
+                " choix en " +
+                selectedDish.addOns[addOn.aIndex].name,
+              options
+            );
+          }
+        }
+        addOn.cIndex.map((c) => {
+          selectedChoices.push(selectedDish.addOns[addOn.aIndex].choice[c]);
+        });
+        addonsToSend.push({
+          name: selectedDish.addOns[addOn.aIndex].name,
+          choice: selectedChoices,
+        });
+        selectedChoices = [];
+      });
+
+      if (!error) {
+        const cart = await addToCart({
+          dishId: selectedDish._id,
+          dishPrice: selectedDish.price,
+          dishCount: quantity,
+          addOns: JSON.stringify(addonsToSend),
+        });
+        updateStore({
+          cart,
+          user: {
+            ...currentUser,
+            user: {
+              ...currentUser.user,
+              cart: cart,
+            },
+          },
+        });
+        getDrinksOfRestaurant();
+        handleDishModalClose();
+      } else {
+        error = false;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const verifyOrder = async () => {
@@ -389,6 +463,7 @@ const Menu = () => {
       const data = await removeDishFromCart({
         dishId: item.id._id,
         dishPrice: item.id.price,
+        dishCartId: item._id,
       });
 
       updateStore({
@@ -604,7 +679,7 @@ const Menu = () => {
                         Sous-Total
                       </Typography>
                       <Typography variant="subtitle2">
-                        {currentUser.user.cart.totalPrice}€
+                        {currentUser.user.cart?.totalPrice}€
                       </Typography>
                     </Box>
                     <Box
@@ -619,7 +694,9 @@ const Menu = () => {
                         Frais de livraison
                       </Typography>
                       <Typography variant="subtitle2">
-                        {totalPrice() - currentUser.user.cart.totalPrice}€
+                        {currentUser.user.cart &&
+                          totalPrice() - currentUser.user.cart.totalPrice}
+                        €
                       </Typography>
                     </Box>
 
@@ -706,6 +783,7 @@ const Menu = () => {
           body={
             <DishDetailModal
               dish={selectedDish}
+              addOns={addOns}
               quantity={quantity}
               onIncrement={handleDishIncrement}
               onDecrement={handleDishDecrement}
