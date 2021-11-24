@@ -177,6 +177,9 @@ function App() {
     setOpen(!open);
   };
 
+  const clearWaitingQueue = () => {
+    toast.clearWaitingQueue();
+  };
   const getLoggedUser = async (token) => {
     const { data } = await getLoggedinUser();
     updateStore({ token, role: data.user.role, user: data.user });
