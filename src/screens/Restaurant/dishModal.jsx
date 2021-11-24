@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import InputWithLabel from "../../Components/common/inputWithLabel";
@@ -13,11 +13,23 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Select from "@material-ui/core/Select";
 import { Switch } from "@material-ui/core";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import CloseIcon from "@material-ui/icons/Close";
+import EditIcon from "@material-ui/icons/Edit";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 import { Store } from "../../context/StoreContext";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles({
   main: {
-    height: "400px",
+    height: "600px",
+    width: "600px",
     overflowY: "scroll",
     paddingRight: "10px",
     "&::-webkit-scrollbar": {
@@ -35,7 +47,7 @@ const useStyles = makeStyles({
     },
   },
   imgDiv: { display: "flex", flexDirection: "column", alignItems: "center" },
-  form: { marginTop: "15px", maxWidth: "400px" },
+  form: { marginTop: "15px", maxWidth: "600px" },
   outlined: {
     textAlign: "left",
     "&.Mui-focused fieldset": {
@@ -43,7 +55,56 @@ const useStyles = makeStyles({
     },
   },
   formControl: { width: "100%", marginBottom: "20px" },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: "white",
+    border: "none",
+    borderRadius: "10px",
+    minWidth: "400px",
+    padding: "20px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  listIcon: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "10px",
+    marginRight: "15px",
+    borderRadius: "50%",
+  },
+  activeListIcon: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(210, 2, 73)",
+    padding: "10px",
+    marginRight: "15px",
+    borderRadius: "50%",
+  },
+  Link: {
+    color: "black",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    "&:hover, :visited": {
+      color: "#C72E54 !important",
+    },
+  },
 });
+const options = {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+};
 
 const DishModal = ({
   dish,
@@ -56,6 +117,158 @@ const DishModal = ({
 }) => {
   const classes = useStyles();
   const { user } = Store();
+  const [addOption, setAddOption] = React.useState(false);
+  const [addChoice, setAddChoice] = React.useState(false);
+  const [editOpt, setEditOpt] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(true);
+  const [addOn, setAddOn] = React.useState(
+    dish["addOns"].length > 0 ? dish["addOns"] : []
+  );
+  const [optionError, setOptionError] = React.useState("");
+
+  const [choice, setChoice] = React.useState([]);
+  const [choiceError, setChoiceError] = React.useState("");
+
+  const [choiceName, setChoiceName] = React.useState("");
+  const [choicePrice, setChoicePrice] = React.useState(0);
+  const [optionName, setOptionName] = React.useState("");
+  const [optionMin, setOptionMin] = React.useState(0);
+  const [optionMax, setOptionMax] = React.useState(0);
+  const [optionIndex, setOptionIndex] = React.useState(0);
+
+  const handleAddOption = (e) => {
+    setOptionError("");
+    setChoice([]);
+    setOptionName("");
+    setOptionMin(0);
+    setOptionMax(0);
+    setChoiceName("");
+    setChoicePrice(0);
+    setAddOption(!addOption);
+  };
+
+  const handleAddChoice = (e) => {
+    setAddChoice(!addChoice);
+  };
+
+  const handleAdd = (e) => {
+    if (optionName === "") {
+      setOptionError("Name Cannot be empty!");
+    } else if (choice.length === 0) {
+      setOptionError("Merci d'ajouter des choix!");
+    } else if (optionMin > optionMax) {
+      setOptionError("Minimum value cannot be greater than max value!");
+    } else if (optionMax === 0 && optionMin === 0) {
+      setOptionError("Maximum and minimum values cannot be zero");
+    } else if (optionMax > choice.length) {
+      setOptionError("Maximum value cannot be greater than all choices");
+    } else {
+      setOptionError("");
+      setAddOn((prev) => [
+        ...prev,
+        { name: optionName, min: optionMin, max: optionMax, choice: choice },
+      ]);
+
+      let arr = [
+        ...addOn,
+        { name: optionName, min: optionMin, max: optionMax, choice: choice },
+      ];
+
+      handleChange(arr);
+      setChoice([]);
+      setOptionName("");
+      setOptionMin(0);
+      setOptionMax(0);
+      setChoiceName("");
+      setChoicePrice(0);
+      setAddOption(!addOption);
+    }
+  };
+
+  const removeOption = (index) => {
+    setAddOn((prev) => {
+      prev.splice(index, 1);
+      return [...prev];
+    });
+    let arr = addOn;
+    handleChange(arr);
+  };
+
+  const editOption = (index) => {
+    setOptionError("");
+    setChoice(addOn[index].choice);
+    setOptionName(addOn[index].name);
+    setOptionMin(addOn[index].min);
+    setOptionMax(addOn[index].max);
+    setOptionIndex(index);
+    setAddOption(true);
+    setEditOpt(true);
+  };
+
+  const handleOptionEdit = () => {
+    if (optionName === "") {
+      setOptionError("Name Cannot be empty!");
+    } else if (choice.length === 0) {
+      setOptionError("Merci d'ajouter des choix!");
+    } else if (optionMin > optionMax) {
+      setOptionError("Minimum value cannot be greater than max value!");
+    } else if (optionMax === 0 && optionMin === 0) {
+      setOptionError("Maximum and minimum values cannot be zero");
+    } else if (optionMax > choice.length) {
+      setOptionError("Maximum value cannot be greater than all choices");
+    } else {
+      setOptionError("");
+      setAddOn((prev) => {
+        prev[optionIndex] = {
+          name: optionName,
+          min: optionMin,
+          max: optionMax,
+          choice: choice,
+        };
+        return [...prev];
+      });
+
+      let temp = addOn;
+      temp[optionIndex] = {
+        name: optionName,
+        min: optionMin,
+        max: optionMax,
+        choice: choice,
+      };
+
+      handleChange(temp);
+      setChoice([]);
+      setOptionName("");
+      setOptionMin(0);
+      setOptionMax(0);
+      setChoiceName("");
+      setChoicePrice(0);
+      setEditOpt(false);
+      setAddOption(!addOption);
+    }
+  };
+
+  const OnAddChoice = (e) => {
+    if (choiceName === "") {
+      setChoiceError("Name Cannot be empty!");
+    } else {
+      setChoiceError("");
+      setChoice((prev) => [
+        ...prev,
+        { name: choiceName, price: choicePrice ? choicePrice : 0 },
+      ]);
+      setChoiceName("");
+      setChoicePrice(0);
+      setAddChoice(!addChoice);
+    }
+  };
+
+  const removeChoice = (index) => {
+    setChoice((prev) => {
+      prev.splice(index, 1);
+      return [...prev];
+    });
+  };
 
   return (
     <div className={classes.main}>
@@ -226,13 +439,283 @@ const DishModal = ({
             />
           </FormGroup>
         </FormControl>
+
+        <div>
+          <FormControl component="fieldset">
+            <FormLabel
+              component="legend"
+              style={{
+                color: "#d10248",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Options
+              {!addOption ? (
+                <AddCircleIcon
+                  style={{ marginLeft: "10px" }}
+                  onClick={handleAddOption}
+                />
+              ) : (
+                <RemoveCircleIcon
+                  style={{ marginLeft: "10px" }}
+                  onClick={handleAddOption}
+                />
+              )}
+              {optionError ? (
+                <FormLabel
+                  component="legend"
+                  style={{
+                    color: "#f44336",
+                    fontSize: "0.75rem",
+                    marginLeft: "20px",
+                    marginTop: "6px",
+                  }}
+                >
+                  {optionError}
+                </FormLabel>
+              ) : (
+                <></>
+              )}
+            </FormLabel>
+          </FormControl>
+        </div>
+
+        {addOption ? (
+          <div style={{ padding: "20px", border: "1px solid lightgrey" }}>
+            <InputWithLabel
+              value={optionName}
+              label="Nom de l'option"
+              required={true}
+              name="optionName"
+              type="text"
+              handleChange={(e) => setOptionName(e.target.value)}
+              // error={errors["name"] ? true : false}
+              // errorMessage={errors["name"]}
+            />
+            <FormLabel
+              component="legend"
+              style={{
+                color: "#d10248",
+              }}
+            >
+              Nombre de choix à faire par le client :
+            </FormLabel>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingTop: "10px",
+              }}
+            >
+              <div style={{ width: "48%" }}>
+                <InputWithLabel
+                  value={optionMin}
+                  label="Minimum"
+                  required={true}
+                  name="min"
+                  type="number"
+                  handleChange={(e) => setOptionMin(e.target.value)}
+                  // error={errors["phone"] ? true : false}
+                  // errorMessage={errors["phone"]}
+                />
+              </div>
+              <div style={{ width: "48%" }}>
+                <InputWithLabel
+                  value={optionMax}
+                  label="Maximum"
+                  required={true}
+                  name="max"
+                  type="number"
+                  handleChange={(e) => setOptionMax(e.target.value)}
+
+                  // error={errors["phone"] ? true : false}
+                  // errorMessage={errors["phone"]}
+                />
+              </div>
+            </div>
+            <FormLabel
+              component="legend"
+              style={{
+                color: "#d10248",
+                display: "flex",
+                justifyContent: "left",
+                alignItems: "center",
+              }}
+            >
+              Choix
+              <Button
+                variant="contained"
+                component="span"
+                color="secondary"
+                style={{ fontSize: "10px", marginLeft: "20px" }}
+                onClick={handleAddChoice}
+              >
+                AJOUTER DES CHOIX
+              </Button>
+            </FormLabel>
+            {choice.length > 0 ? (
+              <List>
+                {choice.map((e, index) => {
+                  return (
+                    <ListItem button className={classes.Link}>
+                      <div
+                        style={{
+                          width: "50%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        Name:
+                        <ListItemText
+                          style={{
+                            marginLeft: "20px",
+                            whiteSpace: "unset",
+                            wordBreak: "break-all",
+                          }}
+                          primary={e.name}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          width: "50%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        Price:
+                        <ListItemText
+                          style={{
+                            marginLeft: "20px",
+                            whiteSpace: "unset",
+                            wordBreak: "break-all",
+                          }}
+                          primary={e.price}
+                        />
+                      </div>
+                      <ListItemIcon
+                        className={classes.listIcon}
+                        onClick={(o) => removeChoice(index)}
+                      >
+                        <CloseIcon style={{ color: "red" }} />
+                      </ListItemIcon>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            ) : null}
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              {editOpt ? (
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="secondary"
+                  style={{ fontSize: "10px" }}
+                  onClick={handleOptionEdit}
+                >
+                  MODIFIER LES OPTIONS
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  component="span"
+                  color="secondary"
+                  style={{ fontSize: "10px" }}
+                  onClick={handleAdd}
+                >
+                  AJOUTER DES OPTIONS
+                </Button>
+              )}
+            </div>
+          </div>
+        ) : null}
       </div>
+      {addOn.length > 0 ? (
+        <List>
+          {addOn.map((e, index) => {
+            return (
+              <ListItem button className={classes.Link}>
+                <div
+                  style={{
+                    width: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Name:
+                  <ListItemText
+                    style={{
+                      marginLeft: "20px",
+                      whiteSpace: "unset",
+                      wordBreak: "break-all",
+                    }}
+                    primary={e.name}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Minimum:
+                  <ListItemText
+                    style={{
+                      marginLeft: "20px",
+                      whiteSpace: "unset",
+                      wordBreak: "break-all",
+                    }}
+                    primary={e.min}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Maximum:
+                  <ListItemText
+                    style={{
+                      marginLeft: "20px",
+                      whiteSpace: "unset",
+                      wordBreak: "break-all",
+                    }}
+                    primary={e.max}
+                  />
+                </div>
+                <ListItemIcon
+                  className={classes.listIcon}
+                  onClick={(o) => removeOption(index)}
+                >
+                  <CloseIcon style={{ color: "red" }} />
+                </ListItemIcon>
+                <ListItemIcon
+                  className={classes.listIcon}
+                  onClick={(o) => editOption(index)}
+                >
+                  <EditIcon style={{ color: "#f50057" }} />
+                </ListItemIcon>
+              </ListItem>
+            );
+          })}
+        </List>
+      ) : null}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          maarginTop: "10px",
-          maarginBottom: "10px",
+          marginTop: "10px",
+          marginBottom: "10px",
         }}
       >
         <Button
@@ -245,6 +728,79 @@ const DishModal = ({
           Soumettre
         </Button>
       </div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={addChoice}
+        onClose={handleAddChoice}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={addChoice}>
+          <div className={classes.paper}>
+            <FormLabel
+              component="legend"
+              style={{
+                color: "#d10248",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: "30px",
+              }}
+            >
+              Ajouter des Choix
+            </FormLabel>
+            <InputWithLabel
+              value={choiceName}
+              label="Nom du choix"
+              required={true}
+              name="choiceName"
+              type="text"
+              handleChange={(e) => setChoiceName(e.target.value)}
+            />
+            <InputWithLabel
+              value={choicePrice}
+              label="Prix"
+              required={true}
+              name="price"
+              type="number"
+              handleChange={(e) => setChoicePrice(e.target.value)}
+              // error={errors["name"] ? true : false}
+              // errorMessage={errors["name"]}
+            />
+            {choiceError ? (
+              <FormLabel
+                component="legend"
+                style={{
+                  color: "#f44336",
+                  display: "flex",
+                  justifyContent: "left",
+                  alignItems: "center",
+                  fontSize: "0.75rem",
+                }}
+              >
+                {choiceError}
+              </FormLabel>
+            ) : (
+              <></>
+            )}
+
+            <Button
+              variant="contained"
+              component="span"
+              color="secondary"
+              style={{ fontSize: "10px" }}
+              onClick={(e) => OnAddChoice(e)}
+            >
+              AJOUTER
+            </Button>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 };
