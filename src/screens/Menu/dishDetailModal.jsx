@@ -3,6 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/styles/makeStyles";
 import { baseUrl } from "../../config";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles({
   heading: {
@@ -58,6 +59,7 @@ const useStyles = makeStyles({
 
 const DishDetailModal = ({
   dish,
+  addOns,
   quantity,
   onIncrement,
   onDecrement,
@@ -65,6 +67,38 @@ const DishDetailModal = ({
   onRestaurantModalOpen,
 }) => {
   const classes = useStyles();
+
+  const handleChoiceSelect = (e, aIndex, cIndex) => {
+    const { name, checked } = e.target;
+    if (checked) {
+      let found = false;
+      addOns.map((addOn, index) => {
+        if (addOn.aIndex === aIndex) {
+          addOns[index].cIndex.push(cIndex);
+          addOns = [...addOns];
+          found = true;
+        }
+      });
+      if (!found) {
+        addOns = [...addOns, { aIndex: aIndex, cIndex: [cIndex] }];
+      }
+    } else {
+      addOns.map((addOn, index) => {
+        if (addOn.aIndex === aIndex) {
+          if (addOn.cIndex.length === 1) {
+            addOns.splice(index, 1);
+          } else if (addOn.cIndex.length > 1) {
+            addOn.cIndex.map((choice, i) => {
+              if (choice === cIndex) {
+                addOns[index].cIndex.splice(i, 1);
+                addOns = [...addOns];
+              }
+            });
+          }
+        }
+      });
+    }
+  };
 
   return (
     <div>
@@ -97,6 +131,50 @@ const DishDetailModal = ({
           <>{special + (dish.specials.length - 1 !== index ? ", " : "")}</>
         ))}
       </Typography>
+      {dish.addOns.length > 0 ? (
+        <div style={{ marginTop: "10px" }}>
+          {dish.addOns.map((addOn, aIndex) => {
+            return (
+              <>
+                <Typography variant="subtitle1">
+                  <b>{addOn.name} : </b>
+                  {addOn.min > 0 && addOn.min < addOn.max
+                    ? "(" + addOn.min + " à " + addOn.max + " choix possibles)"
+                    : addOn.min === addOn.max
+                    ? "Sélectionnez " + addOn.max + " choix"
+                    : addOn.min === 0
+                    ? "(Sélectionnez jusqu'à " + addOn.max + " choix)"
+                    : ""}
+                </Typography>
+                {addOn.choice.length > 0
+                  ? addOn.choice.map((c, cIndex) => {
+                      return (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Checkbox
+                            // checked={}
+                            name={c.name}
+                            onChange={(e) =>
+                              handleChoiceSelect(e, aIndex, cIndex)
+                            }
+                          />
+                          <div>
+                            {c.name} {c.price != 0 ? "(+" + c.price + "€)" : ""}
+                          </div>
+                        </div>
+                      );
+                    })
+                  : null}
+              </>
+            );
+          })}
+        </div>
+      ) : null}
+
       <hr style={{ background: "black" }} />
       <div className={classes.btnDiv}>
         <div>
@@ -121,7 +199,7 @@ const DishDetailModal = ({
           size="small"
           variant="contained"
           className={classes.cartBtn}
-          onClick={onCartAdd}
+          onClick={() => onCartAdd(addOns)}
         >
           Ajouter au panier
         </Button>
