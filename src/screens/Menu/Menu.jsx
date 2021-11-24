@@ -16,8 +16,6 @@ import DishList from "./DishList";
 import {
   getFilteredDishes,
   addToCart,
-  getUserOrder,
-  userOrderPayment,
   removeDishFromCart,
 } from "../../services/userService";
 import { getAllByRestaurantById } from "../../services/dishService";
@@ -30,7 +28,6 @@ import { toast } from "react-toastify";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import PaymentForm from "../../Components/Payment/paymentForm";
 import RestaurantMenuModal from "./restaurantMenuModal";
 import axios from "axios";
 import { baseUrl } from "../../config";
@@ -107,14 +104,13 @@ const Menu = () => {
   const [dishes, setDishes] = useState([]);
   const [filter, setFilter] = useState("all");
   const [selectedDish, setSelectedDish] = useState({});
+  const [addOns, setAddOns] = useState([]);
   const [restaurantDrinks, setRestaurantDrinks] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [openDishModal, setOpenDishModal] = useState(false);
   const [openDrinkModal, setOpenDrinkModal] = useState(false);
-  const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [openRestaurantMenuModal, setOpenRestaurantMenuModal] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState([]);
-  const [cardComplete, setCardComplete] = useState(false);
 
   const [openmodal, setOpenmodal] = useState(false);
   const [disableCheck, setDisableCheck] = useState(false);
@@ -127,8 +123,6 @@ const Menu = () => {
   useEffect(() => {
     getDishes();
   }, []);
-
-  const handleCompleteCardStatus = (status) => setCardComplete(status);
 
   const getDishes = async () => {
     const dishesInDB = await getFilteredDishes(filter);
@@ -169,26 +163,6 @@ const Menu = () => {
         let total = 0;
         Promise.all(
           restaurantCart.dishes.map((restaurantItem) => {
-            // AFTER ADDONS INTEGRATION
-            // if(restaurantItem.addOns){
-            //   if(restaurantItem.addOns.length>0){
-            //     restaurantItem.addOns.map((addOn)=>{
-            //       addOn.choice.map((c)=>{{
-            //         line_items.push({
-            //           price_data: {
-            //                 currency: "eur",
-            //                 product_data: {
-            //                   name: c.name,
-            //                 },
-            //                 unit_amount: c.price,
-            //               },
-            //               quantity: 1,
-
-            //         })
-            //       }})
-            //     })
-            //   }
-            // }
             total +=
               parseInt(restaurantItem.count) *
               parseInt(restaurantItem.id.price) *
@@ -203,6 +177,27 @@ const Menu = () => {
               },
               quantity: restaurantItem.count,
             });
+            if (restaurantItem.addOns) {
+              if (restaurantItem.addOns.length > 0) {
+                restaurantItem.addOns.map((addOn) => {
+                  addOn.choice.map((c) => {
+                    {
+                      total += parseInt(c.price) * 100;
+                      line_items.push({
+                        price_data: {
+                          currency: "eur",
+                          product_data: {
+                            name: c.name,
+                          },
+                          unit_amount: parseInt(c.price) * 100,
+                        },
+                        quantity: 1,
+                      });
+                    }
+                  });
+                });
+              }
+            }
           })
         );
         restaurantTransferData.push({
@@ -243,26 +238,6 @@ const Menu = () => {
         setDisableCheck(false);
         console.log(err);
       });
-  };
-
-  const handlePaymentModalOpen = () => {
-    let timeForOrder = moment()
-      .hour(currentUser.user.company.block.timeForOrder.split("h")[0])
-      .minute(
-        currentUser.user.company.block.timeForOrder.split("h")[1].split("m")[0]
-      );
-    if (moment().isBefore(timeForOrder)) {
-      setOpenPaymentModal(true);
-    } else {
-      toast.info(
-        "Les restaurants ne prennent plus de commandes aujourd'hui. Merci de revenir demain.",
-        options
-      );
-    }
-  };
-  const handlePaymentModalClose = () => {
-    setOpenPaymentModal(false);
-    setCardComplete(false);
   };
 
   const handleAddDrinkToCart = () => {
@@ -352,109 +327,96 @@ const Menu = () => {
     setQuantity(--decrement);
   };
 
-  const handleAddToCart = async () => {
-    const cart = await addToCart({
-      dishId: selectedDish._id,
-      dishPrice: selectedDish.price,
-      dishCount: quantity,
-    });
-    updateStore({
-      cart,
-      user: {
-        ...currentUser,
-        user: {
-          ...currentUser.user,
-          cart: cart,
-        },
-      },
-    });
-    getDrinksOfRestaurant();
-    handleDishModalClose();
-  };
-
-  const verifyOrder = async () => {
-    let timeForOrder = moment()
-      .hour(currentUser.user.company.block.timeForOrder.split("h")[0])
-      .minute(
-        currentUser.user.company.block.timeForOrder.split("h")[1].split("m")[0]
-      );
-    if (moment().isBefore(timeForOrder)) {
-      let isComplete1 = true;
-      let totalrest = [];
-      currentUser.user.cart.userCarts.map(async (restaurantCart) => {
-        let isComplete = false;
-        let ammount = 0;
-        await Promise.all(
-          restaurantCart.dishes.map((restaurantItem) => {
-            if (
-              restaurantItem.id.dishType === "Dish" ||
-              restaurantItem.id.dishType === "Dessert"
-            ) {
-              isComplete = true;
-            }
-            ammount +=
-              parseInt(restaurantItem.count) *
-              parseInt(restaurantItem.id.price);
-          })
-        );
-        totalrest.push({
-          restaurant: restaurantCart.restaurant,
-          value: ammount,
-        });
-        if (!isComplete) {
-          isComplete1 = false;
-          return;
+  const handleAddToCart = async (addOns) => {
+    try {
+      let addonsToSend = [];
+      let selectedChoices = [];
+      let error = false;
+      toast.clearWaitingQueue();
+      addOns.map((addOn) => {
+        if (
+          selectedDish.addOns[addOn.aIndex].min > 0 &&
+          selectedDish.addOns[addOn.aIndex].min <
+            selectedDish.addOns[addOn.aIndex].max
+        ) {
+          if (
+            addOn.cIndex.length < selectedDish.addOns[addOn.aIndex].min ||
+            addOn.cIndex.length > selectedDish.addOns[addOn.aIndex].max
+          ) {
+            error = true;
+            return toast.info(
+              "seulement " +
+                selectedDish.addOns[addOn.aIndex].min +
+                " à " +
+                selectedDish.addOns[addOn.aIndex].max +
+                " choix possibles pour " +
+                selectedDish.addOns[addOn.aIndex].name,
+              options
+            );
+          }
+        } else if (
+          selectedDish.addOns[addOn.aIndex].min ===
+          selectedDish.addOns[addOn.aIndex].max
+        ) {
+          if (
+            addOn.cIndex.length != selectedDish.addOns[addOn.aIndex].min ||
+            addOn.cIndex.length != selectedDish.addOns[addOn.aIndex].max
+          ) {
+            error = true;
+            return toast.info(
+              "Sélectionnez " +
+                selectedDish.addOns[addOn.aIndex].max +
+                " choix en " +
+                selectedDish.addOns[addOn.aIndex].name,
+              options
+            );
+          }
+        } else if (selectedDish.addOns[addOn.aIndex].min === 0) {
+          if (addOn.cIndex.length < selectedDish.addOns[addOn.aIndex].max) {
+            error = true;
+            return toast.info(
+              "Sélectionnez jusqu'à " +
+                selectedDish.addOns[addOn.aIndex].max +
+                " choix en " +
+                selectedDish.addOns[addOn.aIndex].name,
+              options
+            );
+          }
         }
+        addOn.cIndex.map((c) => {
+          selectedChoices.push(selectedDish.addOns[addOn.aIndex].choice[c]);
+        });
+        addonsToSend.push({
+          name: selectedDish.addOns[addOn.aIndex].name,
+          choice: selectedChoices,
+        });
+        selectedChoices = [];
       });
-      if (!isComplete1) {
-        toast.error("Entrée/Boisson ne peut pas être commandé seul.");
+
+      if (!error) {
+        const cart = await addToCart({
+          dishId: selectedDish._id,
+          dishPrice: selectedDish.price,
+          dishCount: quantity,
+          addOns: JSON.stringify(addonsToSend),
+        });
+        updateStore({
+          cart,
+          user: {
+            ...currentUser,
+            user: {
+              ...currentUser.user,
+              cart: cart,
+            },
+          },
+        });
+        getDrinksOfRestaurant();
+        handleDishModalClose();
       } else {
-        const cardElement = elements.getElement(CardElement);
-        const cardObjectWithToken = await stripe.createToken(cardElement);
-
-        onPayment(totalrest, { tokenId: cardObjectWithToken.token.id });
+        error = false;
       }
-    } else {
-      toast.info(
-        "Les restaurants ne prennent plus de commandes aujourd'hui. Merci de revenir demain.",
-        options
-      );
-    }
-  };
-
-  const onPayment = async (totalres, tokenObject) => {
-    try {
-      const price = totalPrice();
-      await userOrderPayment({
-        name: currentUser.firstName + " " + currentUser.lastName,
-        email: currentUser.email,
-        token: tokenObject.tokenId,
-        card: tokenObject,
-        amount: price,
-        totalres: totalres,
-      });
-      makeOrder();
-    } catch (err) {
-      toast.error("une erreur s'est produite 1");
-      console.log(err);
-    }
-  };
-
-  const makeOrder = async () => {
-    try {
-      const data = await getUserOrder();
-
-      updateStore({
-        user: {
-          ...currentUser,
-          user: { ...data.user.user, cart: null },
-        },
-        cart: {},
-      });
-      handlePaymentModalClose();
-      toast.success("Commande passée avec succès!");
-    } catch (err) {
-      toast.error("une erreur s'est produite 2");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -477,6 +439,7 @@ const Menu = () => {
       const data = await removeDishFromCart({
         dishId: item.id._id,
         dishPrice: item.id.price,
+        dishCartId: item._id,
       });
 
       updateStore({
@@ -692,7 +655,7 @@ const Menu = () => {
                         Sous-Total
                       </Typography>
                       <Typography variant="subtitle2">
-                        {currentUser.user.cart.totalPrice}€
+                        {currentUser.user.cart?.totalPrice}€
                       </Typography>
                     </Box>
                     <Box
@@ -707,7 +670,9 @@ const Menu = () => {
                         Frais de livraison
                       </Typography>
                       <Typography variant="subtitle2">
-                        {totalPrice() - currentUser.user.cart.totalPrice}€
+                        {currentUser.user.cart &&
+                          totalPrice() - currentUser.user.cart.totalPrice}
+                        €
                       </Typography>
                     </Box>
 
@@ -731,25 +696,6 @@ const Menu = () => {
                     <Box>
                       <hr className={classes.divider} />
                     </Box>
-                    {/* <Button
-                      variant="contained"
-                      className={classes.ButtonStyle}
-                      onClick={() => {
-                        if (
-                          +currentUser.user.cart.totalPrice <
-                          +discount.leastCartValue
-                        ) {
-                          alert(
-                            `La valeur de votre panier doit être d'au moins ${discount.leastCartValue}€`
-                          );
-                        } else {
-                          // verifyOrder();
-                          handlePaymentModalOpen();
-                        }
-                      }}
-                    >
-                      Payer
-                    </Button> */}
                     <Button
                       variant="contained"
                       className={classes.ButtonStyle}
@@ -804,6 +750,7 @@ const Menu = () => {
           body={
             <DishDetailModal
               dish={selectedDish}
+              addOns={addOns}
               quantity={quantity}
               onIncrement={handleDishIncrement}
               onDecrement={handleDishDecrement}
@@ -829,19 +776,6 @@ const Menu = () => {
           }
         />
       )}
-
-      <TransitionsModal
-        open={openPaymentModal}
-        handleClose={handlePaymentModalClose}
-        body={
-          <PaymentForm
-            stripe={stripe}
-            completeCardStatus={cardComplete}
-            handleCompleteCard={handleCompleteCardStatus}
-            handleSubmit={verifyOrder}
-          />
-        }
-      />
 
       <TransitionsModal
         open={openRestaurantMenuModal}

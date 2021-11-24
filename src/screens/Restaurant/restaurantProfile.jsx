@@ -112,6 +112,7 @@ const RestaurantProfile = ({ onLogout }) => {
     description: "",
     specials: [],
     isPromoted: false,
+    addOns: [],
   });
   const [unchangedDishData, setUnchangedDishData] = useState({
     isPromoted: false,
@@ -208,6 +209,7 @@ const RestaurantProfile = ({ onLogout }) => {
       description: "",
       specials: [],
       isPromoted: false,
+      addOns: [],
     });
     setDishErrors({});
     setDishImageBlob("");
@@ -701,6 +703,7 @@ const RestaurantProfile = ({ onLogout }) => {
     description: Joi.string().required().min(5).label("Description"),
     specials: Joi.array(),
     isPromoted: Joi.boolean(),
+    addOns: Joi.array(),
   };
 
   const validateProperty = (name, value, schemaName) => {
@@ -725,35 +728,41 @@ const RestaurantProfile = ({ onLogout }) => {
   };
 
   const handleDishDataChange = (e) => {
-    const { name, value, checked } = e.target;
-
-    if (name === "specials") {
-      const allSpecials = [...dishData.specials];
-      if (checked) {
-        allSpecials.push(value);
-        setDishData({ ...dishData, specials: allSpecials });
-      } else {
-        const index = allSpecials.indexOf(value);
-        allSpecials.splice(index, 1);
-        setDishData({ ...dishData, specials: allSpecials });
-      }
-    } else {
-      const allErrors = { ...dishErrors };
-      const errorMessage = validateProperty(name, value, dishSchema);
-      if (errorMessage) allErrors[name] = errorMessage;
-      else delete allErrors[name];
-      setDishErrors(allErrors);
-
-      const formData = { ...dishData };
-      if (name === "image") {
-        formData[name] = e.target.files[0];
-        if (e.target.files[0]) {
-          setDishImageBlob(URL.createObjectURL(e.target.files[0]));
+    if (e.target) {
+      const { name, value, checked } = e.target;
+      if (name === "specials") {
+        const allSpecials = [...dishData.specials];
+        if (checked) {
+          allSpecials.push(value);
+          setDishData({ ...dishData, specials: allSpecials });
+        } else {
+          const ind = allSpecials.indexOf(value);
+          allSpecials.splice(ind, 1);
+          setDishData({ ...dishData, specials: allSpecials });
         }
       } else {
-        formData[name] = value;
+        const allErrors = { ...dishErrors };
+        const errorMessage = validateProperty(name, value, dishSchema);
+        if (errorMessage) allErrors[name] = errorMessage;
+        else delete allErrors[name];
+        setDishErrors(allErrors);
+
+        const formData = { ...dishData };
+        if (name === "image") {
+          formData[name] = e.target.files[0];
+          if (e.target.files[0]) {
+            setDishImageBlob(URL.createObjectURL(e.target.files[0]));
+          }
+        } else {
+          formData[name] = value;
+        }
+        setDishData(formData);
       }
-      setDishData(formData);
+    } else {
+      setDishData((prev) => {
+        prev["addOns"] = e;
+        return { ...prev };
+      });
     }
   };
 
@@ -770,6 +779,7 @@ const RestaurantProfile = ({ onLogout }) => {
         description: data.description,
         isPromoted: data.isPromoted ? true : false,
         image: "",
+        addOns: data.addOns,
       });
       setUnchangedDishData({ isPromoted: data.isPromoted ? true : false });
       setDishImageBlob(`${baseUrl}/${data.image}`);
@@ -853,6 +863,7 @@ const RestaurantProfile = ({ onLogout }) => {
     fd.append("description", data.description);
     fd.append("isPromoted", data.isPromoted);
     fd.append("specials", JSON.stringify(data.specials));
+    fd.append("addOns", JSON.stringify(data.addOns));
     if (data.image) {
       fd.append("image", data.image);
     }
