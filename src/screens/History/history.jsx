@@ -71,7 +71,9 @@ const History = () => {
     orderHistory.forEach((item) => {
       item.carts.forEach((cart) => {
         cart.dishes.forEach((dish) => {
-          total += dish.count * dish.id.price;
+          if (dish.id) {
+            total += dish.count * dish.id.price;
+          }
         });
       });
       updatedhistory.push({ ...item, gain: total });
