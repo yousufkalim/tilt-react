@@ -170,26 +170,6 @@ const Menu = () => {
         let total = 0;
         Promise.all(
           restaurantCart.dishes.map((restaurantItem) => {
-            // AFTER ADDONS INTEGRATION
-            // if(restaurantItem.addOns){
-            //   if(restaurantItem.addOns.length>0){
-            //     restaurantItem.addOns.map((addOn)=>{
-            //       addOn.choice.map((c)=>{{
-            //         line_items.push({
-            //           price_data: {
-            //                 currency: "eur",
-            //                 product_data: {
-            //                   name: c.name,
-            //                 },
-            //                 unit_amount: c.price,
-            //               },
-            //               quantity: 1,
-
-            //         })
-            //       }})
-            //     })
-            //   }
-            // }
             total +=
               parseInt(restaurantItem.count) *
               parseInt(restaurantItem.id.price) *
@@ -204,6 +184,26 @@ const Menu = () => {
               },
               quantity: restaurantItem.count,
             });
+            if (restaurantItem.addOns) {
+              if (restaurantItem.addOns.length > 0) {
+                restaurantItem.addOns.map((addOn) => {
+                  addOn.choice.map((c) => {
+                    {
+                      line_items.push({
+                        price_data: {
+                          currency: "eur",
+                          product_data: {
+                            name: c.name,
+                          },
+                          unit_amount: parseInt(c.price) * 100,
+                        },
+                        quantity: 1,
+                      });
+                    }
+                  });
+                });
+              }
+            }
           })
         );
         restaurantTransferData.push({
