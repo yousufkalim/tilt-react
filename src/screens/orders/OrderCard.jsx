@@ -35,7 +35,7 @@ const OrderCard = ({ order, onCompleteOrder }) => {
 
   return (
     <Box className={classes.card}>
-      {order.carts.map((cart) => (
+      {order.carts.map((cart, index) => (
         <>
           <Typography
             variant="body1"
@@ -45,19 +45,87 @@ const OrderCard = ({ order, onCompleteOrder }) => {
             {cart.id.userCode}
           </Typography>
 
-          {cart.dishes.map((dish) => (
-            <>
-              <OneOrder dish={dish} dishImage={`${baseUrl}/${dish.id.image}`} />
-            </>
-          ))}
+          {cart.dishes.map((dish, i) => {
+            return (
+              <>
+                <OneOrder
+                  dish={dish}
+                  dishImage={`${baseUrl}/${dish.id.image}`}
+                />
+                <div
+                  style={{
+                    marginLeft: "74px",
+                  }}
+                >
+                  {dish.addOns.length > 0 &&
+                    dish.addOns.map((addon) => {
+                      return (
+                        <>
+                          <Typography
+                            variant="subtitle2"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <b>Options: </b>
+                            {addon.name}{" "}
+                          </Typography>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography variant="subtitle2">
+                              <b>Choix: </b>
+                            </Typography>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "flex-end",
+                                alignItems: "flex-end",
+                              }}
+                            >
+                              {addon.choice.map((c) => {
+                                return (
+                                  <Typography variant="subtitle2">
+                                    ({c.name} - €{c.price}){" "}
+                                  </Typography>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })}
+                  <Typography
+                    variant="subtitle2"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      borderTop: "1px solid black",
+                    }}
+                  >
+                    <b>Sous-Total: </b>
+                    <>€{cart.total[i]}</>
+                  </Typography>
+                </div>
+              </>
+            );
+          })}
           <Box marginLeft="20px" marginTop="20px" display="flex">
             <Typography variant="subtitle2">
               {cart.dishes.length} {cart.dishes.length === 1 ? "Plat" : "Plats"}
             </Typography>
             <Typography className={classes.textStyle} variant="subtitle2">
-              {/* {cart.totalPrice}€ */}
-              {cart.total[cart.total.length - 1]}€
+              <b>Total</b> {cart.totalPrice}€
             </Typography>
+            <Typography
+              className={classes.textStyle}
+              variant="subtitle2"
+            ></Typography>
           </Box>
         </>
       ))}
