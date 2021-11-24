@@ -18,10 +18,10 @@ const OneOrder = ({ dish, dishImage }) => {
           />
         </Box>
         <Box paddingLeft="15px">
-          <Typography variant="body1" color="initial">
+          <Typography variant="subtitle2" color="initial">
             {dish.id.name}
           </Typography>
-          <Typography variant="caption" color="initial">
+          <Typography variant="subtitle2" color="initial">
             {dish.id.price}€
           </Typography>
         </Box>
