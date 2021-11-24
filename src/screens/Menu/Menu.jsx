@@ -32,6 +32,8 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import PaymentForm from "../../Components/Payment/paymentForm";
 import RestaurantMenuModal from "./restaurantMenuModal";
+import axios from "axios";
+import { baseUrl } from "../../config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,6 +118,7 @@ const Menu = () => {
   const [cardComplete, setCardComplete] = useState(false);
 
   const [openmodal, setOpenmodal] = useState(false);
+  const [disableCheck, setDisableCheck] = useState(false);
 
   const { user: currentUser, cart, discount } = Store();
   const updateStore = UpdateStore();
@@ -156,6 +159,91 @@ const Menu = () => {
     setOpenRestaurantMenuModal(false);
     setSelectedMenu([]);
     // setCardComplete(false);
+  };
+
+  const checkout = async () => {
+    try {
+      setDisableCheck(true);
+      let line_items = [];
+      let restaurantTransferData = [];
+      currentUser.user.cart.userCarts.map(async (restaurantCart) => {
+        let total = 0;
+        Promise.all(
+          restaurantCart.dishes.map((restaurantItem) => {
+            // AFTER ADDONS INTEGRATION
+            // if(restaurantItem.addOns){
+            //   if(restaurantItem.addOns.length>0){
+            //     restaurantItem.addOns.map((addOn)=>{
+            //       addOn.choice.map((c)=>{{
+            //         line_items.push({
+            //           price_data: {
+            //                 currency: "eur",
+            //                 product_data: {
+            //                   name: c.name,
+            //                 },
+            //                 unit_amount: c.price,
+            //               },
+            //               quantity: 1,
+
+            //         })
+            //       }})
+            //     })
+            //   }
+            // }
+            total +=
+              parseInt(restaurantItem.count) *
+              parseInt(restaurantItem.id.price) *
+              100;
+            line_items.push({
+              price_data: {
+                currency: "eur",
+                product_data: {
+                  name: restaurantItem.id.name,
+                },
+                unit_amount: parseInt(restaurantItem.id.price) * 100,
+              },
+              quantity: restaurantItem.count,
+            });
+          })
+        );
+        restaurantTransferData.push({
+          name: restaurantCart.restaurant.firstName,
+          stripeId: restaurantCart.restaurant.restaurant.bank.stripeID,
+          totalAmmount: total,
+          cartId: currentUser.user.cart._id,
+          userId: currentUser.user.cart.user,
+        });
+      });
+      line_items.push({
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: "Frais de livraison",
+          },
+          unit_amount:
+            parseInt(currentUser.user.company.block.deliveryCost) * 100,
+        },
+        quantity: 1,
+      });
+      getSessionUrl(line_items, restaurantTransferData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSessionUrl = async (line_items, Tdata) => {
+    await axios
+      .post(`${baseUrl}/user/checkout`, {
+        line_items: line_items,
+        restaurantTransferData: Tdata,
+      })
+      .then((data) => {
+        window.location = data.data.url;
+      })
+      .catch((err) => {
+        setDisableCheck(false);
+        console.log(err);
+      });
   };
 
   const handlePaymentModalOpen = () => {
@@ -720,7 +808,7 @@ const Menu = () => {
                     <Box>
                       <hr className={classes.divider} />
                     </Box>
-                    <Button
+                    {/* <Button
                       variant="contained"
                       className={classes.ButtonStyle}
                       onClick={() => {
@@ -738,6 +826,16 @@ const Menu = () => {
                       }}
                     >
                       Payer
+                    </Button> */}
+                    <Button
+                      variant="contained"
+                      className={classes.ButtonStyle}
+                      onClick={() => {
+                        checkout();
+                      }}
+                      disabled={disableCheck}
+                    >
+                      Checkout
                     </Button>
                   </>
                 ) : (
