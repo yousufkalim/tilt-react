@@ -35,7 +35,15 @@ const Orders = () => {
           ...item,
           carts: item.carts.map((item1) => {
             const calculatedTotal = item1.dishes.map((dish) => {
-              return (total += dish.count * dish.id.price);
+              total = 0;
+              if (dish.addOns.length > 0) {
+                dish.addOns.map((addon) => {
+                  addon.choice.map((e) => {
+                    total += e.price;
+                  });
+                });
+                return (total += dish.count * dish.id.price);
+              } else return (total += dish.count * dish.id.price);
             });
             total = 0;
             return {
