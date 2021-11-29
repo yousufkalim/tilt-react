@@ -56,7 +56,24 @@ const Dish = ({ dish, handleSelect }) => {
               {dish.name}
             </Typography>
             <Typography variant="caption" color="initial">
-              <RestaurantIcon /> &nbsp; {dish.restaurantName}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src={`${baseUrl}/${dish.restaurantImage}`}
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "100%",
+                    margin: "4px",
+                  }}
+                />
+                <div>{dish.restaurantName}</div>
+              </div>
             </Typography>
           </Box>
         </Box>
