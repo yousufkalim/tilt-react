@@ -25,7 +25,7 @@ const useStyles = makeStyles({
       background: "rgba(0,0,0,0)",
     },
     "&::-webkit-scrollbar-thumb": {
-      background: "#D20249",
+      background: "#EC008C",
       borderRadius: "10px",
     },
     "&::-webkit-scrollbar-thumb:hover": {

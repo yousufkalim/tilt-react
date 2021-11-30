@@ -20,13 +20,13 @@ const useStyles = makeStyles({
   subtitle: { marginTop: "20px" },
   buttonDiv: { display: "flex", justifyContent: "flex-end" },
   editBtn: {
-    backgroundColor: "#D20249",
+    backgroundColor: "#EC008C",
     marginLeft: "auto",
     color: "white",
     fontSize: "10px",
     marginTop: "10px",
     "&:hover": {
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:focus": {

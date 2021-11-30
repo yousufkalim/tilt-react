@@ -24,6 +24,9 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  switch: {
+    "& .MuiSwitch-colorSecondary.Mui-checked": { color: "#EC008C" },
+  },
 });
 
 const Dish = ({ dish, handleEdit, handleDelete, handleDishStatus }) => {
@@ -66,13 +69,14 @@ const Dish = ({ dish, handleEdit, handleDelete, handleDishStatus }) => {
             onClick={() => handleEdit(dish._id)}
           />
           <Switch
+            className={classes.switch}
             checked={dish.status === "Active" ? true : false}
             onChange={(e) => handleDishStatus(e, dish._id, dish.dishType)}
             name="status"
             inputProps={{ "aria-label": "secondary checkbox" }}
           />
           <DeleteIcon
-            style={{ color: "#C72E54", cursor: "pointer" }}
+            style={{ color: "#EC008C", cursor: "pointer" }}
             onClick={() => handleDelete(dish._id)}
           />
         </Box>

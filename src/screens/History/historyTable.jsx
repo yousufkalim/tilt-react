@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     fontWeight: "bold",
   },
   btn: {
-    background: "#C72E54",
+    background: "#EC008C",
     color: "white",
     fontSize: "10px",
     padding: "8px",
@@ -45,7 +45,7 @@ const useStyles = makeStyles({
     border: "none",
     outline: "none",
     "&:hover": {
-      background: "#C72E54",
+      background: "#EC008C",
       color: "white",
     },
     "&:focus": {

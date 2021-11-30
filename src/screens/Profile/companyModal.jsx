@@ -10,25 +10,25 @@ const useStyles = makeStyles({
   formControl: { width: "100%", marginTop: "15px" },
   checkBox: {
     width: "100%",
-    color: "#d10248",
+    color: "#EC008C",
   },
   outlined: {
     textAlign: "left",
     "&.Mui-focused fieldset": {
-      borderColor: "#d10248 !important",
+      borderColor: "#EC008C !important",
     },
   },
   btn: {
     marginTop: "15px",
-    backgroundColor: "#D20249",
+    backgroundColor: "#EC008C",
     color: "white",
     "&:focus": {
       outline: "none",
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:hover": {
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
   },
@@ -48,7 +48,7 @@ const CompanyModal = ({
       </Typography>
 
       <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel style={{ color: "#d10248" }}>
+        <InputLabel style={{ color: "#EC008C" }}>
           Selectionner une enterprise
         </InputLabel>
         <Select

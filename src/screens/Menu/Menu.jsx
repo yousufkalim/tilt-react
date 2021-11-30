@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import familyImage from "../../images/family.png";
 import emoji from "../../images/emoji.png";
-import bike from "../../images/bike.png";
+import { Package } from "../../images/images";
 import Basket from "./Basket";
 import DishCategoryList from "./DishCategoryList";
 import DishList from "./DishList";
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100vh",
   },
   ButtonStyle: {
-    backgroundColor: "#D20249",
+    backgroundColor: "#EC008C",
     color: "#fff",
     fontSize: ".7rem",
     fontWeight: "600",
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
   },
   Primarycontained: {
-    backgroundColor: "#C72E54",
+    backgroundColor: "#EC008C",
     color: "#fff",
     fontSize: ".7rem",
     textTransform: "capitalize",
@@ -566,7 +566,7 @@ const Menu = () => {
             <Box display="flex" marginTop="10px">
               <Box>
                 <img
-                  src={bike}
+                  src={Package}
                   alt="Delivery Bike"
                   style={{ height: "100px" }}
                 />
@@ -574,7 +574,7 @@ const Menu = () => {
               <Box>
                 {currentUser.user && currentUser.user.package ? (
                   <>
-                    <Typography style={{ color: "#D20249" }} variant="body1">
+                    <Typography style={{ color: "#EC008C" }} variant="body1">
                       {currentUser.user.credits} crédits
                     </Typography>
                     <Typography style={{ fontSize: "10px" }}>
@@ -592,7 +592,7 @@ const Menu = () => {
                   </>
                 ) : (
                   <>
-                    <Typography style={{ color: "#D20249" }} variant="body1">
+                    <Typography style={{ color: "#EC008C" }} variant="body1">
                       Aucun crédit
                     </Typography>
                     <Typography style={{ fontSize: "12px" }}>

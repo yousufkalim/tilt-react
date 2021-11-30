@@ -13,12 +13,12 @@ const useStyles = makeStyles({
   formControl: { width: "100%" },
   checkBox: {
     width: "100%",
-    color: "#d10248",
+    color: "#EC008C",
   },
   outlined: {
     textAlign: "left",
     "&.Mui-focused fieldset": {
-      borderColor: "#d10248 !important",
+      borderColor: "#EC008C !important",
     },
   },
 });
@@ -103,7 +103,7 @@ const AddCompany = ({ handleFormChange, handleFormSubmit, errors, data }) => {
           errorMessage={errors["street"]}
         />
         <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel shrink={true} style={{ color: "#d10248", zIndex: "100" }}>
+          <InputLabel shrink={true} style={{ color: "#EC008C", zIndex: "100" }}>
             City
           </InputLabel>
           <Select
@@ -120,7 +120,7 @@ const AddCompany = ({ handleFormChange, handleFormSubmit, errors, data }) => {
             ))}
           </Select>
           {errors["city"] && (
-            <FormHelperText style={{ color: "#d10248" }}>
+            <FormHelperText style={{ color: "#EC008C" }}>
               {errors["city"]}
             </FormHelperText>
           )}

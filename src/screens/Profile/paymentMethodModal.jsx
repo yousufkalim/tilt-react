@@ -10,15 +10,15 @@ const useStyles = makeStyles({
   btn: {
     marginTop: "15px",
     width: "100%",
-    backgroundColor: "#D20249",
+    backgroundColor: "#EC008C",
     color: "white",
     "&:focus": {
       outline: "none",
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:hover": {
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
   },

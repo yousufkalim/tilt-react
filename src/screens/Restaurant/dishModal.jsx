@@ -39,7 +39,7 @@ const useStyles = makeStyles({
       background: "rgba(0,0,0,0)",
     },
     "&::-webkit-scrollbar-thumb": {
-      background: "#D20249",
+      background: "#EC008C",
       borderRadius: "10px",
     },
     "&::-webkit-scrollbar-thumb:hover": {
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
   outlined: {
     textAlign: "left",
     "&.Mui-focused fieldset": {
-      borderColor: "#d10248 !important",
+      borderColor: "#EC008C !important",
     },
   },
   formControl: { width: "100%", marginBottom: "20px" },
@@ -83,7 +83,7 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgb(210, 2, 73)",
+    backgroundColor: "#EC008C",
     padding: "10px",
     marginRight: "15px",
     borderRadius: "50%",
@@ -94,7 +94,7 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     "&:hover, :visited": {
-      color: "#C72E54 !important",
+      color: "#EC008C !important",
     },
   },
 });
@@ -350,7 +350,7 @@ const DishModal = ({
           errorMessage={errors["price"]}
         />
         <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel style={{ color: "#d10248" }}>Type de plat</InputLabel>
+          <InputLabel style={{ color: "#EC008C" }}>Type de plat</InputLabel>
           <Select
             value={dish["type"]}
             name="type"
@@ -364,7 +364,7 @@ const DishModal = ({
             <MenuItem value="Drink">Boissons</MenuItem>
           </Select>
           {errors["type"] && (
-            <FormHelperText style={{ color: "#d10248" }}>
+            <FormHelperText style={{ color: "#EC008C" }}>
               {errors["type"]}
             </FormHelperText>
           )}
@@ -381,7 +381,7 @@ const DishModal = ({
           errorMessage={errors["description"]}
         />
         <FormControl component="fieldset">
-          <FormLabel component="legend" style={{ color: "#d10248" }}>
+          <FormLabel component="legend" style={{ color: "#EC008C" }}>
             Specificite
           </FormLabel>
           <FormGroup aria-label="position" row>
@@ -445,7 +445,7 @@ const DishModal = ({
             <FormLabel
               component="legend"
               style={{
-                color: "#d10248",
+                color: "#EC008C",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -497,7 +497,7 @@ const DishModal = ({
             <FormLabel
               component="legend"
               style={{
-                color: "#d10248",
+                color: "#EC008C",
               }}
             >
               Nombre de choix à faire par le client :
@@ -539,7 +539,7 @@ const DishModal = ({
             <FormLabel
               component="legend"
               style={{
-                color: "#d10248",
+                color: "#EC008C",
                 display: "flex",
                 justifyContent: "left",
                 alignItems: "center",
@@ -703,7 +703,7 @@ const DishModal = ({
                   className={classes.listIcon}
                   onClick={(o) => editOption(index)}
                 >
-                  <EditIcon style={{ color: "#f50057" }} />
+                  <EditIcon style={{ color: "#EC008C" }} />
                 </ListItemIcon>
               </ListItem>
             );
@@ -745,7 +745,7 @@ const DishModal = ({
             <FormLabel
               component="legend"
               style={{
-                color: "#d10248",
+                color: "#EC008C",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",

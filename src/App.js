@@ -56,25 +56,25 @@ let TOKEN = auth.getJwt();
 const useStyles = makeStyles((theme) => ({
   root: {
     "&:hover": {
-      color: "#C72E54 !important",
+      color: "#EC008C !important",
       textDecoration: "none",
     },
   },
 
   active: {
-    color: "#C72E54 !important",
+    color: "#EC008C !important",
     textDecoration: "none",
     width: "100%",
   },
 
   activeIcon: {
-    backgroundColor: "#C72E54 !important",
+    backgroundColor: "#EC008C !important",
     color: " #fff",
   },
   Link: {
     color: "black",
     "&:hover, :visited": {
-      color: "#C72E54 !important",
+      color: "#EC008C !important",
     },
   },
   appBarHome: {
@@ -155,7 +155,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgb(210, 2, 73)",
+    backgroundColor: "#EC008C",
     padding: "10px",
     marginRight: "15px",
     borderRadius: "50%",

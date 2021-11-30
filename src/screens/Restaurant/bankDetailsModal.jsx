@@ -98,7 +98,7 @@ const BankDetailsModal = ({
         <Typography
           component="div"
           variant="caption"
-          style={{ color: "#D20249", textAlign: "center" }}
+          style={{ color: "#EC008C", textAlign: "center" }}
         >
           <b>Télécharger l'identifiant Gouvernemental</b>
         </Typography>

@@ -7,7 +7,7 @@ import { postContactForm } from "../../services/contactFormService";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
-    color: "#D10248",
+    color: "#EC008C",
   },
   contactForm: {
     textAlign: "center",
@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginBottom: "20px",
     "& label.Mui-focused": {
-      color: "#D10248",
+      color: "#EC008C",
     },
     "& .MuiOutlinedInput-root": {
       "&.Mui-focused fieldset": {
-        borderColor: "#D10248",
+        borderColor: "#EC008C",
       },
     },
   },
@@ -42,15 +42,19 @@ const useStyles = makeStyles((theme) => ({
   },
   font: {
     fontSize: "14px",
-    outline: "#D10248",
+    outline: "#EC008C",
   },
   labelRoot: {
-    color: "#D10248",
+    color: "#EC008C",
     fontSize: "14px",
   },
   buttonDiv: {
     display: "flex",
     justifyContent: "flex-end",
+    "& .MuiButton-root": {
+      color: "white",
+      backgroundColor: "#EC008C",
+    },
   },
 }));
 
@@ -120,11 +124,7 @@ const ContactForm = () => {
           {renderInput("email", "Adresse e-mail", "email", false)}
           {renderInput("text", "Message", "message", true, true, 5)}
           <div className={classes.buttonDiv}>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              color="secondary"
-            >
+            <Button onClick={handleSubmit} variant="contained">
               Envoyer
             </Button>
           </div>

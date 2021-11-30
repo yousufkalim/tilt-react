@@ -13,10 +13,10 @@ const useStyles = makeStyles({
   },
   smallBtn: {
     fontSize: "8px",
-    backgroundColor: "#C72E54",
+    backgroundColor: "#EC008C",
     color: "white",
     "&:hover": {
-      backgroundColor: "#C72E54",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:focus": {
@@ -25,10 +25,10 @@ const useStyles = makeStyles({
   },
   cartBtn: {
     fontSize: "10px",
-    backgroundColor: "#C72E54",
+    backgroundColor: "#EC008C",
     color: "white",
     "&:hover": {
-      backgroundColor: "#C72E54",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:focus": {

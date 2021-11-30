@@ -53,7 +53,7 @@ const useStyles = makeStyles({
     paddingRight: "50px",
     marginBottom: "30px",
   },
-  formHeading: { color: "#d10248" },
+  formHeading: { color: "#EC008C" },
 
   modal: {
     display: "flex",
@@ -772,7 +772,7 @@ const Signup = () => {
             <div className={classes.signInInfo}>
               <Typography variant="h2" className={classes.welcome}>
                 <Link to="/">
-                  <img src={Logo} alt="" />
+                  <img style={{ width: "18%" }} src={Logo} alt="" />
                 </Link>
                 <br />
               </Typography>
@@ -855,7 +855,7 @@ const Signup = () => {
           <div className={classes.paper}>
             <Typography
               variant="h5"
-              style={{ color: "#d10248" }}
+              style={{ color: "#EC008C" }}
               className={classes.welcome2}
             >
               Suggérer une entreprise

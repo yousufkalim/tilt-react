@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
     marginBottom: "20px",
     "& .MuiOutlinedInput-root": {
       "&.Mui-focused fieldset": {
-        borderColor: "#d10248",
+        borderColor: "#EC008C",
       },
     },
   },
@@ -60,7 +60,7 @@ const InputWithLabel = ({
         }}
         InputLabelProps={{
           shrink: true,
-          style: { color: "#d10248" },
+          style: { color: "#EC008C" },
         }}
         placeholder={placeholder}
         onChange={(e) => handleChange(e)}
@@ -87,7 +87,7 @@ const InputWithLabel = ({
         }}
         InputLabelProps={{
           shrink: true,
-          style: { color: "#d10248" },
+          style: { color: "#EC008C" },
         }}
         placeholder={placeholder}
         onChange={(e) => handleChange(e)}
