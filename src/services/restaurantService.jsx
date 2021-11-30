@@ -17,6 +17,11 @@ const getDishes = async () => {
   return data.dishes;
 };
 
+const getStripeDetailsUrl = async () => {
+  const { data } = await http.get(`${apiEndPoint}/dashboard`);
+  return data.url;
+};
+
 const createDish = async (body) => {
   const { data } = await http.post(`${apiEndPoint}/dish`, body);
   return data;
@@ -87,4 +92,5 @@ export {
   updateDishStatus,
   addPremiumDish,
   removePremiumDish,
+  getStripeDetailsUrl,
 };
