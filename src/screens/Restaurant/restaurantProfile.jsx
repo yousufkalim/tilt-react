@@ -64,12 +64,12 @@ const useStyles = makeStyles({
     paddingTop: 40,
   },
   dishBtn: {
-    backgroundColor: "#D20249",
+    backgroundColor: "#EC008C",
     color: "white",
     fontSize: "10px",
     marginTop: "10px",
     "&:hover": {
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:focus": {

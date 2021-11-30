@@ -17,12 +17,12 @@ const useStyles = makeStyles({
   formControl: { width: "100%" },
   checkBox: {
     width: "100%",
-    color: "#d10248",
+    color: "#EC008C",
   },
   outlined: {
     textAlign: "left",
     "&.Mui-focused fieldset": {
-      borderColor: "#d10248 !important",
+      borderColor: "#EC008C !important",
     },
   },
 });
@@ -121,7 +121,7 @@ const SignupForm = ({
           errorMessage={errors["affiliate"]}
         />
         <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel style={{ color: "#d10248" }}>
+          <InputLabel style={{ color: "#EC008C" }}>
             Selectionner une enterprise
           </InputLabel>
           <Select
@@ -136,12 +136,12 @@ const SignupForm = ({
                 {company.name}
               </MenuItem>
             ))}
-            <MenuItem style={{ color: "#d10248" }} value={"suggest"}>
+            <MenuItem style={{ color: "#EC008C" }} value={"suggest"}>
               Suggérer une entreprise
             </MenuItem>
           </Select>
           {errors["companyId"] && (
-            <FormHelperText style={{ color: "#d10248" }}>
+            <FormHelperText style={{ color: "#EC008C" }}>
               {errors["companyId"]}
             </FormHelperText>
           )}
@@ -161,7 +161,7 @@ const SignupForm = ({
                   Accepter les &nbsp;
                   <a target="blank" href={CGV}>
                     <span
-                      style={{ textDecoration: "underline", color: "#d10248" }}
+                      style={{ textDecoration: "underline", color: "#EC008C" }}
                     >
                       termes et conditions
                     </span>
@@ -171,7 +171,7 @@ const SignupForm = ({
             }
           />
           {errors["terms"] && (
-            <FormHelperText style={{ color: "#d10248" }}>
+            <FormHelperText style={{ color: "#EC008C" }}>
               {errors["terms"]}
             </FormHelperText>
           )}

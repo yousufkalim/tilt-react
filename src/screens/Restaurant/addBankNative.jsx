@@ -845,7 +845,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                 }}
               >
                 <b>Connect Your Bank Account</b>
-                <b style={{ color: "#f50057" }}>{nativeUser.firstName}</b>
+                <b style={{ color: "#EC008C" }}>{nativeUser.firstName}</b>
               </div>
             </Typography>
 
@@ -937,7 +937,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                             onChange={(e) => handlePersonDataChange(e)}
                             InputLabelProps={{
                               shrink: true,
-                              style: { color: "#d10248" },
+                              style: { color: "#EC008C" },
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -990,7 +990,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
 
                       <FormLabel
                         component="legend"
-                        style={{ color: "#d10248", marginBottom: "20px" }}
+                        style={{ color: "#EC008C", marginBottom: "20px" }}
                       >
                         Address
                       </FormLabel>
@@ -1050,7 +1050,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
 
                       {/* <FormLabel
                     component="legend"
-                    style={{ color: "#d10248", marginBottom: "20px" }}
+                    style={{ color: "#EC008C", marginBottom: "20px" }}
                   >
                     Role (select your role(s) in the company)
                   </FormLabel>
@@ -1113,7 +1113,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                       <Typography
                         component="div"
                         variant="caption"
-                        style={{ color: "#D20249", textAlign: "center" }}
+                        style={{ color: "#EC008C", textAlign: "center" }}
                       >
                         <b>Télécharger l'identifiant Gouvernemental</b>
                       </Typography>
@@ -1241,7 +1241,7 @@ const AddBankNative = ({ nativeToken, inNative, nativeUser }) => {
                       </div>
                       <FormLabel
                         component="legend"
-                        style={{ color: "#d10248", marginBottom: "20px" }}
+                        style={{ color: "#EC008C", marginBottom: "20px" }}
                       >
                         Address
                       </FormLabel>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import image from "../../images/Image 2.png";
+import image from "../../images/Image3.png";
 import image2 from "../../images/Group 37.png";
 import "./Home.css";
 import auth from "../../services/authService";

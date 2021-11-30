@@ -9,7 +9,7 @@ const cardStyle = {
 };
 
 const activeStyle = {
-  backgroundColor: "#D20249",
+  backgroundColor: "#EC008C",
   color: "#fff",
   borderRadius: "20px",
   padding: "10px 2%",

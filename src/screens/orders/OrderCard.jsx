@@ -16,12 +16,12 @@ const useStyles = makeStyles(() => ({
   },
   btnDiv: { marginTop: "10px", display: "flex", justifyContent: "flex-end" },
   btn: {
-    backgroundColor: "rgb(210, 2, 73)",
+    backgroundColor: "#EC008C",
     color: "white",
     fontSize: "10px",
     maxHeight: "100px",
     "&:hover": {
-      backgroundColor: "rgb(210, 2, 73)",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:focus": {

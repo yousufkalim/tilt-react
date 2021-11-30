@@ -1,5 +1,5 @@
 .background {
-  background: #d10248;
+  background: #ec008c;
 }
 
 .signInBtn {
@@ -18,7 +18,7 @@
 
 .signInBtn:hover {
   background-color: white;
-  color: #d10248;
+  color: #ec008c;
 }
 .signInBtn:focus {
   outline: none;
@@ -42,7 +42,7 @@
 .addcompanyBtn:hover {
   background-color: white;
   text-decoration: none;
-  color: #d10248;
+  color: #ec008c;
 }
 .addcompanyBtn:focus {
   outline: none;
@@ -69,8 +69,8 @@
   width: 200px;
   color: white;
   cursor: pointer;
-  background-color: #d10248;
-  border: 2px solid #d10248;
+  background-color: #ec008c;
+  border: 2px solid #ec008c;
   padding: 15px;
   border-radius: 30px;
   transition-property: color, background-color;
@@ -80,7 +80,7 @@
 
 .signUpBtn:hover {
   background-color: transparent;
-  color: #d10248;
+  color: #ec008c;
 }
 
 .signUpBtn:focus {

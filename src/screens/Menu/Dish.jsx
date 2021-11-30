@@ -97,7 +97,7 @@ const Dish = ({ dish, handleSelect }) => {
             className={classes.iconBtn}
           >
             <BsFillPlusCircleFill
-              style={{ color: "#C72E54", fontSize: "35px" }}
+              style={{ color: "#EC008C", fontSize: "35px" }}
             />
           </IconButton>
         </Box>

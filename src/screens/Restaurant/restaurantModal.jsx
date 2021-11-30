@@ -16,7 +16,7 @@ const useStyles = makeStyles({
       background: "rgba(0,0,0,0)",
     },
     "&::-webkit-scrollbar-thumb": {
-      background: "#D20249",
+      background: "#EC008C",
       borderRadius: "10px",
     },
     "&::-webkit-scrollbar-thumb:hover": {
@@ -29,31 +29,31 @@ const useStyles = makeStyles({
     marginTop: "10px",
     width: "100%",
     backgroundColor: "transparent",
-    color: "#D20249",
-    border: "1px solid #D20249",
+    color: "#EC008C",
+    border: "1px solid #EC008C",
     "&:focus": {
       outline: "none",
       backgroundColor: "transparent",
-      color: "#D20249",
+      color: "#EC008C",
     },
     "&:hover": {
       backgroundColor: "transparent",
-      color: "#D20249",
+      color: "#EC008C",
     },
   },
   changeBtn: {
     marginTop: "10px",
     marginBottom: "10px",
     width: "100%",
-    backgroundColor: "#D20249",
+    backgroundColor: "#EC008C",
     color: "white",
     "&:focus": {
       outline: "none",
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:hover": {
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
   },

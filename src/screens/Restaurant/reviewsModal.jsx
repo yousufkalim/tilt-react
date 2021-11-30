@@ -18,7 +18,7 @@ const useStyles = makeStyles({
       background: "rgba(0,0,0,0)",
     },
     "&::-webkit-scrollbar-thumb": {
-      background: "#D20249",
+      background: "#EC008C",
       borderRadius: "10px",
     },
     "&::-webkit-scrollbar-thumb:hover": {
@@ -29,13 +29,13 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    border: "1px solid #D20249",
+    border: "1px solid #EC008C",
     padding: "10px",
     marginBottom: "15px",
     borderRadius: "10px",
   },
   starIcon: {
-    color: "#D20249",
+    color: "#EC008C",
     transform: "translateY(5px)",
   },
 });

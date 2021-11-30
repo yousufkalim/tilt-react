@@ -16,10 +16,10 @@ const useStyles = makeStyles({
     fontSize: "10px",
     marginLeft: "5px",
     marginRight: "5px",
-    backgroundColor: "#C72E54",
+    backgroundColor: "#EC008C",
     color: "white",
     "&:hover": {
-      backgroundColor: "#C72E54",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:focus": {

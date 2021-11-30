@@ -862,7 +862,7 @@ const EditBank = () => {
                         onChange={(e) => handlePersonDataChange(e)}
                         InputLabelProps={{
                           shrink: true,
-                          style: { color: "#d10248" },
+                          style: { color: "#EC008C" },
                         }}
                         InputProps={{
                           disableUnderline: true,
@@ -912,7 +912,7 @@ const EditBank = () => {
 
                   <FormLabel
                     component="legend"
-                    style={{ color: "#d10248", marginBottom: "20px" }}
+                    style={{ color: "#EC008C", marginBottom: "20px" }}
                   >
                     Address
                   </FormLabel>
@@ -972,7 +972,7 @@ const EditBank = () => {
 
                   {/* <FormLabel
                     component="legend"
-                    style={{ color: "#d10248", marginBottom: "20px" }}
+                    style={{ color: "#EC008C", marginBottom: "20px" }}
                   >
                     Role (select your role(s) in the company)
                   </FormLabel>
@@ -1069,7 +1069,7 @@ const EditBank = () => {
                   </div>
                   <FormLabel
                     component="legend"
-                    style={{ color: "#d10248", marginBottom: "20px" }}
+                    style={{ color: "#EC008C", marginBottom: "20px" }}
                   >
                     Address
                   </FormLabel>

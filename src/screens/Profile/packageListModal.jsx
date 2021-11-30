@@ -15,7 +15,7 @@ const useStyles = makeStyles({
   // packages: { marginTop: "15px" },
   singlePackage: {
     marginTop: "15px",
-    borderBottom: "1px solid #D20249",
+    borderBottom: "1px solid #EC008C",
     paddingBottom: "10px",
   },
   packages: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
       background: "rgba(0,0,0,0)",
     },
     "&::-webkit-scrollbar-thumb": {
-      background: "#D20249",
+      background: "#EC008C",
       borderRadius: "10px",
     },
     "&::-webkit-scrollbar-thumb:hover": {
@@ -41,21 +41,21 @@ const useStyles = makeStyles({
   outlined: {
     textAlign: "left",
     "&.Mui-focused fieldset": {
-      borderColor: "#d10248 !important",
+      borderColor: "#EC008C !important",
     },
   },
   btn: {
     marginTop: "15px",
-    backgroundColor: "#D20249",
+    backgroundColor: "#EC008C",
     width: "100%",
     color: "white",
     "&:focus": {
       outline: "none",
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
     "&:hover": {
-      backgroundColor: "#D20249",
+      backgroundColor: "#EC008C",
       color: "white",
     },
   },
@@ -64,8 +64,8 @@ const useStyles = makeStyles({
       cursor: "pointer",
     },
     "&:focus": {
-      color: "#D20249",
-      border: "2px solid #D20249",
+      color: "#EC008C",
+      border: "2px solid #EC008C",
       padding: "10px",
     },
   },
