@@ -958,15 +958,17 @@ const RestaurantProfile = ({ onLogout }) => {
                   </Button>
                 </Link>
               )}
-
-              <Button
-                variant="contained"
-                size="small"
-                className={classes.dishBtn}
-                onClick={handleBankInfoOpen}
-              >
-                Informations bancaires
-              </Button>
+              {user.restaurant.bank ? (
+                <Link to="/editbank">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className={classes.dishBtn}
+                  >
+                    EDIT BANK
+                  </Button>
+                </Link>
+              ) : null}
 
               <Button
                 variant="contained"
