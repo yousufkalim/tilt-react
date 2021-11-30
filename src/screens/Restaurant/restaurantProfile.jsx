@@ -15,6 +15,7 @@ import {
   updateDishStatus,
   addPremiumDish,
   removePremiumDish,
+  getStripeDetailsUrl,
 } from "../../services/restaurantService";
 import { Store, UpdateStore } from "../../context/StoreContext";
 import {
@@ -32,6 +33,7 @@ import BankDetailsModal from "./bankDetailsModal";
 import ReviewsModal from "./reviewsModal";
 import { baseUrl } from "../../config";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles({
   main: {
@@ -98,6 +100,8 @@ const RestaurantProfile = ({ onLogout }) => {
   const [openBankInfoModal, setOpenBankInfoModal] = useState(false);
   const [openRestaurantModal, setOpenRestaurantModal] = useState(false);
   const [openReviewsModal, setOpenReviewsModal] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const [dishes, setDishes] = useState({
     entrees: [],
     plats: [],
@@ -886,6 +890,17 @@ const RestaurantProfile = ({ onLogout }) => {
     }
   };
 
+  const viewStripeAccount = async () => {
+    setIsDisabled(true);
+    try {
+      let url = await getStripeDetailsUrl();
+      window.location = url;
+    } catch (err) {
+      setIsDisabled(false);
+      console.log(err);
+    }
+  };
+
   return (
     <div className={classes.main}>
       <Typography variant="h5">Mon Compte</Typography>
@@ -938,41 +953,61 @@ const RestaurantProfile = ({ onLogout }) => {
               />
               <Typography variant="body2">{user.address.street}</Typography>
               <Typography variant="body2">{user.address.city}</Typography>
-              {user.restaurant.bank ? (
-                <Button
-                  variant="contained"
-                  size="small"
-                  className={classes.dishBtn}
-                  disabled={true}
-                >
-                  BANK ADDED
-                </Button>
-              ) : (
-                <Link to="/addbank">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "50%",
+                }}
+              >
+                {user.restaurant.bank ? (
                   <Button
                     variant="contained"
                     size="small"
                     className={classes.dishBtn}
+                    disabled={true}
                   >
-                    ADD BANK
+                    BANK ADDED
                   </Button>
-                </Link>
-              )}
-              {user.restaurant.bank ? (
-                <Link to="/editbank">
-                  <Button
-                    variant="contained"
-                    size="small"
-                    className={classes.dishBtn}
-                  >
-                    EDIT BANK
-                  </Button>
-                </Link>
-              ) : null}
+                ) : (
+                  <Link to="/addbank">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      className={classes.dishBtn}
+                      disabled={isDisabled}
+                    >
+                      ADD BANK
+                    </Button>
+                  </Link>
+                )}
+                {user.restaurant.bank ? (
+                  <Link to="/editbank">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      className={classes.dishBtn}
+                      disabled={isDisabled}
+                    >
+                      EDIT BANK
+                    </Button>
+                  </Link>
+                ) : null}
+              </div>
+              <Button
+                variant="contained"
+                size="small"
+                className={classes.dishBtn}
+                disabled={isDisabled}
+                onClick={viewStripeAccount}
+              >
+                View Stripe Account Details
+              </Button>
 
               <Button
                 variant="contained"
                 size="small"
+                disabled={isDisabled}
                 className={classes.dishBtn}
                 onClick={handleReviewsModalOpen}
               >
@@ -983,6 +1018,7 @@ const RestaurantProfile = ({ onLogout }) => {
                 variant="contained"
                 size="small"
                 onClick={handleDeleteProfile}
+                disabled={isDisabled}
                 className={classes.deleteBtn}
               >
                 Supprimer le compte
