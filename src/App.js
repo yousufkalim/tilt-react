@@ -41,6 +41,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import RestaurantProfile from "./screens/Restaurant/restaurantProfile";
 import AddBank from "./screens/Restaurant/addBank";
+import EditBank from "./screens/Restaurant/editBank";
 import AddBankNative from "./screens/Restaurant/addBankNative";
 import Cgu from "../src/Components/Footer/cgu";
 import { stripePK, baseUrl } from "../src/config";
@@ -313,6 +314,15 @@ function App() {
                       <RestaurantProfile onLogout={handleLogout} />
                     ) : (
                       <AddBank onLogout={handleLogout} />
+                    )}
+                  </Route>
+                )}
+                {role === "restaurant" && (
+                  <Route path="/editbank">
+                    {user.restaurant.bank ? (
+                      <EditBank onLogout={handleLogout} />
+                    ) : (
+                      <RestaurantProfile onLogout={handleLogout} />
                     )}
                   </Route>
                 )}
