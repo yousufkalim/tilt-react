@@ -10,6 +10,7 @@ import Fade from "@material-ui/core/Fade";
 // import SignupForm from "./../components/auth/signupForm";
 import LoginForm from "./loginForm";
 import SignupForm from "./signupForm";
+import AddCompanyForm from "./addCompany";
 import { Logo } from "../../images/images";
 import { register } from "../../services/userService";
 import auth from "../../services/authService";
@@ -18,6 +19,8 @@ import { UpdateStore, Store } from "../../context/StoreContext";
 import "../../styles/signup.css";
 import { getAllCompanies } from "../../services/companyService";
 import InputWithLabel from "../../Components/common/inputWithLabel";
+import axios from "axios";
+import { baseUrl } from "../../config";
 
 const useStyles = makeStyles({
   root: {
@@ -83,10 +86,19 @@ const Signup = () => {
     affiliate: "",
     terms: false,
   });
+  const [companyData, setCompanyData] = useState({
+    name: "",
+    phone: "",
+    deliveryPlace: "",
+    street: "",
+    city: "",
+  });
   const [companies, setCompanies] = useState([]);
   const [registerErrors, setRegisterErrors] = useState({});
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [loginErrors, setLoginErrors] = useState({});
+  const [companyErrors, setCompanyErrors] = useState({});
+
   const [suggestedBy, setSuggestedBy] = useState();
   const [suggestedCompanyName, setSuggestedCompanyName] = useState("");
   const [suggestErrors, setSuggestErrors] = useState({});
@@ -340,10 +352,125 @@ const Signup = () => {
       }),
   };
 
+  const companySchema = {
+    name: Joi.string()
+      .min(3)
+      .required()
+      .label("Nom")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "string.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    phone: Joi.string()
+      .required()
+      .length(10)
+      .regex(/^((\+)33|0)[1-9](\d{2}){4}$/)
+      .label("Numéro de Téléphone")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+
+            case "string.length":
+              err.message = `${err.context.label} doit comporter 10 caractères!`;
+              break;
+
+            case "string.regex.base":
+              err.message = `${err.context.label} doit commencer par zéro!`;
+              break;
+
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+
+    deliveryPlace: Joi.string()
+      .min(3)
+      .required()
+      .label("Delivery Place")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    street: Joi.string()
+      .min(3)
+      .required()
+      .label("Street")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            case "string.min":
+              err.message = `${err.context.label} doit avoir au moins ${err.context.limit} Longs caractères!`;
+              break;
+            case "string.max":
+              err.message = `${err.context.label} devrait avoir au plus ${err.context.limit} Longs caractères!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+    city: Joi.string()
+      .required()
+      .label("City")
+      .error((errors) => {
+        errors.forEach((err) => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = `${err.context.label} ne doit pas être vide!`;
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      }),
+  };
   const validateProperty = (name, value) => {
     const obj = { [name]: value };
     const schema = {
-      [name]: formType === "signup" ? registerSchema[name] : loginSchema[name],
+      [name]:
+        formType === "none"
+          ? companySchema[name]
+          : formType === "signup"
+          ? registerSchema[name]
+          : loginSchema[name],
     };
     const { error } = Joi.validate(obj, schema);
     return error ? error.details[0].message : null;
@@ -407,10 +534,22 @@ const Signup = () => {
     setLoginData(formData);
   };
 
+  const handleCompanyFormChange = ({ target }) => {
+    const { name, value } = target;
+    const allErrors = { ...companyErrors };
+    const errorMessage = validateProperty(name, value);
+    if (errorMessage) allErrors[name] = errorMessage;
+    else delete allErrors[name];
+    setCompanyErrors(allErrors);
+    const formData = { ...companyData };
+    formData[name] = value;
+    setCompanyData(formData);
+  };
+
   const handleSuggestFormChange = ({ target }) => {
     const { name, value, checked } = target;
     const allErrors = { ...suggestErrors };
-    const errorMessage = validateProperty(name, value);
+    const errorMessage = validateSuggest(name, value);
     if (errorMessage) allErrors[name] = errorMessage;
     else delete allErrors[name];
     setSuggestErrors(allErrors);
@@ -439,6 +578,10 @@ const Signup = () => {
     }
   };
 
+  const handleAddCompanyBtn = () => {
+    setFormType("none");
+  };
+
   const validate = () => {
     const options = { abortEarly: false };
     let errors = {};
@@ -448,8 +591,14 @@ const Signup = () => {
       for (let item of result.error.details) {
         errors[item.path] = item.message;
       }
-    } else {
+    } else if (formType === "signin") {
       const result = Joi.validate(loginData, loginSchema, options);
+      if (!result.error) return null;
+      for (let item of result.error.details) {
+        errors[item.path] = item.message;
+      }
+    } else {
+      const result = Joi.validate(companyData, companySchema, options);
       if (!result.error) return null;
       for (let item of result.error.details) {
         errors[item.path] = item.message;
@@ -484,6 +633,18 @@ const Signup = () => {
 
     if (formType === "signup") registerUser();
     else loginUser();
+  };
+
+  const handleCompanySubmit = (e) => {
+    e.preventDefault();
+    let errors = validate();
+    if (formType === "none") {
+      if (errors) {
+        setCompanyErrors(errors);
+        return;
+      }
+    }
+    addCompnay();
   };
 
   const handleSuggestSubmit = (e) => {
@@ -563,6 +724,46 @@ const Signup = () => {
     setDisable(false);
   };
 
+  const addCompnay = async () => {
+    const { name, deliveryPlace, phone, street, city } = companyData;
+
+    let data = JSON.stringify({
+      name,
+      deliveryPlace,
+      phone,
+      street,
+      city,
+    });
+
+    let headeris = {
+      "Content-Type": "application/json",
+    };
+    await fetch(`${baseUrl}/admin/addcompany`, {
+      method: "POST",
+      headers: headeris,
+      body: data,
+    })
+      .then((data) => {
+        if (data.ok) {
+          toast.success("Entreprise créée avec succès!");
+          setCompanyData({
+            name: "",
+            phone: "",
+            deliveryPlace: "",
+            street: "",
+            city: "",
+          });
+        } else {
+          toast.error(data.statusText);
+        }
+        setDisable(false);
+      })
+      .catch((err) => {
+        setDisable(false);
+        console.log(err);
+      });
+  };
+
   return (
     <div className={classes.root}>
       <Grid container>
@@ -579,9 +780,15 @@ const Signup = () => {
                 Bienvenue !
               </Typography>
               <button className="signInBtn" onClick={handleFormType}>
+                {formType === "none" ? "Se connecter" : ""}
                 {formType === "signup" ? "Se connecter" : ""}
                 {formType === "signin" ? "S’inscrire" : ""}
               </button>
+              {formType != "none" && (
+                <button className="addcompanyBtn" onClick={handleAddCompanyBtn}>
+                  Add a Company
+                </button>
+              )}
             </div>
           </div>
         </Grid>
@@ -613,7 +820,21 @@ const Signup = () => {
                 />
               </>
             ) : (
-              ""
+              <>
+                <Typography
+                  variant="h3"
+                  className={classes.formHeading}
+                  style={{ marginBottom: "20px" }}
+                >
+                  Entreprise
+                </Typography>
+                <AddCompanyForm
+                  handleFormChange={handleCompanyFormChange}
+                  handleFormSubmit={handleCompanySubmit}
+                  errors={companyErrors}
+                  data={companyData}
+                />
+              </>
             )}
           </div>
         </Grid>

@@ -24,6 +24,30 @@
   outline: none;
 }
 
+.addcompanyBtn {
+  width: 200px;
+  color: white;
+  text-decoration: underline;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 30px;
+  flex-wrap: nowrap;
+  transition-property: color, background-color;
+  transition-duration: 0.5s;
+  margin-top: 20px;
+}
+
+.addcompanyBtn:hover {
+  background-color: white;
+  text-decoration: none;
+  color: #d10248;
+}
+.addcompanyBtn:focus {
+  outline: none;
+}
+
 .signupForm {
   height: 100vh;
   color: #2662b1;
