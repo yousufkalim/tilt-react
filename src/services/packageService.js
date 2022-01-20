@@ -7,4 +7,9 @@ const getAllPackages = async () => {
   return data.packages;
 };
 
-export { getAllPackages };
+const buyPackage = async (data) => {
+  const response = await http.post(`/user/package/payment`, data);
+  return response.data;
+};
+
+export { getAllPackages, buyPackage };
