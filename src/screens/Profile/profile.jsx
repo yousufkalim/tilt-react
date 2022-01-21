@@ -20,7 +20,7 @@ import {
 import PaymentMethodModal from "./paymentMethodModal";
 import ProfileModal from "./profileModal";
 import { toast } from "react-toastify";
-import { getAllPackages } from "../../services/packageService";
+import { getAllPackages, buyPackage } from "../../services/packageService";
 import PackageListModal from "./packageListModal";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import PaymentForm from "../../Components/Payment/paymentForm";
@@ -123,10 +123,29 @@ const Profile = ({ onLogout }) => {
     setSelectedPackage("");
   };
 
-  const handlePackageSelectionSubmit = () => {
+  const handlePackageSelectionSubmit = async () => {
     if (selectedPackage) {
       handlePackageListModalClose();
-      handlePackagePaymentModalOpen();
+      let data = {
+        line_items: [
+          {
+            price_data: {
+              currency: "eur",
+              product_data: {
+                name: selectedPackage.name,
+              },
+              unit_amount: parseInt(selectedPackage.price) * 100,
+            },
+            quantity: 1,
+          },
+        ],
+        metaData: {
+          userId: user._id,
+          packageId: selectedPackage._id,
+        },
+      };
+      const response = await buyPackage(data);
+      window.location = response.url;
     } else {
       toast.error("Sélectionnez d'abord un forfait");
     }
