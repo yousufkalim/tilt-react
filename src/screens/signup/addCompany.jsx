@@ -71,7 +71,7 @@ const AddCompany = ({ handleFormChange, handleFormSubmit, errors, data }) => {
           <Grid item zeroMinWidth xs>
             <InputWithLabel
               value={data["phone"]}
-              label="Phone"
+              label="Téléphone"
               required={true}
               name="phone"
               type="number"
@@ -83,7 +83,7 @@ const AddCompany = ({ handleFormChange, handleFormSubmit, errors, data }) => {
         </Grid>
 
         <InputWithLabel
-          label="Delivery Place"
+          label="Lieu de livraison"
           value={data["deliveryPlace"]}
           required={true}
           name="deliveryPlace"
@@ -94,7 +94,7 @@ const AddCompany = ({ handleFormChange, handleFormSubmit, errors, data }) => {
         />
         <InputWithLabel
           value={data["street"]}
-          label="Street"
+          label="Rue"
           required={true}
           name="street"
           type="text"
@@ -104,7 +104,7 @@ const AddCompany = ({ handleFormChange, handleFormSubmit, errors, data }) => {
         />
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel shrink={true} style={{ color: "#EC008C", zIndex: "100" }}>
-            City
+            Ville
           </InputLabel>
           <Select
             value={data["city"]}

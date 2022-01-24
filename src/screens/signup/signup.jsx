@@ -786,7 +786,7 @@ const Signup = () => {
               </button>
               {formType != "none" && (
                 <button className="addcompanyBtn" onClick={handleAddCompanyBtn}>
-                  Add a Company
+                  Ajouter une entreprise
                 </button>
               )}
             </div>
