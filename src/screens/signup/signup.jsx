@@ -101,6 +101,8 @@ const Signup = () => {
 
   const [suggestedBy, setSuggestedBy] = useState();
   const [suggestedCompanyName, setSuggestedCompanyName] = useState("");
+  const [suggestedCompanyPhone, setSuggestedCompanyPhone] = useState("");
+  const [suggestedCompanyAddress, setSuggestedCompanyAddress] = useState("");
   const [suggestErrors, setSuggestErrors] = useState({});
   const [openSuggest, setOpenSuggest] = useState(false);
   const [formType, setFormType] = useState("signup");
@@ -650,7 +652,12 @@ const Signup = () => {
   const handleSuggestSubmit = (e) => {
     e.preventDefault();
     setDisable(true);
-    if (suggestErrors.email || suggestedCompanyName === "") {
+    if (
+      suggestErrors.email ||
+      suggestedCompanyName === "" ||
+      suggestedCompanyPhone.length < 10 ||
+      suggestedCompanyAddress === ""
+    ) {
       setDisable(false);
       return;
     } else {
@@ -709,10 +716,17 @@ const Signup = () => {
 
   const submitSuggestion = async () => {
     try {
-      const data = await auth.suggestCompany(suggestedBy, suggestedCompanyName);
+      const data = await auth.suggestCompany(
+        suggestedBy,
+        suggestedCompanyName,
+        suggestedCompanyPhone,
+        suggestedCompanyAddress
+      );
       setOpenSuggest(false);
       setSuggestedBy("");
       setSuggestedCompanyName("");
+      setSuggestedCompanyPhone("");
+      setSuggestedCompanyAddress("");
       toast.success(data.message);
     } catch (error) {
       console.log(error.message);
@@ -767,7 +781,7 @@ const Signup = () => {
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid item md={6} xs={12} zeroMinWidth>
+        <Grid item md={6} xs={6} zeroMinWidth>
           <div className="background">
             <div className={classes.signInInfo}>
               <Typography variant="h2" className={classes.welcome}>
@@ -792,7 +806,7 @@ const Signup = () => {
             </div>
           </div>
         </Grid>
-        <Grid item md={6} xs={12} zeroMinWidth>
+        <Grid item md={6} xs={6} zeroMinWidth>
           <div className="signupForm">
             {formType === "signup" ? (
               <>
@@ -877,6 +891,26 @@ const Signup = () => {
               name="companyName"
               type="text"
               handleChange={(e) => setSuggestedCompanyName(e.target.value)}
+            />
+            <InputWithLabel
+              value={suggestedCompanyPhone}
+              label="Numéro de téléphone"
+              required={true}
+              name="phone"
+              type="number"
+              handleChange={(e) =>
+                e.target.value.length <= 10
+                  ? setSuggestedCompanyPhone(e.target.value)
+                  : null
+              }
+            />
+            <InputWithLabel
+              value={suggestedCompanyAddress}
+              label="Adresse"
+              required={true}
+              name="address"
+              type="text"
+              handleChange={(e) => setSuggestedCompanyAddress(e.target.value)}
             />
             <button
               type="submit"
