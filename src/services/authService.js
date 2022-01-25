@@ -15,10 +15,12 @@ export async function login(email, password) {
   return data;
 }
 
-export async function suggestCompany(email, name) {
+export async function suggestCompany(email, name, phone, address) {
   const { data } = await http.post(`${apiEndPoint}/suggestCompany`, {
     email,
     name,
+    phone,
+    address,
   });
   return data;
 }
