@@ -34,7 +34,7 @@ const PaymentMethodModal = ({ data, errors, handleChange, handleSubmit }) => {
       <div className={classes.form}>
         <InputWithLabel
           value={data["name"]}
-          label="Name"
+          label="Prénom et Nom"
           required={true}
           name="name"
           type="text"
@@ -44,7 +44,7 @@ const PaymentMethodModal = ({ data, errors, handleChange, handleSubmit }) => {
         />
         <InputWithLabel
           value={data["number"]}
-          label="Number"
+          label="Numéro de carte"
           required={true}
           name="number"
           type="text"
@@ -69,7 +69,7 @@ const PaymentMethodModal = ({ data, errors, handleChange, handleSubmit }) => {
           <Grid item xs={4}>
             <InputWithLabel
               value={data["expiryMonth"]}
-              label="Expiry Month"
+              label="Mois"
               required={true}
               name="expiryMonth"
               type="text"
@@ -81,7 +81,7 @@ const PaymentMethodModal = ({ data, errors, handleChange, handleSubmit }) => {
           <Grid item xs={4}>
             <InputWithLabel
               value={data["expiryYear"]}
-              label="Expiry Year"
+              label="Année"
               required={true}
               name="expiryYear"
               type="text"

@@ -164,16 +164,26 @@ const Menu = () => {
         Promise.all(
           restaurantCart.dishes.map((restaurantItem) => {
             total +=
-              parseInt(restaurantItem.count) *
-              parseInt(restaurantItem.id.price) *
+              parseFloat(restaurantItem.count) *
+              parseFloat(restaurantItem.id.price) *
               100;
+
+            total = String(total);
+            if (total.indexOf(".") >= 0) {
+              total = parseFloat(total.substring(0, total.indexOf(".")));
+            }
+            total = parseFloat(total);
+            var s = String(restaurantItem.id.price * 100);
+            if (s.indexOf(".") >= 0) {
+              s = s.substring(0, s.indexOf("."));
+            }
             line_items.push({
               price_data: {
                 currency: "eur",
                 product_data: {
                   name: restaurantItem.id.name,
                 },
-                unit_amount: parseInt(restaurantItem.id.price) * 100,
+                unit_amount_decimal: parseFloat(s),
               },
               quantity: restaurantItem.count,
             });
@@ -182,14 +192,18 @@ const Menu = () => {
                 restaurantItem.addOns.map((addOn) => {
                   addOn.choice.map((c) => {
                     {
-                      total += parseInt(c.price) * 100;
+                      var s = String(c.price * 100);
+                      if (s.indexOf(".") >= 0) {
+                        s = s.substring(0, s.indexOf("."));
+                      }
+                      total += parseFloat(c.price) * 100;
                       line_items.push({
                         price_data: {
                           currency: "eur",
                           product_data: {
                             name: c.name,
                           },
-                          unit_amount: parseInt(c.price) * 100,
+                          unit_amount_decimal: parseFloat(s),
                         },
                         quantity: 1,
                       });
@@ -208,14 +222,19 @@ const Menu = () => {
           userId: currentUser.user.cart.user,
         });
       });
+
+      var s = String(currentUser.user.company.block.deliveryCost * 100);
+      if (s.indexOf(".") >= 0) {
+        s = s.substring(0, s.indexOf("."));
+      }
+
       line_items.push({
         price_data: {
           currency: "eur",
           product_data: {
             name: "Frais de livraison",
           },
-          unit_amount:
-            parseInt(currentUser.user.company.block.deliveryCost) * 100,
+          unit_amount_decimal: parseFloat(s),
         },
         quantity: 1,
       });
@@ -655,7 +674,17 @@ const Menu = () => {
                         Sous-Total
                       </Typography>
                       <Typography variant="subtitle2">
-                        {currentUser.user.cart?.totalPrice}€
+                        {String(currentUser.user.cart.totalPrice).indexOf(
+                          "."
+                        ) >= 0
+                          ? String(currentUser.user.cart.totalPrice).substring(
+                              0,
+                              String(currentUser.user.cart.totalPrice).indexOf(
+                                "."
+                              ) + 3
+                            )
+                          : currentUser.user.cart.totalPrice}
+                        €
                       </Typography>
                     </Box>
                     <Box
@@ -671,7 +700,18 @@ const Menu = () => {
                       </Typography>
                       <Typography variant="subtitle2">
                         {currentUser.user.cart &&
-                          totalPrice() - currentUser.user.cart.totalPrice}
+                        String(
+                          currentUser.user.company.block.deliveryCost
+                        ).indexOf(".") >= 0
+                          ? String(
+                              currentUser.user.company.block.deliveryCost
+                            ).substring(
+                              0,
+                              String(
+                                currentUser.user.company.block.deliveryCost
+                              ).indexOf(".") + 3
+                            )
+                          : currentUser.user.company.block.deliveryCost}
                         €
                       </Typography>
                     </Box>
@@ -690,7 +730,13 @@ const Menu = () => {
                         Payé
                       </Typography>
                       <Typography variant="subtitle2">
-                        {totalPrice()}€
+                        {String(totalPrice()).indexOf(".") >= 0
+                          ? String(totalPrice()).substring(
+                              0,
+                              String(totalPrice()).indexOf(".") + 3
+                            )
+                          : totalPrice()}
+                        €
                       </Typography>
                     </Box>
                     <Box>
