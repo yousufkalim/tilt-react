@@ -159,6 +159,15 @@ const Menu = () => {
       setDisableCheck(true);
       let line_items = [];
       let restaurantTransferData = [];
+      let discount = 0;
+
+      if (
+        moment().isBefore(currentUser.user.packageExpiration) &&
+        currentUser.user.credits > 0
+      ) {
+        discount = currentUser.user.package.offPrice;
+      }
+
       currentUser.user.cart.userCarts.map(async (restaurantCart) => {
         let total = 0;
         Promise.all(
@@ -216,7 +225,9 @@ const Menu = () => {
         );
         restaurantTransferData.push({
           name: restaurantCart.restaurant.firstName,
-          stripeId: restaurantCart.restaurant.restaurant.bank.stripeID,
+          stripeId: restaurantCart.restaurant.restaurant.bank
+            ? restaurantCart.restaurant.restaurant.bank.stripeID
+            : "",
           totalAmmount: total,
           cartId: currentUser.user.cart._id,
           userId: currentUser.user.cart.user,
@@ -238,17 +249,18 @@ const Menu = () => {
         },
         quantity: 1,
       });
-      getSessionUrl(line_items, restaurantTransferData);
+      getSessionUrl(line_items, restaurantTransferData, discount);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getSessionUrl = async (line_items, Tdata) => {
+  const getSessionUrl = async (line_items, Tdata, discount) => {
     await axios
       .post(`${baseUrl}/user/checkout`, {
         line_items: line_items,
         restaurantTransferData: Tdata,
+        discount: discount,
       })
       .then((data) => {
         window.location = data.data.url;
@@ -715,6 +727,30 @@ const Menu = () => {
                         €
                       </Typography>
                     </Box>
+
+                    {moment().isBefore(currentUser.user.packageExpiration) &&
+                    currentUser.user.credits > 0 ? (
+                      <Box
+                        style={{
+                          marginTop: "10px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography
+                          variant="body"
+                          style={{ fontSize: "0.9rem" }}
+                        >
+                          Réduction
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          -{currentUser.user.package.offPrice}€
+                        </Typography>
+                      </Box>
+                    ) : (
+                      ""
+                    )}
 
                     <Box>
                       <hr className={classes.divider} />
