@@ -132,7 +132,9 @@ const DishDetailModal = ({
         ))}
       </Typography>
       {dish.addOns.length > 0 ? (
-        <div style={{ marginTop: "10px", overflowY: "auto", height: "400px" }}>
+        <div
+          style={{ marginTop: "10px", overflowY: "scroll", height: "200px" }}
+        >
           {dish.addOns.map((addOn, aIndex) => {
             return (
               <>
