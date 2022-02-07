@@ -37,9 +37,10 @@ const useStyles = makeStyles({
 
 const ProfileGrid = ({
   user,
+  disabled,
+  handleProfileModal,
   handleCompanyModal,
   handlePaymentyModal,
-  handleProfileModal,
   handlePackageListModal,
 }) => {
   const classes = useStyles();
@@ -177,6 +178,7 @@ const ProfileGrid = ({
                 <Button
                   className={classes.editBtn}
                   onClick={handlePackageListModal}
+                  disabled={disabled}
                 >
                   Acheter un forfait
                 </Button>

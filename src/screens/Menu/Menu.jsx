@@ -27,7 +27,7 @@ import { EmptyCart } from "../../images/images";
 import { toast } from "react-toastify";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import RestaurantMenuModal from "./restaurantMenuModal";
 import axios from "axios";
 import { baseUrl } from "../../config";
@@ -52,6 +52,15 @@ const useStyles = makeStyles((theme) => ({
       // eslint-disable-line no-useless-computed-key
       margin: "10px 0px auto auto",
     },
+  },
+
+  CheckPackageButtonStyle: {
+    backgroundColor: "#EC008C",
+    color: "#fff",
+    fontSize: ".7rem",
+    fontWeight: "600",
+    textTransform: "capitalize",
+    margin: "auto 10px auto 10px",
   },
 
   card: {
@@ -111,6 +120,7 @@ const Menu = () => {
   const [openDrinkModal, setOpenDrinkModal] = useState(false);
   const [openRestaurantMenuModal, setOpenRestaurantMenuModal] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState([]);
+  const [preCheckoutModal, setPreCheckoutModal] = useState(false);
 
   const [openmodal, setOpenmodal] = useState(false);
   const [disableCheck, setDisableCheck] = useState(false);
@@ -119,6 +129,7 @@ const Menu = () => {
   const updateStore = UpdateStore();
   const stripe = useStripe();
   const elements = useElements();
+  const history = useHistory();
 
   useEffect(() => {
     getDishes();
@@ -154,8 +165,26 @@ const Menu = () => {
     // setCardComplete(false);
   };
 
+  const handlePackageCheckClose = () => {
+    setPreCheckoutModal(false);
+  };
+
+  const packageCheck = () => {
+    if (currentUser.user.package && currentUser.user.packageExpiration) {
+      checkout();
+    } else {
+      setPreCheckoutModal(true);
+    }
+  };
+
+  const goToPackages = () => {
+    handlePackageCheckClose();
+    history.push("/profile");
+  };
+
   const checkout = async () => {
     try {
+      handlePackageCheckClose();
       setDisableCheck(true);
       let line_items = [];
       let restaurantTransferData = [];
@@ -782,7 +811,7 @@ const Menu = () => {
                       variant="contained"
                       className={classes.ButtonStyle}
                       onClick={() => {
-                        checkout();
+                        packageCheck();
                       }}
                       disabled={disableCheck}
                     >
@@ -870,6 +899,46 @@ const Menu = () => {
           />
         }
       />
+      {preCheckoutModal && (
+        <TransitionsModal
+          open={preCheckoutModal}
+          handleClose={() => handlePackageCheckClose()}
+          body={
+            <>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Vous n’avez pas de packs de livraison, voulez-vous en acheter un
+                ?
+              </Typography>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  className={classes.CheckPackageButtonStyle}
+                  onClick={() => {
+                    goToPackages();
+                  }}
+                >
+                  Oui
+                </Button>
+                <Button
+                  variant="contained"
+                  className={classes.CheckPackageButtonStyle}
+                  onClick={() => {
+                    checkout();
+                  }}
+                >
+                  Non
+                </Button>
+              </div>
+            </>
+          }
+        ></TransitionsModal>
+      )}
     </>
   );
 };

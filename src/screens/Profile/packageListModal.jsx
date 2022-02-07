@@ -71,7 +71,12 @@ const useStyles = makeStyles({
   },
 });
 
-const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
+const PackageListModal = ({
+  packages,
+  handleChange,
+  handleSubmit,
+  disabled,
+}) => {
   const classes = useStyles();
 
   return (
@@ -112,6 +117,7 @@ const PackageListModal = ({ packages, handleChange, handleSubmit }) => {
         className={classes.btn}
         color="secondary"
         onClick={handleSubmit}
+        disabled={disabled}
       >
         Modifier
       </Button>

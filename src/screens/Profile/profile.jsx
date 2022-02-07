@@ -89,6 +89,8 @@ const Profile = ({ onLogout }) => {
     cvc: "",
   });
   const [cardErrors, setCardErrors] = useState({});
+  const [disabled, setDisabled] = useState(false);
+
   const [passwordDetails, setPasswordDetails] = useState({
     password: "",
     confirmPassword: "",
@@ -124,6 +126,7 @@ const Profile = ({ onLogout }) => {
   };
 
   const handlePackageSelectionSubmit = async () => {
+    setDisabled(true);
     if (selectedPackage) {
       handlePackageListModalClose();
       let data = {
@@ -143,11 +146,19 @@ const Profile = ({ onLogout }) => {
           userId: user._id,
           packageId: selectedPackage._id,
         },
+        amount: parseInt(selectedPackage.price) * 100,
       };
       const response = await buyPackage(data);
-      window.location = response.url;
+      if (response.url) {
+        window.location = response.url;
+      } else {
+        toast.success("Forfait acheté avec succès");
+        updateStore({ user: response.user });
+        setDisabled(false);
+      }
     } else {
       toast.error("Sélectionnez d'abord un forfait");
+      setDisabled(false);
     }
   };
 
@@ -611,6 +622,7 @@ const Profile = ({ onLogout }) => {
         handlePaymentyModal={handlePaymentModalOpen}
         handleProfileModal={handleProfileModalOpen}
         handlePackageListModal={handlePackageListModalOpen}
+        disabled={disabled}
       />
 
       <TransitionsModal
@@ -665,6 +677,7 @@ const Profile = ({ onLogout }) => {
             packages={packages}
             handleSubmit={handlePackageSelectionSubmit}
             handleChange={(e) => handlePackageChange(e)}
+            disabled={disabled}
           />
         }
       />
