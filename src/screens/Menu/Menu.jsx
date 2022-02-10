@@ -308,6 +308,7 @@ const Menu = () => {
           dishId: drink._id,
           dishPrice: drink.price,
           dishCount: drink.quantity,
+          addOns: [],
         });
         updateStore({
           cart,
