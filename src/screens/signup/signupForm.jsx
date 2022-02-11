@@ -112,7 +112,7 @@ const SignupForm = ({
           errorMessage={errors["phone"]}
         />
         <InputWithLabel
-          label="Code affilié"
+          label="Code affilié du parrain"
           value={data["affiliate"]}
           name="affiliate"
           type="text"
@@ -131,14 +131,14 @@ const SignupForm = ({
             label="Sélectionner une entreprise"
             className={classes.outlined}
           >
+            <MenuItem style={{ color: "#EC008C" }} value={"suggest"}>
+              Suggérer une entreprise
+            </MenuItem>
             {companies.map((company) => (
               <MenuItem key={company._id} value={company._id}>
                 {company.name}
               </MenuItem>
             ))}
-            <MenuItem style={{ color: "#EC008C" }} value={"suggest"}>
-              Suggérer une entreprise
-            </MenuItem>
           </Select>
           {errors["companyId"] && (
             <FormHelperText style={{ color: "#EC008C" }}>
