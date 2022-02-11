@@ -608,7 +608,7 @@ const Profile = ({ onLogout }) => {
         </Grid>
         <Grid item xs={12} md={10} className={classes.subheadingBox}>
           <Typography variant="subtitle1" className={classes.affiliateCode}>
-            Mon code affilié : {user.user.affiliateCode}
+            Mon Code affilié du parrain : {user.user.affiliateCode}
           </Typography>
           <Button className={classes.deleteBtn} onClick={handleDeleteProfile}>
             Supprimer le compte
